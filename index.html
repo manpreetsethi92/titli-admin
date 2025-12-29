@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TITLI Admin</title>
+  <title>TITLI Command Center</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -29,39 +29,17 @@
       width: 100%;
       max-width: 360px;
     }
-    .login-box h1 {
-      font-size: 28px;
-      font-weight: 800;
-      text-align: center;
-      margin-bottom: 8px;
-    }
-    .login-box p {
-      color: #888;
-      font-size: 14px;
-      text-align: center;
-      margin-bottom: 24px;
-    }
+    .login-box h1 { font-size: 28px; font-weight: 800; text-align: center; margin-bottom: 8px; }
+    .login-box p { color: #888; font-size: 14px; text-align: center; margin-bottom: 24px; }
     .login-box input {
-      width: 100%;
-      padding: 14px 16px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.15);
-      border-radius: 10px;
-      color: #fff;
-      font-size: 15px;
-      outline: none;
+      width: 100%; padding: 14px 16px; background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15); border-radius: 10px;
+      color: #fff; font-size: 15px; outline: none;
     }
     .login-box button {
-      width: 100%;
-      padding: 14px;
-      margin-top: 16px;
-      background: #e63946;
-      border: none;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 15px;
-      font-weight: 600;
-      cursor: pointer;
+      width: 100%; padding: 14px; margin-top: 16px; background: #e63946;
+      border: none; border-radius: 10px; color: #fff; font-size: 15px;
+      font-weight: 600; cursor: pointer;
     }
     .login-box button:hover { background: #c92a36; }
     
@@ -80,88 +58,74 @@
       background: #0a0a0f;
       z-index: 100;
     }
-    .logo {
-      font-size: 22px;
-      font-weight: 800;
-      color: #e63946;
-    }
+    .logo { font-size: 22px; font-weight: 800; color: #e63946; }
     .logo span { color: #666; font-size: 14px; font-weight: 400; margin-left: 8px; }
-    .header-actions { display: flex; gap: 12px; }
+    .header-actions { display: flex; gap: 12px; align-items: center; }
     .header-actions button {
-      padding: 8px 16px;
-      background: rgba(255,255,255,0.1);
-      border: none;
-      border-radius: 8px;
-      color: #fff;
-      cursor: pointer;
-      font-size: 13px;
+      padding: 8px 16px; background: rgba(255,255,255,0.1); border: none;
+      border-radius: 8px; color: #fff; cursor: pointer; font-size: 13px;
     }
     .header-actions button:hover { background: rgba(255,255,255,0.15); }
     .header-actions .logout { background: transparent; color: #888; }
+    .last-updated { font-size: 11px; color: #666; }
     
-    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
     
-    /* Stats */
-    .stats {
+    /* Stats Grid */
+    .stats-grid {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(6, 1fr);
       gap: 16px;
       margin-bottom: 32px;
     }
-    @media (max-width: 768px) {
-      .stats { grid-template-columns: repeat(2, 1fr); }
-    }
+    @media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    
     .stat-card {
       padding: 20px;
       border-radius: 12px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
     }
-    .stat-card.blue { background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(59,130,246,0.05)); border: 1px solid rgba(59,130,246,0.3); }
-    .stat-card.purple { background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(139,92,246,0.05)); border: 1px solid rgba(139,92,246,0.3); }
-    .stat-card.yellow { background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.05)); border: 1px solid rgba(245,158,11,0.3); }
-    .stat-card.green { background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05)); border: 1px solid rgba(16,185,129,0.3); }
-    .stat-value { font-size: 28px; font-weight: 700; }
-    .stat-label { font-size: 13px; color: #888; margin-top: 4px; }
+    .stat-card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(0,0,0,0.3); }
+    .stat-card.blue { background: linear-gradient(135deg, rgba(59,130,246,0.2), rgba(59,130,246,0.05)); border: 1px solid rgba(59,130,246,0.3); }
+    .stat-card.purple { background: linear-gradient(135deg, rgba(139,92,246,0.2), rgba(139,92,246,0.05)); border: 1px solid rgba(139,92,246,0.3); }
+    .stat-card.yellow { background: linear-gradient(135deg, rgba(245,158,11,0.2), rgba(245,158,11,0.05)); border: 1px solid rgba(245,158,11,0.3); }
+    .stat-card.green { background: linear-gradient(135deg, rgba(16,185,129,0.2), rgba(16,185,129,0.05)); border: 1px solid rgba(16,185,129,0.3); }
+    .stat-card.red { background: linear-gradient(135deg, rgba(239,68,68,0.2), rgba(239,68,68,0.05)); border: 1px solid rgba(239,68,68,0.3); }
+    .stat-card.cyan { background: linear-gradient(135deg, rgba(6,182,212,0.2), rgba(6,182,212,0.05)); border: 1px solid rgba(6,182,212,0.3); }
+    .stat-value { font-size: 32px; font-weight: 700; }
+    .stat-label { font-size: 12px; color: #888; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .stat-detail { font-size: 11px; color: #666; margin-top: 8px; }
     
     /* Tabs */
-    .tabs {
-      display: flex;
-      gap: 8px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-    }
+    .tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
     .tab {
-      padding: 10px 20px;
-      background: rgba(255,255,255,0.05);
-      border: none;
-      border-radius: 8px;
-      color: #888;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
+      padding: 10px 20px; background: rgba(255,255,255,0.05); border: none;
+      border-radius: 8px; color: #888; cursor: pointer; font-size: 14px; font-weight: 500;
+      transition: all 0.2s;
     }
     .tab:hover { background: rgba(255,255,255,0.1); color: #fff; }
     .tab.active { background: #e63946; color: #fff; }
     .tab .badge {
-      margin-left: 8px;
-      padding: 2px 8px;
-      background: #f59e0b;
-      border-radius: 10px;
-      font-size: 12px;
-      color: #000;
+      margin-left: 8px; padding: 2px 8px; background: #f59e0b;
+      border-radius: 10px; font-size: 11px; color: #000;
     }
     
-    /* Search */
+    /* Search & Filters */
+    .toolbar { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
     .search {
-      width: 100%;
-      padding: 14px 16px;
-      background: rgba(255,255,255,0.05);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px;
-      color: #fff;
-      font-size: 14px;
-      margin-bottom: 24px;
-      outline: none;
+      flex: 1; min-width: 200px; padding: 12px 16px;
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px; color: #fff; font-size: 14px; outline: none;
     }
+    .filter-btn {
+      padding: 12px 20px; background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 10px;
+      color: #888; cursor: pointer; font-size: 13px;
+    }
+    .filter-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .filter-btn.active { background: rgba(230,57,70,0.2); border-color: #e63946; color: #e63946; }
     
     /* Cards */
     .card {
@@ -172,90 +136,177 @@
       margin-bottom: 24px;
     }
     .card.highlight { border-color: rgba(245,158,11,0.3); }
+    .card.success { border-color: rgba(16,185,129,0.3); }
     .card-header {
       padding: 16px 20px;
       border-bottom: 1px solid rgba(255,255,255,0.08);
       font-weight: 600;
       font-size: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
     }
     .card.highlight .card-header { color: #f59e0b; }
+    .card-header .count { font-size: 12px; color: #666; font-weight: 400; }
     
-    /* Rows */
-    .row {
-      padding: 14px 20px;
+    /* Grid Layouts */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
+    @media (max-width: 1024px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+    
+    /* User Card */
+    .user-card {
+      padding: 16px 20px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
-      display: flex;
-      align-items: center;
-      gap: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
     }
-    .row:last-child { border-bottom: none; }
+    .user-card:hover { background: rgba(255,255,255,0.03); }
+    .user-card:last-child { border-bottom: none; }
+    .user-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
     .avatar {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
+      width: 40px; height: 40px; border-radius: 50%;
       background: linear-gradient(135deg, #e63946, #f97316);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 600;
-      font-size: 14px;
-      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 600; font-size: 16px; flex-shrink: 0;
     }
-    .row-content { flex: 1; min-width: 0; }
-    .row-title { font-weight: 500; font-size: 14px; }
-    .row-subtitle { font-size: 12px; color: #666; margin-top: 2px; }
+    .user-info { flex: 1; }
+    .user-name { font-weight: 600; font-size: 15px; }
+    .user-phone { font-size: 12px; color: #666; }
+    .user-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .skill-tag {
+      padding: 4px 10px; background: rgba(139,92,246,0.15);
+      color: #a78bfa; border-radius: 20px; font-size: 11px;
+    }
     .badge {
-      padding: 4px 10px;
-      border-radius: 20px;
-      font-size: 11px;
+      padding: 4px 10px; border-radius: 20px; font-size: 11px;
     }
     .badge.green { background: rgba(16,185,129,0.15); color: #10b981; }
     .badge.yellow { background: rgba(245,158,11,0.15); color: #f59e0b; }
     .badge.purple { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+    .badge.red { background: rgba(239,68,68,0.15); color: #ef4444; }
+    .badge.blue { background: rgba(59,130,246,0.15); color: #3b82f6; }
     .badge.gray { background: rgba(128,128,128,0.15); color: #888; }
     
-    /* Empty */
-    .empty {
-      padding: 40px 20px;
-      text-align: center;
-      color: #666;
-      font-size: 14px;
+    /* Request Card */
+    .request-card {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
+    .request-card:last-child { border-bottom: none; }
+    .request-title { font-weight: 600; font-size: 14px; margin-bottom: 6px; }
+    .request-meta { font-size: 12px; color: #666; margin-bottom: 10px; }
+    .request-skills { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+    .request-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .action-btn {
+      padding: 8px 14px; border-radius: 8px; font-size: 12px;
+      font-weight: 500; text-decoration: none; cursor: pointer; border: none;
+      transition: opacity 0.2s;
+    }
+    .action-btn:hover { opacity: 0.8; }
+    .action-btn.ig { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); color: #fff; }
+    .action-btn.li { background: #0a66c2; color: #fff; }
+    .action-btn.primary { background: #e63946; color: #fff; }
+    .action-btn.secondary { background: rgba(255,255,255,0.1); color: #fff; }
     
-    /* Grid */
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
+    /* Modal */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
     }
-    @media (max-width: 768px) {
-      .grid-2 { grid-template-columns: 1fr; }
+    .modal-overlay.active { display: flex; }
+    .modal {
+      background: #1a1a2e;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      border: 1px solid rgba(255,255,255,0.1);
     }
-    
-    /* Unfilled Actions */
-    .unfilled-actions {
+    .modal-header {
+      padding: 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
       display: flex;
-      gap: 8px;
-      margin-top: 12px;
-      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
     }
-    .unfilled-actions a {
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-size: 12px;
-      font-weight: 500;
-      color: #fff;
-      text-decoration: none;
+    .modal-header h2 { font-size: 18px; font-weight: 600; }
+    .modal-close {
+      background: none; border: none; color: #888;
+      font-size: 24px; cursor: pointer; line-height: 1;
     }
-    .unfilled-actions .ig { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); }
-    .unfilled-actions .li { background: #0a66c2; }
+    .modal-body { padding: 20px; }
+    .modal-section { margin-bottom: 20px; }
+    .modal-section h3 { font-size: 13px; color: #888; margin-bottom: 8px; text-transform: uppercase; }
+    .modal-section p { font-size: 14px; line-height: 1.6; }
+    .social-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .social-link {
+      padding: 8px 16px; background: rgba(255,255,255,0.1);
+      border-radius: 8px; color: #fff; text-decoration: none; font-size: 13px;
+    }
+    .social-link:hover { background: rgba(255,255,255,0.15); }
     
-    /* Tab content */
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
+    /* Outreach Form */
+    .outreach-form {
+      padding: 16px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 10px;
+      margin-top: 12px;
+    }
+    .form-row { margin-bottom: 12px; }
+    .form-row label { display: block; font-size: 12px; color: #888; margin-bottom: 6px; }
+    .form-row input, .form-row select {
+      width: 100%; padding: 10px 14px;
+      background: rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 8px; color: #fff; font-size: 14px;
+    }
+    
+    /* Empty State */
+    .empty { padding: 40px 20px; text-align: center; color: #666; font-size: 14px; }
     
     /* Loading */
     .loading { text-align: center; padding: 40px; color: #888; }
+    
+    /* Tab Content */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    /* Timeline */
+    .timeline-item {
+      padding: 16px 20px;
+      border-left: 2px solid rgba(255,255,255,0.1);
+      margin-left: 10px;
+      position: relative;
+    }
+    .timeline-item::before {
+      content: '';
+      width: 10px; height: 10px;
+      background: #e63946;
+      border-radius: 50%;
+      position: absolute;
+      left: -6px;
+      top: 20px;
+    }
+    .timeline-item.green::before { background: #10b981; }
+    .timeline-item.yellow::before { background: #f59e0b; }
+    
+    /* Enriched Profile */
+    .enriched-section {
+      background: rgba(139,92,246,0.1);
+      border: 1px solid rgba(139,92,246,0.3);
+      border-radius: 10px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+    .enriched-title { font-size: 12px; color: #a78bfa; margin-bottom: 10px; text-transform: uppercase; }
   </style>
 </head>
 <body>
@@ -263,7 +314,7 @@
   <div class="login-screen" id="loginScreen">
     <form class="login-box" onsubmit="handleLogin(event)">
       <h1>TITLI</h1>
-      <p>Admin Dashboard</p>
+      <p>Command Center</p>
       <input type="password" id="password" placeholder="Enter password" required>
       <button type="submit">Enter</button>
     </form>
@@ -272,31 +323,48 @@
   <!-- Dashboard -->
   <div class="dashboard" id="dashboard">
     <header>
-      <div class="logo">TITLI<span>Admin</span></div>
+      <div>
+        <span class="logo">TITLI<span>Command Center</span></span>
+      </div>
       <div class="header-actions">
-        <button onclick="fetchData()">Refresh</button>
+        <span class="last-updated" id="lastUpdated"></span>
+        <button onclick="fetchAllData()">Refresh</button>
         <button class="logout" onclick="logout()">Logout</button>
       </div>
     </header>
     
     <div class="container">
-      <!-- Stats -->
-      <div class="stats">
-        <div class="stat-card blue">
+      <!-- Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card blue" onclick="switchTab('users')">
           <div class="stat-value" id="statUsers">0</div>
           <div class="stat-label">Total Users</div>
+          <div class="stat-detail" id="statUsersDetail">-</div>
         </div>
-        <div class="stat-card purple">
+        <div class="stat-card green" onclick="switchTab('users')">
+          <div class="stat-value" id="statTelegram">0</div>
+          <div class="stat-label">Telegram Active</div>
+          <div class="stat-detail">Connected to bot</div>
+        </div>
+        <div class="stat-card purple" onclick="switchTab('requests')">
           <div class="stat-value" id="statRequests">0</div>
           <div class="stat-label">Total Requests</div>
+          <div class="stat-detail" id="statRequestsDetail">-</div>
         </div>
-        <div class="stat-card yellow">
+        <div class="stat-card yellow" onclick="switchTab('unfilled')">
           <div class="stat-value" id="statUnfilled">0</div>
-          <div class="stat-label">Unfilled</div>
+          <div class="stat-label">Need Matches</div>
+          <div class="stat-detail">Recruitment opportunities</div>
         </div>
-        <div class="stat-card green">
-          <div class="stat-value" id="statConnected">0</div>
-          <div class="stat-label">Telegram Connected</div>
+        <div class="stat-card cyan" onclick="switchTab('matches')">
+          <div class="stat-value" id="statMatches">0</div>
+          <div class="stat-label">Matches Made</div>
+          <div class="stat-detail" id="statMatchesDetail">-</div>
+        </div>
+        <div class="stat-card red" onclick="switchTab('outreach')">
+          <div class="stat-value" id="statOutreach">0</div>
+          <div class="stat-label">Outreach</div>
+          <div class="stat-detail" id="statOutreachDetail">-</div>
         </div>
       </div>
       
@@ -304,47 +372,169 @@
       <div class="tabs">
         <button class="tab active" onclick="switchTab('overview')">Overview</button>
         <button class="tab" onclick="switchTab('users')">Users</button>
-        <button class="tab" onclick="switchTab('requests')">Requests</button>
+        <button class="tab" onclick="switchTab('requests')">All Requests</button>
         <button class="tab" onclick="switchTab('unfilled')">Unfilled <span class="badge" id="unfilledBadge">0</span></button>
+        <button class="tab" onclick="switchTab('matches')">Matches</button>
+        <button class="tab" onclick="switchTab('outreach')">Outreach</button>
+        <button class="tab" onclick="switchTab('skills')">Skills Map</button>
       </div>
       
       <!-- Search -->
-      <input type="text" class="search" placeholder="Search users, requests, skills..." oninput="handleSearch(this.value)">
+      <div class="toolbar">
+        <input type="text" class="search" placeholder="Search users, requests, skills..." oninput="handleSearch(this.value)">
+        <button class="filter-btn" onclick="toggleFilter('telegram')" id="filterTelegram">Telegram Only</button>
+        <button class="filter-btn" onclick="toggleFilter('enriched')" id="filterEnriched">Has Smart Profile</button>
+      </div>
       
       <!-- Tab Contents -->
       <div class="tab-content active" id="tab-overview">
-        <div class="grid-2">
+        <div class="grid-3">
+          <!-- Recent Activity -->
           <div class="card">
-            <div class="card-header">Recent Users</div>
+            <div class="card-header">Recent Activity</div>
+            <div id="recentActivity"><div class="loading">Loading...</div></div>
+          </div>
+          
+          <!-- Unfilled Requests -->
+          <div class="card highlight">
+            <div class="card-header">
+              🔥 Needs Your Attention
+              <span class="count" id="attentionCount">0 items</span>
+            </div>
+            <div id="needsAttention"><div class="loading">Loading...</div></div>
+          </div>
+          
+          <!-- Top Skills -->
+          <div class="card">
+            <div class="card-header">Skills Distribution</div>
+            <div id="skillsDistribution"><div class="loading">Loading...</div></div>
+          </div>
+        </div>
+        
+        <div class="grid-2">
+          <!-- Recent Users -->
+          <div class="card">
+            <div class="card-header">
+              Recent Users
+              <span class="count" id="recentUsersCount">0</span>
+            </div>
             <div id="recentUsers"><div class="loading">Loading...</div></div>
           </div>
-          <div class="card highlight">
-            <div class="card-header">Unfilled Requests</div>
-            <div id="recentUnfilled"><div class="loading">Loading...</div></div>
+          
+          <!-- Recent Requests -->
+          <div class="card">
+            <div class="card-header">
+              Recent Requests
+              <span class="count" id="recentRequestsCount">0</span>
+            </div>
+            <div id="recentRequests"><div class="loading">Loading...</div></div>
           </div>
         </div>
       </div>
       
+      <!-- Users Tab -->
       <div class="tab-content" id="tab-users">
         <div class="card">
-          <div class="card-header">All Users (<span id="userCount">0</span>)</div>
+          <div class="card-header">
+            All Users
+            <span class="count" id="userCount">0</span>
+          </div>
           <div id="allUsers"><div class="loading">Loading...</div></div>
         </div>
       </div>
       
+      <!-- Requests Tab -->
       <div class="tab-content" id="tab-requests">
         <div class="card">
-          <div class="card-header">All Requests (<span id="requestCount">0</span>)</div>
+          <div class="card-header">
+            All Requests
+            <span class="count" id="requestCount">0</span>
+          </div>
           <div id="allRequests"><div class="loading">Loading...</div></div>
         </div>
       </div>
       
+      <!-- Unfilled Tab -->
       <div class="tab-content" id="tab-unfilled">
         <div class="card highlight">
-          <div class="card-header">Recruitment Opportunities</div>
+          <div class="card-header">
+            Recruitment Opportunities
+            <span class="count">Skills we need to find</span>
+          </div>
           <div id="allUnfilled"><div class="loading">Loading...</div></div>
         </div>
       </div>
+      
+      <!-- Matches Tab -->
+      <div class="tab-content" id="tab-matches">
+        <div class="card success">
+          <div class="card-header">
+            All Matches
+            <span class="count" id="matchCount">0</span>
+          </div>
+          <div id="allMatches"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
+      
+      <!-- Outreach Tab -->
+      <div class="tab-content" id="tab-outreach">
+        <div class="card">
+          <div class="card-header">
+            Outreach Tracking
+            <button class="action-btn primary" onclick="showOutreachForm()" style="padding:6px 12px;font-size:11px;">+ New Outreach</button>
+          </div>
+          <div id="outreachForm" style="display:none;padding:20px;border-bottom:1px solid rgba(255,255,255,0.1);">
+            <div class="outreach-form">
+              <div class="form-row">
+                <label>Person's Name</label>
+                <input type="text" id="outreachName" placeholder="e.g. Maya Chen">
+              </div>
+              <div class="form-row">
+                <label>Platform</label>
+                <select id="outreachPlatform">
+                  <option value="instagram">Instagram</option>
+                  <option value="linkedin">LinkedIn</option>
+                  <option value="twitter">Twitter/X</option>
+                  <option value="email">Email</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+              <div class="form-row">
+                <label>Profile URL</label>
+                <input type="text" id="outreachUrl" placeholder="https://instagram.com/...">
+              </div>
+              <div class="form-row">
+                <label>For Request (optional)</label>
+                <select id="outreachRequest"></select>
+              </div>
+              <button class="action-btn primary" onclick="saveOutreach()" style="width:100%;margin-top:8px;">Save Outreach</button>
+            </div>
+          </div>
+          <div id="allOutreach"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
+      
+      <!-- Skills Map Tab -->
+      <div class="tab-content" id="tab-skills">
+        <div class="card">
+          <div class="card-header">
+            Skills Map
+            <span class="count">Who has what skills</span>
+          </div>
+          <div id="skillsMap"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- User Detail Modal -->
+  <div class="modal-overlay" id="userModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 id="modalUserName">User Details</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body" id="modalUserBody"></div>
     </div>
   </div>
 
@@ -355,21 +545,23 @@
     let users = [];
     let requests = [];
     let unfilled = [];
+    let matches = [];
+    let outreach = [];
     let searchTerm = "";
+    let filters = { telegram: false, enriched: false };
     
     // Check if already logged in
     if (localStorage.getItem("titli_admin") === "true") {
       showDashboard();
-      fetchData();
+      fetchAllData();
     }
     
     function handleLogin(e) {
       e.preventDefault();
-      const pwd = document.getElementById("password").value;
-      if (pwd === PASSWORD) {
+      if (document.getElementById("password").value === PASSWORD) {
         localStorage.setItem("titli_admin", "true");
         showDashboard();
-        fetchData();
+        fetchAllData();
       } else {
         alert("Wrong password");
       }
@@ -386,31 +578,54 @@
       document.getElementById("dashboard").classList.add("active");
     }
     
-    async function fetchData() {
+    async function fetchAllData() {
       try {
-        const [usersRes, requestsRes, unfilledRes] = await Promise.all([
-          fetch(`${API}/admin/users`).then(r => r.json()).catch(() => []),
-          fetch(`${API}/admin/requests`).then(r => r.json()).catch(() => []),
-          fetch(`${API}/admin/unfilled-requests`).then(r => r.json()).catch(() => [])
+        const [u, r, uf, m, o] = await Promise.all([
+          fetch(`${API}/admin/users`).then(res => res.json()).catch(() => []),
+          fetch(`${API}/admin/requests`).then(res => res.json()).catch(() => []),
+          fetch(`${API}/admin/unfilled-requests`).then(res => res.json()).catch(() => []),
+          fetch(`${API}/admin/matches`).then(res => res.json()).catch(() => []),
+          fetch(`${API}/admin/outreach`).then(res => res.json()).catch(() => [])
         ]);
         
-        users = usersRes || [];
-        requests = requestsRes || [];
-        unfilled = unfilledRes || [];
+        users = u || [];
+        requests = r || [];
+        unfilled = uf || [];
+        matches = m || [];
+        outreach = o || [];
         
         updateStats();
         render();
+        updateLastUpdated();
+        populateOutreachRequests();
       } catch (e) {
         console.error("Fetch error:", e);
       }
     }
     
+    function updateLastUpdated() {
+      document.getElementById("lastUpdated").textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+    }
+    
     function updateStats() {
+      const telegramUsers = users.filter(u => u.telegram_connected).length;
+      const enrichedUsers = users.filter(u => u.enriched_profile).length;
+      const completedRequests = requests.filter(r => r.status === 'completed').length;
+      const pendingOutreach = outreach.filter(o => o.status === 'pending' || o.status === 'contacted').length;
+      const joinedOutreach = outreach.filter(o => o.status === 'joined').length;
+      
       document.getElementById("statUsers").textContent = users.length;
+      document.getElementById("statUsersDetail").textContent = `${enrichedUsers} with smart profiles`;
+      document.getElementById("statTelegram").textContent = telegramUsers;
       document.getElementById("statRequests").textContent = requests.length;
+      document.getElementById("statRequestsDetail").textContent = `${completedRequests} completed`;
       document.getElementById("statUnfilled").textContent = unfilled.length;
-      document.getElementById("statConnected").textContent = users.filter(u => u.telegram_connected).length;
+      document.getElementById("statMatches").textContent = matches.length;
+      document.getElementById("statMatchesDetail").textContent = `Connections made`;
+      document.getElementById("statOutreach").textContent = outreach.length;
+      document.getElementById("statOutreachDetail").textContent = `${pendingOutreach} pending, ${joinedOutreach} joined`;
       document.getElementById("unfilledBadge").textContent = unfilled.length;
+      document.getElementById("attentionCount").textContent = `${unfilled.length} items`;
     }
     
     function switchTab(tab) {
@@ -425,93 +640,422 @@
       render();
     }
     
+    function toggleFilter(filter) {
+      filters[filter] = !filters[filter];
+      document.getElementById(`filter${filter.charAt(0).toUpperCase() + filter.slice(1)}`).classList.toggle('active');
+      render();
+    }
+    
+    function getFilteredUsers() {
+      return users.filter(u => {
+        const matchesSearch = !searchTerm || 
+          u.name?.toLowerCase().includes(searchTerm) ||
+          u.phone?.includes(searchTerm) ||
+          u.skills?.some(s => s.toLowerCase().includes(searchTerm)) ||
+          u.bio?.toLowerCase().includes(searchTerm);
+        const matchesTelegram = !filters.telegram || u.telegram_connected;
+        const matchesEnriched = !filters.enriched || u.enriched_profile;
+        return matchesSearch && matchesTelegram && matchesEnriched;
+      });
+    }
+    
     function render() {
-      const filteredUsers = users.filter(u => 
-        u.name?.toLowerCase().includes(searchTerm) ||
-        u.skills?.some(s => s.toLowerCase().includes(searchTerm))
-      );
-      
+      const filteredUsers = getFilteredUsers();
       const filteredRequests = requests.filter(r =>
-        r.title?.toLowerCase().includes(searchTerm)
+        !searchTerm || r.title?.toLowerCase().includes(searchTerm)
       );
       
-      // Recent Users (overview)
-      document.getElementById("recentUsers").innerHTML = users.length === 0 
-        ? '<div class="empty">No users yet</div>'
-        : users.slice(0, 5).map(userRow).join("");
+      // Overview - Recent Activity
+      const activity = [
+        ...users.slice(0, 3).map(u => ({ type: 'user', data: u, time: u.created_at })),
+        ...requests.slice(0, 3).map(r => ({ type: 'request', data: r, time: r.created_at })),
+        ...matches.slice(0, 3).map(m => ({ type: 'match', data: m, time: m.created_at }))
+      ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 5);
       
-      // Recent Unfilled (overview)
-      document.getElementById("recentUnfilled").innerHTML = unfilled.length === 0
-        ? '<div class="empty">All requests have matches!</div>'
-        : unfilled.slice(0, 5).map(requestRow).join("");
+      document.getElementById("recentActivity").innerHTML = activity.length === 0
+        ? '<div class="empty">No activity yet</div>'
+        : activity.map(a => activityItem(a)).join("");
+      
+      // Needs Attention
+      document.getElementById("needsAttention").innerHTML = unfilled.length === 0
+        ? '<div class="empty">All requests have matches! 🎉</div>'
+        : unfilled.slice(0, 5).map(r => unfilledCard(r, true)).join("");
+      
+      // Skills Distribution
+      const skillCounts = {};
+      users.forEach(u => u.skills?.forEach(s => skillCounts[s] = (skillCounts[s] || 0) + 1));
+      const topSkills = Object.entries(skillCounts).sort((a, b) => b[1] - a[1]).slice(0, 10);
+      document.getElementById("skillsDistribution").innerHTML = topSkills.length === 0
+        ? '<div class="empty">No skills data</div>'
+        : `<div style="padding:16px">${topSkills.map(([skill, count]) => 
+          `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+            <span>${skill}</span>
+            <span class="badge purple">${count} users</span>
+          </div>`).join("")}</div>`;
+      
+      // Recent Users
+      document.getElementById("recentUsersCount").textContent = users.length;
+      document.getElementById("recentUsers").innerHTML = users.length === 0
+        ? '<div class="empty">No users yet</div>'
+        : users.slice(0, 5).map(u => userCard(u)).join("");
+      
+      // Recent Requests
+      document.getElementById("recentRequestsCount").textContent = requests.length;
+      document.getElementById("recentRequests").innerHTML = requests.length === 0
+        ? '<div class="empty">No requests yet</div>'
+        : requests.slice(0, 5).map(r => requestCard(r)).join("");
       
       // All Users
       document.getElementById("userCount").textContent = filteredUsers.length;
       document.getElementById("allUsers").innerHTML = filteredUsers.length === 0
         ? '<div class="empty">No users found</div>'
-        : filteredUsers.map(u => userRow(u, true)).join("");
+        : filteredUsers.map(u => userCard(u, true)).join("");
       
       // All Requests
       document.getElementById("requestCount").textContent = filteredRequests.length;
       document.getElementById("allRequests").innerHTML = filteredRequests.length === 0
         ? '<div class="empty">No requests found</div>'
-        : filteredRequests.map(r => requestRow(r, true)).join("");
+        : filteredRequests.map(r => requestCard(r, true)).join("");
       
       // Unfilled
       document.getElementById("allUnfilled").innerHTML = unfilled.length === 0
         ? '<div class="empty">All requests have matches! 🎉</div>'
-        : unfilled.map(unfilledRow).join("");
+        : unfilled.map(r => unfilledCard(r)).join("");
+      
+      // Matches
+      document.getElementById("matchCount").textContent = matches.length;
+      document.getElementById("allMatches").innerHTML = matches.length === 0
+        ? '<div class="empty">No matches yet</div>'
+        : matches.map(m => matchCard(m)).join("");
+      
+      // Outreach
+      document.getElementById("allOutreach").innerHTML = outreach.length === 0
+        ? '<div class="empty">No outreach yet. Start recruiting!</div>'
+        : outreach.map(o => outreachCard(o)).join("");
+      
+      // Skills Map
+      document.getElementById("skillsMap").innerHTML = `<div style="padding:16px">
+        ${Object.entries(skillCounts).sort((a, b) => b[1] - a[1]).map(([skill, count]) => {
+          const usersWithSkill = users.filter(u => u.skills?.includes(skill));
+          return `<div style="margin-bottom:16px;padding:16px;background:rgba(255,255,255,0.03);border-radius:10px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:10px">
+              <strong>${skill}</strong>
+              <span class="badge purple">${count} users</span>
+            </div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              ${usersWithSkill.map(u => `<span style="padding:4px 10px;background:rgba(255,255,255,0.1);border-radius:15px;font-size:12px;cursor:pointer" onclick="showUserDetail('${u.id}')">${u.name}</span>`).join("")}
+            </div>
+          </div>`;
+        }).join("")}
+      </div>`;
     }
     
-    function userRow(u, showDetails = false) {
-      return `
-        <div class="row">
+    function activityItem(a) {
+      const icons = { user: '👤', request: '📋', match: '🤝' };
+      const colors = { user: 'blue', request: 'purple', match: 'green' };
+      let text = '';
+      if (a.type === 'user') text = `${a.data.name} joined`;
+      if (a.type === 'request') text = `New request: "${a.data.title}"`;
+      if (a.type === 'match') text = `Match created`;
+      
+      return `<div class="timeline-item ${colors[a.type]}">
+        <div style="font-size:13px">${icons[a.type]} ${text}</div>
+        <div style="font-size:11px;color:#666;margin-top:4px">${timeAgo(a.time)}</div>
+      </div>`;
+    }
+    
+    function userCard(u, detailed = false) {
+      const hasEnriched = u.enriched_profile && Object.keys(u.enriched_profile).length > 0;
+      return `<div class="user-card" onclick="showUserDetail('${u.id}')">
+        <div class="user-header">
           <div class="avatar">${u.name?.charAt(0) || "?"}</div>
-          <div class="row-content">
-            <div class="row-title">${u.name || "Unknown"}</div>
-            <div class="row-subtitle">${u.skills?.slice(0, 3).join(", ") || "No skills"}</div>
+          <div class="user-info">
+            <div class="user-name">${u.name || "Unknown"}</div>
+            <div class="user-phone">${u.phone || ""}</div>
           </div>
           ${u.telegram_connected ? '<span class="badge green">Telegram</span>' : ''}
-          ${showDetails && u.location ? `<span style="font-size:12px;color:#666">${u.location}</span>` : ''}
+          ${hasEnriched ? '<span class="badge purple">Smart Profile</span>' : ''}
         </div>
-      `;
+        ${u.bio ? `<div style="font-size:13px;color:#aaa;margin-bottom:8px">${u.bio.substring(0, 100)}${u.bio.length > 100 ? '...' : ''}</div>` : ''}
+        <div class="user-meta">
+          ${(u.skills || []).slice(0, detailed ? 10 : 4).map(s => `<span class="skill-tag">${s}</span>`).join("")}
+          ${u.skills?.length > (detailed ? 10 : 4) ? `<span style="font-size:11px;color:#666">+${u.skills.length - (detailed ? 10 : 4)} more</span>` : ''}
+        </div>
+        ${detailed && u.location ? `<div style="font-size:12px;color:#666;margin-top:8px">📍 ${u.location}</div>` : ''}
+      </div>`;
     }
     
-    function requestRow(r, showDetails = false) {
-      const statusClass = {
-        in_progress: "yellow",
-        completed: "green",
-        awaiting_approval: "purple"
-      }[r.status] || "gray";
+    function requestCard(r, detailed = false) {
+      const requester = users.find(u => u.id === r.user_id);
+      const statusColors = {
+        in_progress: 'yellow',
+        completed: 'green',
+        awaiting_approval: 'purple',
+        matching: 'blue'
+      };
       
-      return `
-        <div class="row" style="display:block">
-          <div style="display:flex;justify-content:space-between;align-items:center">
-            <div class="row-title">${r.title || "Untitled"}</div>
-            <span class="badge ${statusClass}">${(r.status || "unknown").replace("_", " ")}</span>
-          </div>
-          ${showDetails ? `<div class="row-subtitle" style="margin-top:6px">${new Date(r.created_at).toLocaleDateString()}</div>` : ''}
+      // Extract skills from title
+      const skillWords = (r.title || '').toLowerCase();
+      const matchingSkills = [];
+      users.forEach(u => {
+        u.skills?.forEach(s => {
+          if (skillWords.includes(s.toLowerCase()) && !matchingSkills.includes(s)) {
+            matchingSkills.push(s);
+          }
+        });
+      });
+      
+      return `<div class="request-card">
+        <div style="display:flex;justify-content:space-between;align-items:start">
+          <div class="request-title">${r.title || "Untitled"}</div>
+          <span class="badge ${statusColors[r.status] || 'gray'}">${(r.status || 'unknown').replace('_', ' ')}</span>
         </div>
-      `;
+        <div class="request-meta">
+          By ${requester?.name || 'Unknown'} · ${timeAgo(r.created_at)}
+          ${r.location ? ` · 📍 ${r.location}` : ''}
+        </div>
+        ${matchingSkills.length > 0 ? `<div class="request-skills">${matchingSkills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>` : ''}
+      </div>`;
     }
     
-    function unfilledRow(r) {
+    function unfilledCard(r, compact = false) {
+      const requester = users.find(u => u.id === r.user_id);
       const searchTerm = encodeURIComponent(r.title || "");
-      const lastWord = encodeURIComponent((r.title || "").split(" ").pop());
       
-      return `
-        <div class="row" style="display:block;padding:16px 20px">
-          <div class="row-title" style="color:#fbbf24">${r.title || "Untitled"}</div>
-          <div class="row-subtitle" style="margin-top:4px">
-            By ${r.requester || "Unknown"} · ${r.location || "No location"} · ${new Date(r.created_at).toLocaleDateString()}
+      // Find potential matches
+      const titleWords = (r.title || '').toLowerCase().split(' ');
+      const potentialMatches = users.filter(u => 
+        u.id !== r.user_id && 
+        u.skills?.some(s => titleWords.some(w => s.toLowerCase().includes(w) || w.includes(s.toLowerCase())))
+      );
+      
+      return `<div class="request-card" style="border-left:3px solid #f59e0b;margin-left:-1px">
+        <div class="request-title" style="color:#fbbf24">${r.title || "Untitled"}</div>
+        <div class="request-meta">
+          By ${requester?.name || r.requester || 'Unknown'} · ${timeAgo(r.created_at)}
+        </div>
+        ${potentialMatches.length > 0 ? `
+          <div style="margin:10px 0;padding:10px;background:rgba(16,185,129,0.1);border-radius:8px">
+            <div style="font-size:11px;color:#10b981;margin-bottom:6px">POTENTIAL MATCHES IN DATABASE:</div>
+            ${potentialMatches.slice(0, 3).map(u => `<span style="display:inline-block;padding:4px 10px;background:rgba(255,255,255,0.1);border-radius:15px;font-size:12px;margin-right:6px;cursor:pointer" onclick="showUserDetail('${u.id}')">${u.name}</span>`).join('')}
+            ${potentialMatches.length > 3 ? `<span style="font-size:11px;color:#666">+${potentialMatches.length - 3} more</span>` : ''}
           </div>
-          <div class="unfilled-actions">
-            <a href="https://www.instagram.com/explore/tags/${lastWord}" target="_blank" class="ig">Find on Instagram</a>
-            <a href="https://www.linkedin.com/search/results/people/?keywords=${searchTerm}" target="_blank" class="li">Find on LinkedIn</a>
+        ` : ''}
+        ${!compact ? `<div class="request-actions">
+          <a href="https://www.instagram.com/explore/search/keyword/?q=${searchTerm}" target="_blank" class="action-btn ig">Find on Instagram</a>
+          <a href="https://www.linkedin.com/search/results/people/?keywords=${searchTerm}" target="_blank" class="action-btn li">Find on LinkedIn</a>
+          <button class="action-btn secondary" onclick="startOutreach('${r.id}', '${r.title}')">Log Outreach</button>
+        </div>` : ''}
+      </div>`;
+    }
+    
+    function matchCard(m) {
+      const user1 = users.find(u => u.id === m.user_id || u.id === m.requester_id);
+      const user2 = users.find(u => u.id === m.matched_user_id);
+      
+      return `<div class="request-card">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="avatar" style="width:32px;height:32px;font-size:12px">${user1?.name?.charAt(0) || "?"}</div>
+          <span style="color:#10b981">🤝</span>
+          <div class="avatar" style="width:32px;height:32px;font-size:12px">${user2?.name?.charAt(0) || "?"}</div>
+          <div>
+            <div style="font-size:14px"><strong>${user1?.name || 'Unknown'}</strong> matched with <strong>${user2?.name || 'Unknown'}</strong></div>
+            <div style="font-size:12px;color:#666">${timeAgo(m.created_at)}</div>
           </div>
         </div>
-      `;
+      </div>`;
     }
+    
+    function outreachCard(o) {
+      const statusColors = {
+        pending: 'yellow',
+        contacted: 'blue',
+        joined: 'green',
+        declined: 'red'
+      };
+      const request = requests.find(r => r.id === o.request_id) || unfilled.find(r => r.id === o.request_id);
+      
+      return `<div class="request-card">
+        <div style="display:flex;justify-content:space-between;align-items:start">
+          <div>
+            <div class="request-title">${o.name}</div>
+            <div class="request-meta">
+              ${o.platform} · <a href="${o.profile_url}" target="_blank" style="color:#3b82f6">${o.profile_url}</a>
+            </div>
+            ${request ? `<div style="font-size:12px;color:#888;margin-top:4px">For: "${request.title}"</div>` : ''}
+          </div>
+          <span class="badge ${statusColors[o.status]}">${o.status}</span>
+        </div>
+        <div class="request-actions" style="margin-top:12px">
+          ${o.status === 'pending' ? `<button class="action-btn secondary" onclick="updateOutreach('${o.id}', 'contacted')">Mark Contacted</button>` : ''}
+          ${o.status !== 'joined' && o.status !== 'declined' ? `
+            <button class="action-btn primary" onclick="updateOutreach('${o.id}', 'joined')">Joined ✓</button>
+            <button class="action-btn secondary" onclick="updateOutreach('${o.id}', 'declined')">Declined</button>
+          ` : ''}
+        </div>
+      </div>`;
+    }
+    
+    function showUserDetail(userId) {
+      const user = users.find(u => u.id === userId);
+      if (!user) return;
+      
+      document.getElementById("modalUserName").textContent = user.name || "User Details";
+      
+      const userRequests = requests.filter(r => r.user_id === userId);
+      const userMatches = matches.filter(m => m.user_id === userId || m.matched_user_id === userId);
+      
+      let html = `
+        <div class="modal-section">
+          <h3>Contact</h3>
+          <p>📱 ${user.phone || 'No phone'}</p>
+          <p>📍 ${user.location || 'No location'}</p>
+          ${user.telegram_connected ? '<p style="color:#10b981">✓ Telegram Connected</p>' : '<p style="color:#888">✗ Not on Telegram</p>'}
+        </div>
+        
+        <div class="modal-section">
+          <h3>Bio</h3>
+          <p>${user.bio || 'No bio'}</p>
+        </div>
+        
+        <div class="modal-section">
+          <h3>Skills (${user.skills?.length || 0})</h3>
+          <div style="display:flex;gap:6px;flex-wrap:wrap">
+            ${(user.skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('') || 'No skills'}
+          </div>
+        </div>
+        
+        ${user.social_links ? `
+          <div class="modal-section">
+            <h3>Social Links</h3>
+            <div class="social-links">
+              ${user.social_links.instagram ? `<a href="https://instagram.com/${user.social_links.instagram}" target="_blank" class="social-link">Instagram</a>` : ''}
+              ${user.social_links.linkedin ? `<a href="${user.social_links.linkedin}" target="_blank" class="social-link">LinkedIn</a>` : ''}
+              ${user.social_links.imdb ? `<a href="${user.social_links.imdb}" target="_blank" class="social-link">IMDB</a>` : ''}
+              ${user.social_links.twitter ? `<a href="https://twitter.com/${user.social_links.twitter}" target="_blank" class="social-link">Twitter</a>` : ''}
+              ${user.social_links.soundcloud ? `<a href="${user.social_links.soundcloud}" target="_blank" class="social-link">SoundCloud</a>` : ''}
+            </div>
+          </div>
+        ` : ''}
+        
+        ${user.enriched_profile ? `
+          <div class="enriched-section">
+            <div class="enriched-title">🧠 Smart Profile (AI Enriched)</div>
+            ${user.enriched_profile.work_types?.length ? `<p><strong>Work Types:</strong> ${user.enriched_profile.work_types.join(', ')}</p>` : ''}
+            ${user.enriched_profile.industries?.length ? `<p><strong>Industries:</strong> ${user.enriched_profile.industries.join(', ')}</p>` : ''}
+            ${user.enriched_profile.specialties?.length ? `<p><strong>Specialties:</strong> ${user.enriched_profile.specialties.join(', ')}</p>` : ''}
+            ${user.enriched_profile.credibility_score ? `<p><strong>Credibility Score:</strong> ${user.enriched_profile.credibility_score}/100</p>` : ''}
+          </div>
+        ` : ''}
+        
+        <div class="modal-section">
+          <h3>Requests Made (${userRequests.length})</h3>
+          ${userRequests.length === 0 ? '<p style="color:#666">No requests</p>' : 
+            userRequests.map(r => `<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+              <div style="font-size:13px">${r.title}</div>
+              <div style="font-size:11px;color:#666">${r.status} · ${timeAgo(r.created_at)}</div>
+            </div>`).join('')}
+        </div>
+        
+        <div class="modal-section">
+          <h3>Matches (${userMatches.length})</h3>
+          ${userMatches.length === 0 ? '<p style="color:#666">No matches yet</p>' : 
+            userMatches.map(m => {
+              const other = users.find(u => u.id === (m.user_id === userId ? m.matched_user_id : m.user_id));
+              return `<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+                <div style="font-size:13px">Matched with ${other?.name || 'Unknown'}</div>
+                <div style="font-size:11px;color:#666">${timeAgo(m.created_at)}</div>
+              </div>`;
+            }).join('')}
+        </div>
+        
+        <div class="modal-section">
+          <h3>Account</h3>
+          <p style="font-size:12px;color:#666">Created: ${new Date(user.created_at).toLocaleString()}</p>
+          <p style="font-size:12px;color:#666">ID: ${user.id}</p>
+        </div>
+      `;
+      
+      document.getElementById("modalUserBody").innerHTML = html;
+      document.getElementById("userModal").classList.add("active");
+    }
+    
+    function closeModal() {
+      document.getElementById("userModal").classList.remove("active");
+    }
+    
+    function showOutreachForm() {
+      document.getElementById("outreachForm").style.display = 
+        document.getElementById("outreachForm").style.display === 'none' ? 'block' : 'none';
+    }
+    
+    function startOutreach(requestId, requestTitle) {
+      document.getElementById("outreachRequest").value = requestId;
+      switchTab('outreach');
+      showOutreachForm();
+    }
+    
+    function populateOutreachRequests() {
+      const select = document.getElementById("outreachRequest");
+      select.innerHTML = '<option value="">-- Select Request --</option>' +
+        [...unfilled, ...requests].map(r => `<option value="${r.id}">${r.title}</option>`).join('');
+    }
+    
+    async function saveOutreach() {
+      const name = document.getElementById("outreachName").value;
+      const platform = document.getElementById("outreachPlatform").value;
+      const url = document.getElementById("outreachUrl").value;
+      const requestId = document.getElementById("outreachRequest").value;
+      
+      if (!name || !url) {
+        alert("Please fill in name and URL");
+        return;
+      }
+      
+      try {
+        const params = new URLSearchParams({ name, platform, profile_url: url });
+        if (requestId) params.append("request_id", requestId);
+        
+        await fetch(`${API}/admin/outreach?${params}`, { method: "POST" });
+        
+        // Clear form
+        document.getElementById("outreachName").value = '';
+        document.getElementById("outreachUrl").value = '';
+        document.getElementById("outreachForm").style.display = 'none';
+        
+        fetchAllData();
+      } catch (e) {
+        console.error("Error saving outreach:", e);
+        alert("Failed to save outreach");
+      }
+    }
+    
+    async function updateOutreach(id, status) {
+      try {
+        await fetch(`${API}/admin/outreach/${id}?status=${status}`, { method: "PATCH" });
+        fetchAllData();
+      } catch (e) {
+        console.error("Error updating outreach:", e);
+      }
+    }
+    
+    function timeAgo(dateString) {
+      if (!dateString) return '';
+      const date = new Date(dateString);
+      const now = new Date();
+      const seconds = Math.floor((now - date) / 1000);
+      
+      if (seconds < 60) return 'just now';
+      if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
+      if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
+      if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
+      return date.toLocaleDateString();
+    }
+    
+    // Close modal on click outside
+    document.getElementById("userModal").addEventListener("click", function(e) {
+      if (e.target === this) closeModal();
+    });
   </script>
 </body>
 </html>
