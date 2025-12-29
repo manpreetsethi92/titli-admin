@@ -13,7 +13,6 @@
       min-height: 100vh;
     }
     
-    /* Login */
     .login-screen {
       min-height: 100vh;
       display: flex;
@@ -43,7 +42,6 @@
     }
     .login-box button:hover { background: #c92a36; }
     
-    /* Dashboard */
     .dashboard { display: none; }
     .dashboard.active { display: block; }
     
@@ -69,9 +67,8 @@
     .header-actions .logout { background: transparent; color: #888; }
     .last-updated { font-size: 11px; color: #666; }
     
-    .container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+    .container { max-width: 1600px; margin: 0 auto; padding: 24px; }
     
-    /* Stats Grid */
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(6, 1fr);
@@ -98,7 +95,6 @@
     .stat-label { font-size: 12px; color: #888; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.5px; }
     .stat-detail { font-size: 11px; color: #666; margin-top: 8px; }
     
-    /* Tabs */
     .tabs { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
     .tab {
       padding: 10px 20px; background: rgba(255,255,255,0.05); border: none;
@@ -112,7 +108,6 @@
       border-radius: 10px; font-size: 11px; color: #000;
     }
     
-    /* Search & Filters */
     .toolbar { display: flex; gap: 12px; margin-bottom: 24px; flex-wrap: wrap; }
     .search {
       flex: 1; min-width: 200px; padding: 12px 16px;
@@ -127,7 +122,6 @@
     .filter-btn:hover { background: rgba(255,255,255,0.1); color: #fff; }
     .filter-btn.active { background: rgba(230,57,70,0.2); border-color: #e63946; color: #e63946; }
     
-    /* Cards */
     .card {
       background: rgba(255,255,255,0.03);
       border: 1px solid rgba(255,255,255,0.08);
@@ -149,55 +143,42 @@
     .card.highlight .card-header { color: #f59e0b; }
     .card-header .count { font-size: 12px; color: #666; font-weight: 400; }
     
-    /* Grid Layouts */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; }
     @media (max-width: 1024px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
     
-    /* User Card */
-    .user-card {
+    .item-card {
       padding: 16px 20px;
       border-bottom: 1px solid rgba(255,255,255,0.05);
       cursor: pointer;
       transition: background 0.2s;
     }
-    .user-card:hover { background: rgba(255,255,255,0.03); }
-    .user-card:last-child { border-bottom: none; }
-    .user-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .item-card:hover { background: rgba(255,255,255,0.03); }
+    .item-card:last-child { border-bottom: none; }
+    .item-header { display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
     .avatar {
       width: 40px; height: 40px; border-radius: 50%;
       background: linear-gradient(135deg, #e63946, #f97316);
       display: flex; align-items: center; justify-content: center;
       font-weight: 600; font-size: 16px; flex-shrink: 0;
     }
-    .user-info { flex: 1; }
-    .user-name { font-weight: 600; font-size: 15px; }
-    .user-phone { font-size: 12px; color: #666; }
-    .user-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .item-info { flex: 1; }
+    .item-name { font-weight: 600; font-size: 15px; }
+    .item-sub { font-size: 12px; color: #666; }
+    .item-meta { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
     .skill-tag {
       padding: 4px 10px; background: rgba(139,92,246,0.15);
       color: #a78bfa; border-radius: 20px; font-size: 11px;
     }
-    .badge {
-      padding: 4px 10px; border-radius: 20px; font-size: 11px;
-    }
+    .badge { padding: 4px 10px; border-radius: 20px; font-size: 11px; }
     .badge.green { background: rgba(16,185,129,0.15); color: #10b981; }
     .badge.yellow { background: rgba(245,158,11,0.15); color: #f59e0b; }
     .badge.purple { background: rgba(139,92,246,0.15); color: #8b5cf6; }
     .badge.red { background: rgba(239,68,68,0.15); color: #ef4444; }
     .badge.blue { background: rgba(59,130,246,0.15); color: #3b82f6; }
     .badge.gray { background: rgba(128,128,128,0.15); color: #888; }
+    .badge.cyan { background: rgba(6,182,212,0.15); color: #06b6d4; }
     
-    /* Request Card */
-    .request-card {
-      padding: 16px 20px;
-      border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    .request-card:last-child { border-bottom: none; }
-    .request-title { font-weight: 600; font-size: 14px; margin-bottom: 6px; }
-    .request-meta { font-size: 12px; color: #666; margin-bottom: 10px; }
-    .request-skills { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
-    .request-actions { display: flex; gap: 8px; flex-wrap: wrap; }
     .action-btn {
       padding: 8px 14px; border-radius: 8px; font-size: 12px;
       font-weight: 500; text-decoration: none; cursor: pointer; border: none;
@@ -208,8 +189,8 @@
     .action-btn.li { background: #0a66c2; color: #fff; }
     .action-btn.primary { background: #e63946; color: #fff; }
     .action-btn.secondary { background: rgba(255,255,255,0.1); color: #fff; }
+    .action-btn.green { background: #10b981; color: #fff; }
     
-    /* Modal */
     .modal-overlay {
       display: none;
       position: fixed;
@@ -225,8 +206,8 @@
       background: #1a1a2e;
       border-radius: 16px;
       width: 100%;
-      max-width: 600px;
-      max-height: 80vh;
+      max-width: 700px;
+      max-height: 85vh;
       overflow-y: auto;
       border: 1px solid rgba(255,255,255,0.1);
     }
@@ -236,6 +217,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      position: sticky;
+      top: 0;
+      background: #1a1a2e;
     }
     .modal-header h2 { font-size: 18px; font-weight: 600; }
     .modal-close {
@@ -246,71 +230,129 @@
     .modal-section { margin-bottom: 20px; }
     .modal-section h3 { font-size: 13px; color: #888; margin-bottom: 8px; text-transform: uppercase; }
     .modal-section p { font-size: 14px; line-height: 1.6; }
-    .social-links { display: flex; gap: 12px; flex-wrap: wrap; }
-    .social-link {
-      padding: 8px 16px; background: rgba(255,255,255,0.1);
-      border-radius: 8px; color: #fff; text-decoration: none; font-size: 13px;
-    }
-    .social-link:hover { background: rgba(255,255,255,0.15); }
     
-    /* Outreach Form */
-    .outreach-form {
-      padding: 16px;
-      background: rgba(0,0,0,0.2);
-      border-radius: 10px;
-      margin-top: 12px;
-    }
     .form-row { margin-bottom: 12px; }
     .form-row label { display: block; font-size: 12px; color: #888; margin-bottom: 6px; }
-    .form-row input, .form-row select {
+    .form-row input, .form-row select, .form-row textarea {
       width: 100%; padding: 10px 14px;
       background: rgba(255,255,255,0.1);
       border: 1px solid rgba(255,255,255,0.2);
       border-radius: 8px; color: #fff; font-size: 14px;
     }
+    .form-row textarea { min-height: 80px; resize: vertical; }
+    .form-inline { display: flex; gap: 12px; }
+    .form-inline .form-row { flex: 1; }
     
-    /* Empty State */
     .empty { padding: 40px 20px; text-align: center; color: #666; font-size: 14px; }
-    
-    /* Loading */
     .loading { text-align: center; padding: 40px; color: #888; }
-    
-    /* Tab Content */
     .tab-content { display: none; }
     .tab-content.active { display: block; }
     
-    /* Timeline */
-    .timeline-item {
-      padding: 16px 20px;
+    .activity-item {
+      padding: 12px 16px;
       border-left: 2px solid rgba(255,255,255,0.1);
       margin-left: 10px;
       position: relative;
     }
-    .timeline-item::before {
+    .activity-item::before {
       content: '';
-      width: 10px; height: 10px;
+      width: 8px; height: 8px;
       background: #e63946;
       border-radius: 50%;
       position: absolute;
-      left: -6px;
-      top: 20px;
+      left: -5px;
+      top: 16px;
     }
-    .timeline-item.green::before { background: #10b981; }
-    .timeline-item.yellow::before { background: #f59e0b; }
+    .activity-item.green::before { background: #10b981; }
+    .activity-item.yellow::before { background: #f59e0b; }
+    .activity-item.blue::before { background: #3b82f6; }
+    .activity-item.purple::before { background: #8b5cf6; }
+    .activity-text { font-size: 13px; }
+    .activity-time { font-size: 11px; color: #666; margin-top: 4px; }
     
-    /* Enriched Profile */
-    .enriched-section {
-      background: rgba(139,92,246,0.1);
-      border: 1px solid rgba(139,92,246,0.3);
-      border-radius: 10px;
-      padding: 16px;
-      margin-top: 12px;
+    .funnel-item {
+      padding: 16px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
     }
-    .enriched-title { font-size: 12px; color: #a78bfa; margin-bottom: 10px; text-transform: uppercase; }
+    .funnel-bar {
+      flex: 1;
+      height: 24px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+    .funnel-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #e63946, #f97316);
+      transition: width 0.5s ease;
+    }
+    .funnel-label { width: 140px; font-size: 13px; }
+    .funnel-value { width: 80px; text-align: right; font-weight: 600; }
+    .funnel-pct { width: 60px; text-align: right; color: #888; font-size: 12px; }
+    
+    .gap-item {
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+    }
+    .gap-skill { width: 120px; font-size: 13px; font-weight: 500; }
+    .gap-bars { flex: 1; display: flex; gap: 8px; }
+    .gap-bar {
+      height: 20px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      min-width: 30px;
+    }
+    .gap-bar.demand { background: rgba(239,68,68,0.3); color: #ef4444; }
+    .gap-bar.supply { background: rgba(16,185,129,0.3); color: #10b981; }
+    .gap-status { width: 80px; text-align: right; }
+    
+    .note-item {
+      padding: 12px;
+      background: rgba(255,255,255,0.03);
+      border-radius: 8px;
+      margin-bottom: 8px;
+    }
+    .note-text { font-size: 13px; margin-bottom: 6px; }
+    .note-time { font-size: 11px; color: #666; }
+    
+    .tag {
+      display: inline-block;
+      padding: 4px 10px;
+      background: rgba(59,130,246,0.15);
+      color: #3b82f6;
+      border-radius: 20px;
+      font-size: 11px;
+      margin-right: 6px;
+      margin-bottom: 6px;
+    }
+    .tag.vip { background: rgba(245,158,11,0.15); color: #f59e0b; }
+    .tag.verified { background: rgba(16,185,129,0.15); color: #10b981; }
+    
+    .verification {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+    }
+    .verification.phone { background: rgba(128,128,128,0.15); color: #888; }
+    .verification.profile { background: rgba(59,130,246,0.15); color: #3b82f6; }
+    .verification.work { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+    .verification.trusted { background: rgba(16,185,129,0.15); color: #10b981; }
+    .verification.vip { background: rgba(245,158,11,0.15); color: #f59e0b; }
   </style>
 </head>
 <body>
-  <!-- Login Screen -->
   <div class="login-screen" id="loginScreen">
     <form class="login-box" onsubmit="handleLogin(event)">
       <h1>TITLI</h1>
@@ -320,12 +362,9 @@
     </form>
   </div>
   
-  <!-- Dashboard -->
   <div class="dashboard" id="dashboard">
     <header>
-      <div>
-        <span class="logo">TITLI<span>Command Center</span></span>
-      </div>
+      <div><span class="logo">TITLI<span>Command Center</span></span></div>
       <div class="header-actions">
         <span class="last-updated" id="lastUpdated"></span>
         <button onclick="fetchAllData()">Refresh</button>
@@ -334,17 +373,16 @@
     </header>
     
     <div class="container">
-      <!-- Stats Grid -->
       <div class="stats-grid">
         <div class="stat-card blue" onclick="switchTab('users')">
           <div class="stat-value" id="statUsers">0</div>
           <div class="stat-label">Total Users</div>
           <div class="stat-detail" id="statUsersDetail">-</div>
         </div>
-        <div class="stat-card green" onclick="switchTab('users')">
-          <div class="stat-value" id="statTelegram">0</div>
-          <div class="stat-label">Telegram Active</div>
-          <div class="stat-detail">Connected to bot</div>
+        <div class="stat-card green" onclick="switchTab('connections')">
+          <div class="stat-value" id="statConnections">0</div>
+          <div class="stat-label">Connections</div>
+          <div class="stat-detail">Successful matches</div>
         </div>
         <div class="stat-card purple" onclick="switchTab('requests')">
           <div class="stat-value" id="statRequests">0</div>
@@ -356,178 +394,143 @@
           <div class="stat-label">Need Matches</div>
           <div class="stat-detail">Recruitment opportunities</div>
         </div>
-        <div class="stat-card cyan" onclick="switchTab('matches')">
-          <div class="stat-value" id="statMatches">0</div>
-          <div class="stat-label">Matches Made</div>
-          <div class="stat-detail" id="statMatchesDetail">-</div>
+        <div class="stat-card cyan" onclick="switchTab('recruitment')">
+          <div class="stat-value" id="statRecruitment">0</div>
+          <div class="stat-label">Recruiting</div>
+          <div class="stat-detail" id="statRecruitmentDetail">-</div>
         </div>
-        <div class="stat-card red" onclick="switchTab('outreach')">
-          <div class="stat-value" id="statOutreach">0</div>
-          <div class="stat-label">Outreach</div>
-          <div class="stat-detail" id="statOutreachDetail">-</div>
+        <div class="stat-card red" onclick="switchTab('activity')">
+          <div class="stat-value" id="statActivity">0</div>
+          <div class="stat-label">Actions Today</div>
+          <div class="stat-detail">Taj activity</div>
         </div>
       </div>
       
-      <!-- Tabs -->
       <div class="tabs">
-        <button class="tab active" onclick="switchTab('overview')">Overview</button>
-        <button class="tab" onclick="switchTab('users')">Users</button>
-        <button class="tab" onclick="switchTab('requests')">All Requests</button>
-        <button class="tab" onclick="switchTab('unfilled')">Unfilled <span class="badge" id="unfilledBadge">0</span></button>
-        <button class="tab" onclick="switchTab('matches')">Matches</button>
-        <button class="tab" onclick="switchTab('outreach')">Outreach</button>
-        <button class="tab" onclick="switchTab('skills')">Skills Map</button>
+        <button class="tab active" data-tab="overview">Overview</button>
+        <button class="tab" data-tab="activity">Activity Feed</button>
+        <button class="tab" data-tab="users">Users</button>
+        <button class="tab" data-tab="requests">Requests</button>
+        <button class="tab" data-tab="unfilled">Unfilled <span class="badge" id="unfilledBadge">0</span></button>
+        <button class="tab" data-tab="connections">Connections</button>
+        <button class="tab" data-tab="analytics">Analytics</button>
+        <button class="tab" data-tab="skill-gaps">Skill Gaps</button>
+        <button class="tab" data-tab="recruitment">Recruitment</button>
+        <button class="tab" data-tab="external">External Opps</button>
       </div>
       
-      <!-- Search -->
       <div class="toolbar">
         <input type="text" class="search" placeholder="Search users, requests, skills..." oninput="handleSearch(this.value)">
         <button class="filter-btn" onclick="toggleFilter('telegram')" id="filterTelegram">Telegram Only</button>
-        <button class="filter-btn" onclick="toggleFilter('enriched')" id="filterEnriched">Has Smart Profile</button>
+        <button class="filter-btn" onclick="toggleFilter('verified')" id="filterVerified">Verified Only</button>
       </div>
       
-      <!-- Tab Contents -->
       <div class="tab-content active" id="tab-overview">
         <div class="grid-3">
-          <!-- Recent Activity -->
           <div class="card">
-            <div class="card-header">Recent Activity</div>
+            <div class="card-header">Taj Activity (Last 24h)</div>
             <div id="recentActivity"><div class="loading">Loading...</div></div>
           </div>
-          
-          <!-- Unfilled Requests -->
           <div class="card highlight">
-            <div class="card-header">
-              🔥 Needs Your Attention
-              <span class="count" id="attentionCount">0 items</span>
-            </div>
+            <div class="card-header">Needs Your Attention <span class="count" id="attentionCount">0</span></div>
             <div id="needsAttention"><div class="loading">Loading...</div></div>
           </div>
-          
-          <!-- Top Skills -->
           <div class="card">
-            <div class="card-header">Skills Distribution</div>
-            <div id="skillsDistribution"><div class="loading">Loading...</div></div>
+            <div class="card-header">Conversion Funnel</div>
+            <div id="quickFunnel"><div class="loading">Loading...</div></div>
           </div>
         </div>
-        
         <div class="grid-2">
-          <!-- Recent Users -->
           <div class="card">
-            <div class="card-header">
-              Recent Users
-              <span class="count" id="recentUsersCount">0</span>
-            </div>
+            <div class="card-header">Recent Users <span class="count" id="recentUsersCount">0</span></div>
             <div id="recentUsers"><div class="loading">Loading...</div></div>
           </div>
-          
-          <!-- Recent Requests -->
-          <div class="card">
-            <div class="card-header">
-              Recent Requests
-              <span class="count" id="recentRequestsCount">0</span>
-            </div>
-            <div id="recentRequests"><div class="loading">Loading...</div></div>
+          <div class="card highlight">
+            <div class="card-header">Top Skill Gaps <span class="count">Demand vs Supply</span></div>
+            <div id="skillGapsSummary"><div class="loading">Loading...</div></div>
           </div>
         </div>
       </div>
       
-      <!-- Users Tab -->
+      <div class="tab-content" id="tab-activity">
+        <div class="card"><div class="card-header">All Taj Activity <span class="count" id="activityCount">0</span></div><div id="allActivity"><div class="loading">Loading...</div></div></div>
+      </div>
+      
       <div class="tab-content" id="tab-users">
-        <div class="card">
-          <div class="card-header">
-            All Users
-            <span class="count" id="userCount">0</span>
-          </div>
-          <div id="allUsers"><div class="loading">Loading...</div></div>
-        </div>
+        <div class="card"><div class="card-header">All Users <span class="count" id="userCount">0</span></div><div id="allUsers"><div class="loading">Loading...</div></div></div>
       </div>
       
-      <!-- Requests Tab -->
       <div class="tab-content" id="tab-requests">
-        <div class="card">
-          <div class="card-header">
-            All Requests
-            <span class="count" id="requestCount">0</span>
-          </div>
-          <div id="allRequests"><div class="loading">Loading...</div></div>
-        </div>
+        <div class="card"><div class="card-header">All Requests <span class="count" id="requestCount">0</span></div><div id="allRequests"><div class="loading">Loading...</div></div></div>
       </div>
       
-      <!-- Unfilled Tab -->
       <div class="tab-content" id="tab-unfilled">
-        <div class="card highlight">
-          <div class="card-header">
-            Recruitment Opportunities
-            <span class="count">Skills we need to find</span>
-          </div>
-          <div id="allUnfilled"><div class="loading">Loading...</div></div>
+        <div class="card highlight"><div class="card-header">Recruitment Opportunities</div><div id="allUnfilled"><div class="loading">Loading...</div></div></div>
+      </div>
+      
+      <div class="tab-content" id="tab-connections">
+        <div class="card success"><div class="card-header">Successful Connections <span class="count" id="connectionCount">0</span></div><div id="allConnections"><div class="loading">Loading...</div></div></div>
+      </div>
+      
+      <div class="tab-content" id="tab-analytics">
+        <div class="grid-2">
+          <div class="card"><div class="card-header">Conversion Funnel</div><div id="funnelChart"><div class="loading">Loading...</div></div></div>
+          <div class="card"><div class="card-header">Growth (Last 30 Days)</div><div id="growthChart"><div class="loading">Loading...</div></div></div>
         </div>
       </div>
       
-      <!-- Matches Tab -->
-      <div class="tab-content" id="tab-matches">
-        <div class="card success">
-          <div class="card-header">
-            All Matches
-            <span class="count" id="matchCount">0</span>
-          </div>
-          <div id="allMatches"><div class="loading">Loading...</div></div>
+      <div class="tab-content" id="tab-skill-gaps">
+        <div class="grid-2">
+          <div class="card highlight"><div class="card-header">Skills Gap Analysis</div><div id="skillGapsAll"><div class="loading">Loading...</div></div></div>
+          <div class="card"><div class="card-header">Available Skills</div><div id="availableSkills"><div class="loading">Loading...</div></div></div>
         </div>
       </div>
       
-      <!-- Outreach Tab -->
-      <div class="tab-content" id="tab-outreach">
+      <div class="tab-content" id="tab-recruitment">
         <div class="card">
-          <div class="card-header">
-            Outreach Tracking
-            <button class="action-btn primary" onclick="showOutreachForm()" style="padding:6px 12px;font-size:11px;">+ New Outreach</button>
-          </div>
-          <div id="outreachForm" style="display:none;padding:20px;border-bottom:1px solid rgba(255,255,255,0.1);">
-            <div class="outreach-form">
-              <div class="form-row">
-                <label>Person's Name</label>
-                <input type="text" id="outreachName" placeholder="e.g. Maya Chen">
-              </div>
-              <div class="form-row">
-                <label>Platform</label>
-                <select id="outreachPlatform">
-                  <option value="instagram">Instagram</option>
-                  <option value="linkedin">LinkedIn</option>
-                  <option value="twitter">Twitter/X</option>
-                  <option value="email">Email</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-              <div class="form-row">
-                <label>Profile URL</label>
-                <input type="text" id="outreachUrl" placeholder="https://instagram.com/...">
-              </div>
-              <div class="form-row">
-                <label>For Request (optional)</label>
-                <select id="outreachRequest"></select>
-              </div>
-              <button class="action-btn primary" onclick="saveOutreach()" style="width:100%;margin-top:8px;">Save Outreach</button>
+          <div class="card-header">Recruitment Pipeline <button class="action-btn primary" onclick="showRecruitmentForm()" style="padding:6px 12px;font-size:11px;">+ Add Target</button></div>
+          <div id="recruitmentForm" style="display:none;padding:20px;border-bottom:1px solid rgba(255,255,255,0.1);">
+            <div class="form-inline">
+              <div class="form-row"><label>Name</label><input type="text" id="recruitName" placeholder="Person's name"></div>
+              <div class="form-row"><label>Platform</label><select id="recruitPlatform"><option value="instagram">Instagram</option><option value="linkedin">LinkedIn</option><option value="twitter">Twitter/X</option><option value="other">Other</option></select></div>
             </div>
+            <div class="form-row"><label>Profile URL</label><input type="text" id="recruitUrl" placeholder="https://instagram.com/..."></div>
+            <div class="form-inline">
+              <div class="form-row"><label>Skills (comma separated)</label><input type="text" id="recruitSkills" placeholder="Photography, Videography"></div>
+              <div class="form-row"><label>Location</label><input type="text" id="recruitLocation" placeholder="Austin, TX"></div>
+            </div>
+            <div class="form-row"><label>Notes</label><input type="text" id="recruitNotes" placeholder="Optional notes"></div>
+            <button class="action-btn primary" onclick="saveRecruitmentTarget()" style="width:100%;margin-top:8px;">Save Target</button>
           </div>
-          <div id="allOutreach"><div class="loading">Loading...</div></div>
+          <div id="allRecruitment"><div class="loading">Loading...</div></div>
         </div>
       </div>
       
-      <!-- Skills Map Tab -->
-      <div class="tab-content" id="tab-skills">
+      <div class="tab-content" id="tab-external">
         <div class="card">
-          <div class="card-header">
-            Skills Map
-            <span class="count">Who has what skills</span>
+          <div class="card-header">External Opportunities <button class="action-btn primary" onclick="showExternalForm()" style="padding:6px 12px;font-size:11px;">+ Add Opportunity</button></div>
+          <div id="externalForm" style="display:none;padding:20px;border-bottom:1px solid rgba(255,255,255,0.1);">
+            <div class="form-inline">
+              <div class="form-row"><label>Source</label><input type="text" id="extSource" placeholder="Instagram, Craigslist, etc."></div>
+              <div class="form-row"><label>Title</label><input type="text" id="extTitle" placeholder="Looking for photographer..."></div>
+            </div>
+            <div class="form-row"><label>Description</label><textarea id="extDescription" placeholder="Job details..."></textarea></div>
+            <div class="form-inline">
+              <div class="form-row"><label>Skills Needed</label><input type="text" id="extSkills" placeholder="Photography, Editing"></div>
+              <div class="form-row"><label>Location</label><input type="text" id="extLocation" placeholder="Austin, TX"></div>
+            </div>
+            <div class="form-inline">
+              <div class="form-row"><label>Budget</label><input type="text" id="extBudget" placeholder="$500/day"></div>
+              <div class="form-row"><label>URL</label><input type="text" id="extUrl" placeholder="Link to original post"></div>
+            </div>
+            <button class="action-btn primary" onclick="saveExternalOpp()" style="width:100%;margin-top:8px;">Save Opportunity</button>
           </div>
-          <div id="skillsMap"><div class="loading">Loading...</div></div>
+          <div id="allExternal"><div class="loading">Loading...</div></div>
         </div>
       </div>
     </div>
   </div>
   
-  <!-- User Detail Modal -->
   <div class="modal-overlay" id="userModal">
     <div class="modal">
       <div class="modal-header">
@@ -542,520 +545,255 @@
     const API = "https://titly-backend-production.up.railway.app/api";
     const PASSWORD = "titli2024";
     
-    let users = [];
-    let requests = [];
-    let unfilled = [];
-    let matches = [];
-    let outreach = [];
+    let users = [], requests = [], unfilled = [], matches = [], connections = [], activity = [];
+    let recruitmentTargets = [], externalOpps = [];
+    let funnel = {}, skillGaps = {}, growth = {};
     let searchTerm = "";
-    let filters = { telegram: false, enriched: false };
+    let filters = { telegram: false, verified: false };
     
-    // Check if already logged in
-    if (localStorage.getItem("titli_admin") === "true") {
-      showDashboard();
-      fetchAllData();
+    if (localStorage.getItem("titli_admin") === "true") { showDashboard(); fetchAllData(); }
+    
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+      });
+    });
+    
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
+      document.getElementById(`tab-${tabId}`).classList.add('active');
     }
     
     function handleLogin(e) {
       e.preventDefault();
       if (document.getElementById("password").value === PASSWORD) {
         localStorage.setItem("titli_admin", "true");
-        showDashboard();
-        fetchAllData();
-      } else {
-        alert("Wrong password");
-      }
+        showDashboard(); fetchAllData();
+      } else { alert("Wrong password"); }
     }
     
-    function logout() {
-      localStorage.removeItem("titli_admin");
-      document.getElementById("loginScreen").style.display = "flex";
-      document.getElementById("dashboard").classList.remove("active");
-    }
-    
-    function showDashboard() {
-      document.getElementById("loginScreen").style.display = "none";
-      document.getElementById("dashboard").classList.add("active");
-    }
+    function logout() { localStorage.removeItem("titli_admin"); location.reload(); }
+    function showDashboard() { document.getElementById("loginScreen").style.display = "none"; document.getElementById("dashboard").classList.add("active"); }
     
     async function fetchAllData() {
       try {
-        const [u, r, uf, m, o] = await Promise.all([
+        const [u, r, uf, m, c, a, rt, eo, f, sg, g] = await Promise.all([
           fetch(`${API}/admin/users`).then(res => res.json()).catch(() => []),
           fetch(`${API}/admin/requests`).then(res => res.json()).catch(() => []),
           fetch(`${API}/admin/unfilled-requests`).then(res => res.json()).catch(() => []),
           fetch(`${API}/admin/matches`).then(res => res.json()).catch(() => []),
-          fetch(`${API}/admin/outreach`).then(res => res.json()).catch(() => [])
+          fetch(`${API}/admin/connections`).then(res => res.json()).catch(() => []),
+          fetch(`${API}/admin/activity?limit=100`).then(res => res.json()).catch(() => []),
+          fetch(`${API}/admin/recruitment/targets`).then(res => res.json()).catch(() => []),
+          fetch(`${API}/admin/opportunities/external`).then(res => res.json()).catch(() => []),
+          fetch(`${API}/admin/analytics/funnel`).then(res => res.json()).catch(() => ({})),
+          fetch(`${API}/admin/analytics/skill-gaps`).then(res => res.json()).catch(() => ({})),
+          fetch(`${API}/admin/analytics/growth`).then(res => res.json()).catch(() => ({}))
         ]);
-        
-        users = u || [];
-        requests = r || [];
-        unfilled = uf || [];
-        matches = m || [];
-        outreach = o || [];
-        
-        updateStats();
-        render();
-        updateLastUpdated();
-        populateOutreachRequests();
-      } catch (e) {
-        console.error("Fetch error:", e);
-      }
-    }
-    
-    function updateLastUpdated() {
-      document.getElementById("lastUpdated").textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+        users = u || []; requests = r || []; unfilled = uf || []; matches = m || []; connections = c || [];
+        activity = a || []; recruitmentTargets = rt || []; externalOpps = eo || [];
+        funnel = f || {}; skillGaps = sg || {}; growth = g || {};
+        updateStats(); render();
+        document.getElementById("lastUpdated").textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+      } catch (e) { console.error("Fetch error:", e); }
     }
     
     function updateStats() {
       const telegramUsers = users.filter(u => u.telegram_connected).length;
-      const enrichedUsers = users.filter(u => u.enriched_profile).length;
-      const completedRequests = requests.filter(r => r.status === 'completed').length;
-      const pendingOutreach = outreach.filter(o => o.status === 'pending' || o.status === 'contacted').length;
-      const joinedOutreach = outreach.filter(o => o.status === 'joined').length;
+      const todayActivity = activity.filter(a => new Date(a.timestamp).toDateString() === new Date().toDateString()).length;
+      const pendingRecruitment = recruitmentTargets.filter(t => t.status === 'found' || t.status === 'contacted').length;
       
       document.getElementById("statUsers").textContent = users.length;
-      document.getElementById("statUsersDetail").textContent = `${enrichedUsers} with smart profiles`;
-      document.getElementById("statTelegram").textContent = telegramUsers;
+      document.getElementById("statUsersDetail").textContent = `${telegramUsers} on Telegram`;
+      document.getElementById("statConnections").textContent = connections.length;
       document.getElementById("statRequests").textContent = requests.length;
-      document.getElementById("statRequestsDetail").textContent = `${completedRequests} completed`;
+      document.getElementById("statRequestsDetail").textContent = `${requests.filter(r => r.status === 'completed').length} completed`;
       document.getElementById("statUnfilled").textContent = unfilled.length;
-      document.getElementById("statMatches").textContent = matches.length;
-      document.getElementById("statMatchesDetail").textContent = `Connections made`;
-      document.getElementById("statOutreach").textContent = outreach.length;
-      document.getElementById("statOutreachDetail").textContent = `${pendingOutreach} pending, ${joinedOutreach} joined`;
+      document.getElementById("statRecruitment").textContent = recruitmentTargets.length;
+      document.getElementById("statRecruitmentDetail").textContent = `${pendingRecruitment} in progress`;
+      document.getElementById("statActivity").textContent = todayActivity;
       document.getElementById("unfilledBadge").textContent = unfilled.length;
-      document.getElementById("attentionCount").textContent = `${unfilled.length} items`;
+      document.getElementById("attentionCount").textContent = unfilled.length + " items";
     }
     
-    function switchTab(tab) {
-      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
-      document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
-      event.target.classList.add("active");
-      document.getElementById(`tab-${tab}`).classList.add("active");
-    }
-    
-    function handleSearch(term) {
-      searchTerm = term.toLowerCase();
-      render();
-    }
-    
-    function toggleFilter(filter) {
-      filters[filter] = !filters[filter];
-      document.getElementById(`filter${filter.charAt(0).toUpperCase() + filter.slice(1)}`).classList.toggle('active');
-      render();
-    }
+    function handleSearch(term) { searchTerm = term.toLowerCase(); render(); }
+    function toggleFilter(filter) { filters[filter] = !filters[filter]; document.getElementById(`filter${filter.charAt(0).toUpperCase() + filter.slice(1)}`).classList.toggle('active'); render(); }
     
     function getFilteredUsers() {
       return users.filter(u => {
-        const matchesSearch = !searchTerm || 
-          u.name?.toLowerCase().includes(searchTerm) ||
-          u.phone?.includes(searchTerm) ||
-          u.skills?.some(s => s.toLowerCase().includes(searchTerm)) ||
-          u.bio?.toLowerCase().includes(searchTerm);
+        const matchesSearch = !searchTerm || u.name?.toLowerCase().includes(searchTerm) || u.phone?.includes(searchTerm) || u.skills?.some(s => s.toLowerCase().includes(searchTerm));
         const matchesTelegram = !filters.telegram || u.telegram_connected;
-        const matchesEnriched = !filters.enriched || u.enriched_profile;
-        return matchesSearch && matchesTelegram && matchesEnriched;
+        const matchesVerified = !filters.verified || (u.verification_level && u.verification_level !== 'phone');
+        return matchesSearch && matchesTelegram && matchesVerified;
       });
     }
     
     function render() {
       const filteredUsers = getFilteredUsers();
-      const filteredRequests = requests.filter(r =>
-        !searchTerm || r.title?.toLowerCase().includes(searchTerm)
-      );
       
-      // Overview - Recent Activity
-      const activity = [
-        ...users.slice(0, 3).map(u => ({ type: 'user', data: u, time: u.created_at })),
-        ...requests.slice(0, 3).map(r => ({ type: 'request', data: r, time: r.created_at })),
-        ...matches.slice(0, 3).map(m => ({ type: 'match', data: m, time: m.created_at }))
-      ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 5);
+      document.getElementById("recentActivity").innerHTML = activity.length === 0 ? '<div class="empty">No activity yet</div>' : activity.slice(0, 10).map(a => activityItem(a)).join("");
+      document.getElementById("needsAttention").innerHTML = unfilled.length === 0 ? '<div class="empty">All requests have matches!</div>' : unfilled.slice(0, 5).map(r => unfilledCard(r, true)).join("");
       
-      document.getElementById("recentActivity").innerHTML = activity.length === 0
-        ? '<div class="empty">No activity yet</div>'
-        : activity.map(a => activityItem(a)).join("");
+      if (funnel.funnel) {
+        document.getElementById("quickFunnel").innerHTML = funnel.funnel.slice(0, 5).map(f => `<div class="funnel-item"><div class="funnel-label">${f.stage}</div><div class="funnel-bar"><div class="funnel-fill" style="width:${f.percentage}%"></div></div><div class="funnel-value">${f.count}</div><div class="funnel-pct">${f.percentage}%</div></div>`).join("");
+      }
       
-      // Needs Attention
-      document.getElementById("needsAttention").innerHTML = unfilled.length === 0
-        ? '<div class="empty">All requests have matches! 🎉</div>'
-        : unfilled.slice(0, 5).map(r => unfilledCard(r, true)).join("");
-      
-      // Skills Distribution
-      const skillCounts = {};
-      users.forEach(u => u.skills?.forEach(s => skillCounts[s] = (skillCounts[s] || 0) + 1));
-      const topSkills = Object.entries(skillCounts).sort((a, b) => b[1] - a[1]).slice(0, 10);
-      document.getElementById("skillsDistribution").innerHTML = topSkills.length === 0
-        ? '<div class="empty">No skills data</div>'
-        : `<div style="padding:16px">${topSkills.map(([skill, count]) => 
-          `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
-            <span>${skill}</span>
-            <span class="badge purple">${count} users</span>
-          </div>`).join("")}</div>`;
-      
-      // Recent Users
       document.getElementById("recentUsersCount").textContent = users.length;
-      document.getElementById("recentUsers").innerHTML = users.length === 0
-        ? '<div class="empty">No users yet</div>'
-        : users.slice(0, 5).map(u => userCard(u)).join("");
+      document.getElementById("recentUsers").innerHTML = users.length === 0 ? '<div class="empty">No users yet</div>' : users.slice(0, 5).map(u => userCard(u)).join("");
       
-      // Recent Requests
-      document.getElementById("recentRequestsCount").textContent = requests.length;
-      document.getElementById("recentRequests").innerHTML = requests.length === 0
-        ? '<div class="empty">No requests yet</div>'
-        : requests.slice(0, 5).map(r => requestCard(r)).join("");
+      if (skillGaps.skill_gaps) {
+        document.getElementById("skillGapsSummary").innerHTML = skillGaps.skill_gaps.slice(0, 5).map(g => `<div class="gap-item"><div class="gap-skill">${g.skill}</div><div class="gap-bars"><div class="gap-bar demand" style="width:${Math.min(g.demand * 30, 100)}px">${g.demand} need</div><div class="gap-bar supply" style="width:${Math.min(g.supply * 30, 100)}px">${g.supply} have</div></div><div class="gap-status">${g.gap > 0 ? `<span class="badge red">-${g.gap}</span>` : `<span class="badge green">+${Math.abs(g.gap)}</span>`}</div></div>`).join("");
+      }
       
-      // All Users
+      document.getElementById("activityCount").textContent = activity.length;
+      document.getElementById("allActivity").innerHTML = activity.length === 0 ? '<div class="empty">No activity yet</div>' : activity.map(a => activityItem(a)).join("");
+      
       document.getElementById("userCount").textContent = filteredUsers.length;
-      document.getElementById("allUsers").innerHTML = filteredUsers.length === 0
-        ? '<div class="empty">No users found</div>'
-        : filteredUsers.map(u => userCard(u, true)).join("");
+      document.getElementById("allUsers").innerHTML = filteredUsers.length === 0 ? '<div class="empty">No users found</div>' : filteredUsers.map(u => userCard(u, true)).join("");
       
-      // All Requests
-      document.getElementById("requestCount").textContent = filteredRequests.length;
-      document.getElementById("allRequests").innerHTML = filteredRequests.length === 0
-        ? '<div class="empty">No requests found</div>'
-        : filteredRequests.map(r => requestCard(r, true)).join("");
+      document.getElementById("requestCount").textContent = requests.length;
+      document.getElementById("allRequests").innerHTML = requests.length === 0 ? '<div class="empty">No requests yet</div>' : requests.map(r => requestCard(r)).join("");
       
-      // Unfilled
-      document.getElementById("allUnfilled").innerHTML = unfilled.length === 0
-        ? '<div class="empty">All requests have matches! 🎉</div>'
-        : unfilled.map(r => unfilledCard(r)).join("");
+      document.getElementById("allUnfilled").innerHTML = unfilled.length === 0 ? '<div class="empty">All requests have matches!</div>' : unfilled.map(r => unfilledCard(r)).join("");
       
-      // Matches
-      document.getElementById("matchCount").textContent = matches.length;
-      document.getElementById("allMatches").innerHTML = matches.length === 0
-        ? '<div class="empty">No matches yet</div>'
-        : matches.map(m => matchCard(m)).join("");
+      document.getElementById("connectionCount").textContent = connections.length;
+      document.getElementById("allConnections").innerHTML = connections.length === 0 ? '<div class="empty">No connections yet</div>' : connections.map(c => connectionCard(c)).join("");
       
-      // Outreach
-      document.getElementById("allOutreach").innerHTML = outreach.length === 0
-        ? '<div class="empty">No outreach yet. Start recruiting!</div>'
-        : outreach.map(o => outreachCard(o)).join("");
+      if (funnel.funnel) { document.getElementById("funnelChart").innerHTML = funnel.funnel.map(f => `<div class="funnel-item"><div class="funnel-label">${f.stage}</div><div class="funnel-bar"><div class="funnel-fill" style="width:${f.percentage}%"></div></div><div class="funnel-value">${f.count}</div><div class="funnel-pct">${f.percentage}%</div></div>`).join(""); }
       
-      // Skills Map
-      document.getElementById("skillsMap").innerHTML = `<div style="padding:16px">
-        ${Object.entries(skillCounts).sort((a, b) => b[1] - a[1]).map(([skill, count]) => {
-          const usersWithSkill = users.filter(u => u.skills?.includes(skill));
-          return `<div style="margin-bottom:16px;padding:16px;background:rgba(255,255,255,0.03);border-radius:10px">
-            <div style="display:flex;justify-content:space-between;margin-bottom:10px">
-              <strong>${skill}</strong>
-              <span class="badge purple">${count} users</span>
-            </div>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              ${usersWithSkill.map(u => `<span style="padding:4px 10px;background:rgba(255,255,255,0.1);border-radius:15px;font-size:12px;cursor:pointer" onclick="showUserDetail('${u.id}')">${u.name}</span>`).join("")}
-            </div>
-          </div>`;
-        }).join("")}
-      </div>`;
+      if (growth.totals) {
+        document.getElementById("growthChart").innerHTML = `<div style="padding:20px"><div style="display:flex;justify-content:space-around;text-align:center"><div><div style="font-size:32px;font-weight:700;color:#3b82f6">${growth.totals.users}</div><div style="font-size:12px;color:#888">Total Users</div></div><div><div style="font-size:32px;font-weight:700;color:#8b5cf6">${growth.totals.requests}</div><div style="font-size:12px;color:#888">Total Requests</div></div><div><div style="font-size:32px;font-weight:700;color:#10b981">${growth.totals.connections}</div><div style="font-size:12px;color:#888">Connections</div></div></div>${growth.this_week ? `<div style="margin-top:20px;text-align:center"><div style="font-size:14px;color:#888">This Week</div><div style="font-size:24px;font-weight:600">${growth.this_week.users} new users ${growth.this_week.change > 0 ? `<span style="color:#10b981">↑${growth.this_week.change}</span>` : growth.this_week.change < 0 ? `<span style="color:#ef4444">↓${Math.abs(growth.this_week.change)}</span>` : ''}</div></div>` : ''}</div>`;
+      }
+      
+      if (skillGaps.skill_gaps) { document.getElementById("skillGapsAll").innerHTML = skillGaps.skill_gaps.map(g => `<div class="gap-item"><div class="gap-skill">${g.skill}</div><div class="gap-bars"><div class="gap-bar demand" style="width:${Math.min(g.demand * 30, 100)}px">${g.demand} need</div><div class="gap-bar supply" style="width:${Math.min(g.supply * 30, 100)}px">${g.supply} have</div></div><div class="gap-status">${g.gap > 0 ? `<span class="badge red">-${g.gap}</span>` : `<span class="badge green">+${Math.abs(g.gap)}</span>`}</div></div>`).join(""); }
+      if (skillGaps.available_skills) { document.getElementById("availableSkills").innerHTML = `<div style="padding:16px">${Object.entries(skillGaps.available_skills).map(([skill, count]) => `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span>${skill}</span><span class="badge purple">${count} users</span></div>`).join("")}</div>`; }
+      
+      document.getElementById("allRecruitment").innerHTML = recruitmentTargets.length === 0 ? '<div class="empty">No recruitment targets yet</div>' : recruitmentTargets.map(t => recruitmentCard(t)).join("");
+      document.getElementById("allExternal").innerHTML = externalOpps.length === 0 ? '<div class="empty">No external opportunities yet</div>' : externalOpps.map(o => externalCard(o)).join("");
     }
     
     function activityItem(a) {
-      const icons = { user: '👤', request: '📋', match: '🤝' };
-      const colors = { user: 'blue', request: 'purple', match: 'green' };
-      let text = '';
-      if (a.type === 'user') text = `${a.data.name} joined`;
-      if (a.type === 'request') text = `New request: "${a.data.title}"`;
-      if (a.type === 'match') text = `Match created`;
-      
-      return `<div class="timeline-item ${colors[a.type]}">
-        <div style="font-size:13px">${icons[a.type]} ${text}</div>
-        <div style="font-size:11px;color:#666;margin-top:4px">${timeAgo(a.time)}</div>
-      </div>`;
+      const colors = { 'user_signup': 'blue', 'profile_completed': 'green', 'telegram_connected': 'cyan', 'request_created': 'purple', 'matches_found': 'yellow', 'outreach_sent': 'red', 'connection_made': 'green' };
+      const icons = { 'user_signup': '👤', 'profile_completed': '✓', 'telegram_connected': '📱', 'request_created': '📋', 'matches_found': '🔍', 'outreach_sent': '📤', 'connection_made': '🤝', 'profile_enriched': '✨' };
+      let text = a.action.replace(/_/g, ' ');
+      if (a.details) { if (a.details.name) text += `: ${a.details.name}`; if (a.details.title) text += `: ${a.details.title}`; if (a.details.matches_count) text += ` (${a.details.matches_count} matches)`; }
+      return `<div class="activity-item ${colors[a.action] || ''}"><div class="activity-text">${icons[a.action] || '•'} ${text}</div><div class="activity-time">${timeAgo(a.timestamp)}</div></div>`;
     }
     
     function userCard(u, detailed = false) {
-      const hasEnriched = u.enriched_profile && Object.keys(u.enriched_profile).length > 0;
-      return `<div class="user-card" onclick="showUserDetail('${u.id}')">
-        <div class="user-header">
-          <div class="avatar">${u.name?.charAt(0) || "?"}</div>
-          <div class="user-info">
-            <div class="user-name">${u.name || "Unknown"}</div>
-            <div class="user-phone">${u.phone || ""}</div>
-          </div>
-          ${u.telegram_connected ? '<span class="badge green">Telegram</span>' : ''}
-          ${hasEnriched ? '<span class="badge purple">Smart Profile</span>' : ''}
-        </div>
-        ${u.bio ? `<div style="font-size:13px;color:#aaa;margin-bottom:8px">${u.bio.substring(0, 100)}${u.bio.length > 100 ? '...' : ''}</div>` : ''}
-        <div class="user-meta">
-          ${(u.skills || []).slice(0, detailed ? 10 : 4).map(s => `<span class="skill-tag">${s}</span>`).join("")}
-          ${u.skills?.length > (detailed ? 10 : 4) ? `<span style="font-size:11px;color:#666">+${u.skills.length - (detailed ? 10 : 4)} more</span>` : ''}
-        </div>
-        ${detailed && u.location ? `<div style="font-size:12px;color:#666;margin-top:8px">📍 ${u.location}</div>` : ''}
-      </div>`;
+      const icons = { phone: '📱', profile: '✓', work: '💼', trusted: '⭐', vip: '👑' };
+      return `<div class="item-card" onclick="showUserDetail('${u.id}')"><div class="item-header"><div class="avatar">${u.name?.charAt(0) || "?"}</div><div class="item-info"><div class="item-name">${u.name || "Unknown"} ${u.verification_level ? `<span class="verification ${u.verification_level}">${icons[u.verification_level] || ''} ${u.verification_level}</span>` : ''}</div><div class="item-sub">${u.phone || ""} ${u.location ? `• ${u.location}` : ''}</div></div>${u.telegram_connected ? '<span class="badge green">Telegram</span>' : ''}</div>${u.tags?.length ? `<div class="item-meta">${u.tags.map(t => `<span class="tag ${t.toLowerCase() === 'vip' ? 'vip' : ''}">${t}</span>`).join("")}</div>` : ''}<div class="item-meta">${(u.skills || []).slice(0, detailed ? 6 : 3).map(s => `<span class="skill-tag">${s}</span>`).join("")}</div></div>`;
     }
     
-    function requestCard(r, detailed = false) {
-      const requester = users.find(u => u.id === r.user_id);
-      const statusColors = {
-        in_progress: 'yellow',
-        completed: 'green',
-        awaiting_approval: 'purple',
-        matching: 'blue'
-      };
-      
-      // Extract skills from title
-      const skillWords = (r.title || '').toLowerCase();
-      const matchingSkills = [];
-      users.forEach(u => {
-        u.skills?.forEach(s => {
-          if (skillWords.includes(s.toLowerCase()) && !matchingSkills.includes(s)) {
-            matchingSkills.push(s);
-          }
-        });
-      });
-      
-      return `<div class="request-card">
-        <div style="display:flex;justify-content:space-between;align-items:start">
-          <div class="request-title">${r.title || "Untitled"}</div>
-          <span class="badge ${statusColors[r.status] || 'gray'}">${(r.status || 'unknown').replace('_', ' ')}</span>
-        </div>
-        <div class="request-meta">
-          By ${requester?.name || 'Unknown'} · ${timeAgo(r.created_at)}
-          ${r.location ? ` · 📍 ${r.location}` : ''}
-        </div>
-        ${matchingSkills.length > 0 ? `<div class="request-skills">${matchingSkills.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>` : ''}
-      </div>`;
+    function requestCard(r) {
+      const colors = { 'in_progress': 'yellow', 'awaiting_approval': 'purple', 'matching': 'blue', 'completed': 'green', 'cancelled': 'gray' };
+      const user = users.find(u => u.id === r.user_id);
+      return `<div class="item-card"><div style="display:flex;justify-content:space-between;align-items:start"><div><div class="item-name">${r.title || "Untitled"}</div><div class="item-sub">By ${user?.name || 'Unknown'} • ${timeAgo(r.created_at)}</div></div><span class="badge ${colors[r.status] || 'gray'}">${r.status?.replace('_', ' ')}</span></div></div>`;
     }
     
     function unfilledCard(r, compact = false) {
-      const requester = users.find(u => u.id === r.user_id);
       const searchTerm = encodeURIComponent(r.title || "");
-      
-      // Find potential matches
-      const titleWords = (r.title || '').toLowerCase().split(' ');
-      const potentialMatches = users.filter(u => 
-        u.id !== r.user_id && 
-        u.skills?.some(s => titleWords.some(w => s.toLowerCase().includes(w) || w.includes(s.toLowerCase())))
-      );
-      
-      return `<div class="request-card" style="border-left:3px solid #f59e0b;margin-left:-1px">
-        <div class="request-title" style="color:#fbbf24">${r.title || "Untitled"}</div>
-        <div class="request-meta">
-          By ${requester?.name || r.requester || 'Unknown'} · ${timeAgo(r.created_at)}
-        </div>
-        ${potentialMatches.length > 0 ? `
-          <div style="margin:10px 0;padding:10px;background:rgba(16,185,129,0.1);border-radius:8px">
-            <div style="font-size:11px;color:#10b981;margin-bottom:6px">POTENTIAL MATCHES IN DATABASE:</div>
-            ${potentialMatches.slice(0, 3).map(u => `<span style="display:inline-block;padding:4px 10px;background:rgba(255,255,255,0.1);border-radius:15px;font-size:12px;margin-right:6px;cursor:pointer" onclick="showUserDetail('${u.id}')">${u.name}</span>`).join('')}
-            ${potentialMatches.length > 3 ? `<span style="font-size:11px;color:#666">+${potentialMatches.length - 3} more</span>` : ''}
-          </div>
-        ` : ''}
-        ${!compact ? `<div class="request-actions">
-          <a href="https://www.instagram.com/explore/search/keyword/?q=${searchTerm}" target="_blank" class="action-btn ig">Find on Instagram</a>
-          <a href="https://www.linkedin.com/search/results/people/?keywords=${searchTerm}" target="_blank" class="action-btn li">Find on LinkedIn</a>
-          <button class="action-btn secondary" onclick="startOutreach('${r.id}', '${r.title}')">Log Outreach</button>
-        </div>` : ''}
-      </div>`;
+      return `<div class="item-card" style="border-left:3px solid #f59e0b"><div class="item-name" style="color:#fbbf24">${r.title || "Untitled"}</div><div class="item-sub">By ${r.requester || 'Unknown'} • ${timeAgo(r.created_at)}</div>${!compact ? `<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap"><a href="https://www.instagram.com/explore/search/keyword/?q=${searchTerm}" target="_blank" class="action-btn ig">Find on IG</a><a href="https://www.linkedin.com/search/results/people/?keywords=${searchTerm}" target="_blank" class="action-btn li">Find on LinkedIn</a></div>` : ''}</div>`;
     }
     
-    function matchCard(m) {
-      const user1 = users.find(u => u.id === m.user_id || u.id === m.requester_id);
-      const user2 = users.find(u => u.id === m.matched_user_id);
-      
-      return `<div class="request-card">
-        <div style="display:flex;align-items:center;gap:12px">
-          <div class="avatar" style="width:32px;height:32px;font-size:12px">${user1?.name?.charAt(0) || "?"}</div>
-          <span style="color:#10b981">🤝</span>
-          <div class="avatar" style="width:32px;height:32px;font-size:12px">${user2?.name?.charAt(0) || "?"}</div>
-          <div>
-            <div style="font-size:14px"><strong>${user1?.name || 'Unknown'}</strong> matched with <strong>${user2?.name || 'Unknown'}</strong></div>
-            <div style="font-size:12px;color:#666">${timeAgo(m.created_at)}</div>
-          </div>
-        </div>
-      </div>`;
+    function connectionCard(c) {
+      return `<div class="item-card"><div style="display:flex;align-items:center;gap:12px"><div class="avatar" style="width:32px;height:32px;font-size:12px">${c.user_1?.name?.charAt(0) || "?"}</div><span style="color:#10b981">🤝</span><div class="avatar" style="width:32px;height:32px;font-size:12px">${c.user_2?.name?.charAt(0) || "?"}</div><div><div class="item-name">${c.user_1?.name || 'Unknown'} ↔ ${c.user_2?.name || 'Unknown'}</div><div class="item-sub">${c.request?.title || ''} • ${timeAgo(c.created_at)}</div></div></div></div>`;
     }
     
-    function outreachCard(o) {
-      const statusColors = {
-        pending: 'yellow',
-        contacted: 'blue',
-        joined: 'green',
-        declined: 'red'
-      };
-      const request = requests.find(r => r.id === o.request_id) || unfilled.find(r => r.id === o.request_id);
-      
-      return `<div class="request-card">
-        <div style="display:flex;justify-content:space-between;align-items:start">
-          <div>
-            <div class="request-title">${o.name}</div>
-            <div class="request-meta">
-              ${o.platform} · <a href="${o.profile_url}" target="_blank" style="color:#3b82f6">${o.profile_url}</a>
-            </div>
-            ${request ? `<div style="font-size:12px;color:#888;margin-top:4px">For: "${request.title}"</div>` : ''}
-          </div>
-          <span class="badge ${statusColors[o.status]}">${o.status}</span>
-        </div>
-        <div class="request-actions" style="margin-top:12px">
-          ${o.status === 'pending' ? `<button class="action-btn secondary" onclick="updateOutreach('${o.id}', 'contacted')">Mark Contacted</button>` : ''}
-          ${o.status !== 'joined' && o.status !== 'declined' ? `
-            <button class="action-btn primary" onclick="updateOutreach('${o.id}', 'joined')">Joined ✓</button>
-            <button class="action-btn secondary" onclick="updateOutreach('${o.id}', 'declined')">Declined</button>
-          ` : ''}
-        </div>
-      </div>`;
+    function recruitmentCard(t) {
+      const colors = { 'found': 'blue', 'contacted': 'yellow', 'responded': 'purple', 'joined': 'green', 'declined': 'red' };
+      return `<div class="item-card"><div style="display:flex;justify-content:space-between;align-items:start"><div><div class="item-name">${t.name}</div><div class="item-sub">${t.platform} • <a href="${t.profile_url}" target="_blank" style="color:#3b82f6">View Profile</a></div>${t.skills_detected?.length ? `<div class="item-meta" style="margin-top:8px">${t.skills_detected.map(s => `<span class="skill-tag">${s}</span>`).join("")}</div>` : ''}${t.location ? `<div class="item-sub" style="margin-top:4px">📍 ${t.location}</div>` : ''}</div><span class="badge ${colors[t.status]}">${t.status}</span></div><div style="margin-top:12px;display:flex;gap:8px">${t.status === 'found' ? `<button class="action-btn secondary" onclick="updateRecruitment('${t.id}', 'contacted')">Mark Contacted</button>` : ''}${t.status === 'contacted' ? `<button class="action-btn secondary" onclick="updateRecruitment('${t.id}', 'responded')">Mark Responded</button>` : ''}${t.status !== 'joined' && t.status !== 'declined' ? `<button class="action-btn green" onclick="updateRecruitment('${t.id}', 'joined')">Joined</button><button class="action-btn secondary" onclick="updateRecruitment('${t.id}', 'declined')">Declined</button>` : ''}</div></div>`;
+    }
+    
+    function externalCard(o) {
+      const colors = { 'new': 'blue', 'sent': 'yellow', 'accepted': 'green', 'expired': 'gray' };
+      return `<div class="item-card"><div style="display:flex;justify-content:space-between;align-items:start"><div><div class="item-name">${o.title}</div><div class="item-sub">${o.source} ${o.location ? `• ${o.location}` : ''} ${o.budget ? `• ${o.budget}` : ''}</div>${o.skills_needed?.length ? `<div class="item-meta" style="margin-top:8px">${o.skills_needed.map(s => `<span class="skill-tag">${s}</span>`).join("")}</div>` : ''}</div><span class="badge ${colors[o.status]}">${o.status}</span></div>${o.url ? `<div class="item-sub" style="margin-top:8px"><a href="${o.url}" target="_blank" style="color:#3b82f6">View original →</a></div>` : ''}</div>`;
     }
     
     function showUserDetail(userId) {
       const user = users.find(u => u.id === userId);
       if (!user) return;
-      
       document.getElementById("modalUserName").textContent = user.name || "User Details";
+      const icons = { phone: '📱', profile: '✓', work: '💼', trusted: '⭐', vip: '👑' };
       
-      const userRequests = requests.filter(r => r.user_id === userId);
-      const userMatches = matches.filter(m => m.user_id === userId || m.matched_user_id === userId);
-      
-      let html = `
-        <div class="modal-section">
-          <h3>Contact</h3>
-          <p>📱 ${user.phone || 'No phone'}</p>
-          <p>📍 ${user.location || 'No location'}</p>
-          ${user.telegram_connected ? '<p style="color:#10b981">✓ Telegram Connected</p>' : '<p style="color:#888">✗ Not on Telegram</p>'}
-        </div>
-        
-        <div class="modal-section">
-          <h3>Bio</h3>
-          <p>${user.bio || 'No bio'}</p>
-        </div>
-        
-        <div class="modal-section">
-          <h3>Skills (${user.skills?.length || 0})</h3>
-          <div style="display:flex;gap:6px;flex-wrap:wrap">
-            ${(user.skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('') || 'No skills'}
-          </div>
-        </div>
-        
-        ${user.social_links ? `
-          <div class="modal-section">
-            <h3>Social Links</h3>
-            <div class="social-links">
-              ${user.social_links.instagram ? `<a href="https://instagram.com/${user.social_links.instagram}" target="_blank" class="social-link">Instagram</a>` : ''}
-              ${user.social_links.linkedin ? `<a href="${user.social_links.linkedin}" target="_blank" class="social-link">LinkedIn</a>` : ''}
-              ${user.social_links.imdb ? `<a href="${user.social_links.imdb}" target="_blank" class="social-link">IMDB</a>` : ''}
-              ${user.social_links.twitter ? `<a href="https://twitter.com/${user.social_links.twitter}" target="_blank" class="social-link">Twitter</a>` : ''}
-              ${user.social_links.soundcloud ? `<a href="${user.social_links.soundcloud}" target="_blank" class="social-link">SoundCloud</a>` : ''}
-            </div>
-          </div>
-        ` : ''}
-        
-        ${user.enriched_profile ? `
-          <div class="enriched-section">
-            <div class="enriched-title">🧠 Smart Profile (AI Enriched)</div>
-            ${user.enriched_profile.work_types?.length ? `<p><strong>Work Types:</strong> ${user.enriched_profile.work_types.join(', ')}</p>` : ''}
-            ${user.enriched_profile.industries?.length ? `<p><strong>Industries:</strong> ${user.enriched_profile.industries.join(', ')}</p>` : ''}
-            ${user.enriched_profile.specialties?.length ? `<p><strong>Specialties:</strong> ${user.enriched_profile.specialties.join(', ')}</p>` : ''}
-            ${user.enriched_profile.credibility_score ? `<p><strong>Credibility Score:</strong> ${user.enriched_profile.credibility_score}/100</p>` : ''}
-          </div>
-        ` : ''}
-        
-        <div class="modal-section">
-          <h3>Requests Made (${userRequests.length})</h3>
-          ${userRequests.length === 0 ? '<p style="color:#666">No requests</p>' : 
-            userRequests.map(r => `<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
-              <div style="font-size:13px">${r.title}</div>
-              <div style="font-size:11px;color:#666">${r.status} · ${timeAgo(r.created_at)}</div>
-            </div>`).join('')}
-        </div>
-        
-        <div class="modal-section">
-          <h3>Matches (${userMatches.length})</h3>
-          ${userMatches.length === 0 ? '<p style="color:#666">No matches yet</p>' : 
-            userMatches.map(m => {
-              const other = users.find(u => u.id === (m.user_id === userId ? m.matched_user_id : m.user_id));
-              return `<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
-                <div style="font-size:13px">Matched with ${other?.name || 'Unknown'}</div>
-                <div style="font-size:11px;color:#666">${timeAgo(m.created_at)}</div>
-              </div>`;
-            }).join('')}
-        </div>
-        
-        <div class="modal-section">
-          <h3>Account</h3>
-          <p style="font-size:12px;color:#666">Created: ${new Date(user.created_at).toLocaleString()}</p>
-          <p style="font-size:12px;color:#666">ID: ${user.id}</p>
-        </div>
-      `;
+      let html = `<div class="modal-section"><h3>Contact & Status</h3><p>📱 ${user.phone || 'No phone'}</p><p>📍 ${user.location || 'No location'}</p>${user.telegram_connected ? '<p style="color:#10b981">✓ Telegram Connected</p>' : '<p style="color:#888">✗ Not on Telegram</p>'}<p>Verification: <span class="verification ${user.verification_level || 'phone'}">${user.verification_level || 'phone'}</span></p></div>
+      <div class="modal-section"><h3>Tags</h3><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">${(user.tags || []).map(t => `<span class="tag">${t}</span>`).join("") || '<span style="color:#666">No tags</span>'}</div><div style="display:flex;gap:8px;margin-top:8px"><input type="text" id="newTag" placeholder="Add tag" style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff"><button class="action-btn secondary" onclick="addTag('${user.id}')">Add</button></div></div>
+      <div class="modal-section"><h3>Bio</h3><p>${user.bio || 'No bio'}</p></div>
+      <div class="modal-section"><h3>Skills (${user.skills?.length || 0})</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${(user.skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('') || 'No skills'}</div></div>
+      ${user.enriched_profile ? `<div class="modal-section" style="background:rgba(139,92,246,0.1);padding:16px;border-radius:10px"><h3 style="color:#a78bfa">Smart Profile (AI Enriched)</h3>${user.enriched_profile.summary ? `<p>${user.enriched_profile.summary}</p>` : ''}${user.enriched_profile.credibility_score ? `<p><strong>Credibility:</strong> ${user.enriched_profile.credibility_score}/100</p>` : ''}</div>` : ''}
+      <div class="modal-section"><h3>Notes</h3><div id="userNotes">${(user.notes || []).map(n => `<div class="note-item"><div class="note-text">${n.note}</div><div class="note-time">${timeAgo(n.created_at)}</div></div>`).join("") || '<p style="color:#666">No notes</p>'}</div><div style="display:flex;gap:8px;margin-top:8px"><input type="text" id="newNote" placeholder="Add note" style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff"><button class="action-btn secondary" onclick="addNote('${user.id}')">Add</button></div></div>
+      <div class="modal-section"><h3>Send Telegram Message</h3>${user.telegram_connected ? `<div style="display:flex;gap:8px"><input type="text" id="telegramMsg" placeholder="Type message..." style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff"><button class="action-btn primary" onclick="sendTelegramMessage('${user.id}')">Send</button></div>` : '<p style="color:#666">User not connected to Telegram</p>'}</div>
+      <div class="modal-section"><h3>Actions</h3><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="action-btn secondary" onclick="setVerification('${user.id}', 'profile')">Set Profile Verified</button><button class="action-btn secondary" onclick="setVerification('${user.id}', 'trusted')">Set Trusted</button><button class="action-btn secondary" onclick="setVerification('${user.id}', 'vip')" style="background:rgba(245,158,11,0.2);color:#f59e0b">Set VIP</button></div></div>`;
       
       document.getElementById("modalUserBody").innerHTML = html;
       document.getElementById("userModal").classList.add("active");
     }
     
-    function closeModal() {
-      document.getElementById("userModal").classList.remove("active");
+    function closeModal() { document.getElementById("userModal").classList.remove("active"); }
+    
+    async function addTag(userId) { const tag = document.getElementById("newTag").value.trim(); if (!tag) return; await fetch(`${API}/admin/users/${userId}/tags?tag=${encodeURIComponent(tag)}`, { method: "POST" }); fetchAllData(); closeModal(); }
+    async function addNote(userId) { const note = document.getElementById("newNote").value.trim(); if (!note) return; await fetch(`${API}/admin/users/${userId}/notes?note=${encodeURIComponent(note)}`, { method: "POST" }); fetchAllData(); showUserDetail(userId); }
+    async function setVerification(userId, level) { await fetch(`${API}/admin/users/${userId}/verification?level=${level}`, { method: "PATCH" }); fetchAllData(); closeModal(); }
+    async function sendTelegramMessage(userId) { const msg = document.getElementById("telegramMsg").value.trim(); if (!msg) return; try { await fetch(`${API}/admin/users/${userId}/message?message=${encodeURIComponent(msg)}`, { method: "POST" }); alert("Message sent!"); } catch (e) { alert("Failed to send"); } }
+    
+    function showRecruitmentForm() { const f = document.getElementById("recruitmentForm"); f.style.display = f.style.display === 'none' ? 'block' : 'none'; }
+    function showExternalForm() { const f = document.getElementById("externalForm"); f.style.display = f.style.display === 'none' ? 'block' : 'none'; }
+    
+    async function saveRecruitmentTarget() {
+      const name = document.getElementById("recruitName").value;
+      const platform = document.getElementById("recruitPlatform").value;
+      const url = document.getElementById("recruitUrl").value;
+      const skills = document.getElementById("recruitSkills").value;
+      const location = document.getElementById("recruitLocation").value;
+      const notes = document.getElementById("recruitNotes").value;
+      if (!name || !url) { alert("Name and URL required"); return; }
+      const params = new URLSearchParams({ name, platform, profile_url: url });
+      if (skills) params.append("skills", skills);
+      if (location) params.append("location", location);
+      if (notes) params.append("notes", notes);
+      await fetch(`${API}/admin/recruitment/targets?${params}`, { method: "POST" });
+      document.getElementById("recruitmentForm").style.display = "none";
+      fetchAllData();
     }
     
-    function showOutreachForm() {
-      document.getElementById("outreachForm").style.display = 
-        document.getElementById("outreachForm").style.display === 'none' ? 'block' : 'none';
-    }
+    async function updateRecruitment(id, status) { await fetch(`${API}/admin/recruitment/targets/${id}?status=${status}`, { method: "PATCH" }); fetchAllData(); }
     
-    function startOutreach(requestId, requestTitle) {
-      document.getElementById("outreachRequest").value = requestId;
-      switchTab('outreach');
-      showOutreachForm();
-    }
-    
-    function populateOutreachRequests() {
-      const select = document.getElementById("outreachRequest");
-      select.innerHTML = '<option value="">-- Select Request --</option>' +
-        [...unfilled, ...requests].map(r => `<option value="${r.id}">${r.title}</option>`).join('');
-    }
-    
-    async function saveOutreach() {
-      const name = document.getElementById("outreachName").value;
-      const platform = document.getElementById("outreachPlatform").value;
-      const url = document.getElementById("outreachUrl").value;
-      const requestId = document.getElementById("outreachRequest").value;
-      
-      if (!name || !url) {
-        alert("Please fill in name and URL");
-        return;
-      }
-      
-      try {
-        const params = new URLSearchParams({ name, platform, profile_url: url });
-        if (requestId) params.append("request_id", requestId);
-        
-        await fetch(`${API}/admin/outreach?${params}`, { method: "POST" });
-        
-        // Clear form
-        document.getElementById("outreachName").value = '';
-        document.getElementById("outreachUrl").value = '';
-        document.getElementById("outreachForm").style.display = 'none';
-        
-        fetchAllData();
-      } catch (e) {
-        console.error("Error saving outreach:", e);
-        alert("Failed to save outreach");
-      }
-    }
-    
-    async function updateOutreach(id, status) {
-      try {
-        await fetch(`${API}/admin/outreach/${id}?status=${status}`, { method: "PATCH" });
-        fetchAllData();
-      } catch (e) {
-        console.error("Error updating outreach:", e);
-      }
+    async function saveExternalOpp() {
+      const source = document.getElementById("extSource").value;
+      const title = document.getElementById("extTitle").value;
+      const description = document.getElementById("extDescription").value;
+      const skills = document.getElementById("extSkills").value;
+      const location = document.getElementById("extLocation").value;
+      const budget = document.getElementById("extBudget").value;
+      const url = document.getElementById("extUrl").value;
+      if (!source || !title) { alert("Source and Title required"); return; }
+      const params = new URLSearchParams({ source, title });
+      if (description) params.append("description", description);
+      if (skills) params.append("skills_needed", skills);
+      if (location) params.append("location", location);
+      if (budget) params.append("budget", budget);
+      if (url) params.append("url", url);
+      await fetch(`${API}/admin/opportunities/external?${params}`, { method: "POST" });
+      document.getElementById("externalForm").style.display = "none";
+      fetchAllData();
     }
     
     function timeAgo(dateString) {
       if (!dateString) return '';
-      const date = new Date(dateString);
-      const now = new Date();
-      const seconds = Math.floor((now - date) / 1000);
-      
+      const seconds = Math.floor((new Date() - new Date(dateString)) / 1000);
       if (seconds < 60) return 'just now';
       if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`;
       if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
       if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
-      return date.toLocaleDateString();
+      return new Date(dateString).toLocaleDateString();
     }
     
-    // Close modal on click outside
-    document.getElementById("userModal").addEventListener("click", function(e) {
-      if (e.target === this) closeModal();
-    });
+    document.getElementById("userModal").addEventListener("click", function(e) { if (e.target === this) closeModal(); });
   </script>
 </body>
 </html>
