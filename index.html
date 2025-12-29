@@ -488,7 +488,13 @@
       
       <div class="tab-content" id="tab-recruitment">
         <div class="card">
-          <div class="card-header">Recruitment Pipeline <button class="action-btn primary" onclick="showRecruitmentForm()" style="padding:6px 12px;font-size:11px;">+ Add Target</button></div>
+          <div class="card-header">Recruitment Pipeline 
+            <div style="display:flex;gap:8px;">
+              <button class="action-btn secondary" onclick="getRecruitmentSuggestions()" style="padding:6px 12px;font-size:11px;">🤖 AI Suggestions</button>
+              <button class="action-btn primary" onclick="showRecruitmentForm()" style="padding:6px 12px;font-size:11px;">+ Add Target</button>
+            </div>
+          </div>
+          <div id="recruitmentSuggestions" style="display:none;padding:16px;background:rgba(139,92,246,0.1);border-bottom:1px solid rgba(139,92,246,0.3);"></div>
           <div id="recruitmentForm" style="display:none;padding:20px;border-bottom:1px solid rgba(255,255,255,0.1);">
             <div class="form-inline">
               <div class="form-row"><label>Name</label><input type="text" id="recruitName" placeholder="Person's name"></div>
@@ -508,7 +514,14 @@
       
       <div class="tab-content" id="tab-external">
         <div class="card">
-          <div class="card-header">External Opportunities <button class="action-btn primary" onclick="showExternalForm()" style="padding:6px 12px;font-size:11px;">+ Add Opportunity</button></div>
+          <div class="card-header">External Opportunities 
+            <div style="display:flex;gap:8px;">
+              <button class="action-btn secondary" onclick="scrapeReddit()" style="padding:6px 12px;font-size:11px;">🔍 Scrape Reddit</button>
+              <button class="action-btn secondary" onclick="analyzeJobs()" style="padding:6px 12px;font-size:11px;">🤖 Analyze All</button>
+              <button class="action-btn primary" onclick="showExternalForm()" style="padding:6px 12px;font-size:11px;">+ Add Opportunity</button>
+            </div>
+          </div>
+          <div id="scrapeStatus" style="display:none;padding:12px;background:rgba(59,130,246,0.1);border-bottom:1px solid rgba(59,130,246,0.3);color:#60a5fa;"></div>
           <div id="externalForm" style="display:none;padding:20px;border-bottom:1px solid rgba(255,255,255,0.1);">
             <div class="form-inline">
               <div class="form-row"><label>Source</label><input type="text" id="extSource" placeholder="Instagram, Craigslist, etc."></div>
@@ -712,7 +725,23 @@
     
     function externalCard(o) {
       const colors = { 'new': 'blue', 'sent': 'yellow', 'accepted': 'green', 'expired': 'gray' };
-      return `<div class="item-card"><div style="display:flex;justify-content:space-between;align-items:start"><div><div class="item-name">${o.title}</div><div class="item-sub">${o.source} ${o.location ? `• ${o.location}` : ''} ${o.budget ? `• ${o.budget}` : ''}</div>${o.skills_needed?.length ? `<div class="item-meta" style="margin-top:8px">${o.skills_needed.map(s => `<span class="skill-tag">${s}</span>`).join("")}</div>` : ''}</div><span class="badge ${colors[o.status]}">${o.status}</span></div>${o.url ? `<div class="item-sub" style="margin-top:8px"><a href="${o.url}" target="_blank" style="color:#3b82f6">View original →</a></div>` : ''}</div>`;
+      const matchCount = o.matched_users?.length || 0;
+      return `<div class="item-card">
+        <div style="display:flex;justify-content:space-between;align-items:start">
+          <div>
+            <div class="item-name">${o.title}</div>
+            <div class="item-sub">${o.source} ${o.location ? `• ${o.location}` : ''} ${o.budget ? `• ${o.budget}` : ''}</div>
+            ${o.skills_needed?.length ? `<div class="item-meta" style="margin-top:8px">${o.skills_needed.map(s => `<span class="skill-tag">${s}</span>`).join("")}</div>` : ''}
+            ${o.analyzed ? '<span style="font-size:10px;color:#a78bfa;">✓ AI Analyzed</span>' : ''}
+          </div>
+          <span class="badge ${colors[o.status] || 'gray'}">${o.status}</span>
+        </div>
+        <div style="margin-top:12px;display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          ${o.url ? `<a href="${o.url}" target="_blank" style="color:#3b82f6;font-size:12px;">View original →</a>` : ''}
+          <button class="action-btn secondary" onclick="matchExternalOpp('${o.id}')" style="padding:4px 10px;font-size:11px;">🔍 Find Matches ${matchCount > 0 ? `(${matchCount})` : ''}</button>
+          ${o.status === 'new' ? `<button class="action-btn green" onclick="updateExternalStatus('${o.id}', 'sent')" style="padding:4px 10px;font-size:11px;">Mark Sent</button>` : ''}
+        </div>
+      </div>`;
     }
     
     function showUserDetail(userId) {
@@ -801,6 +830,113 @@
       if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`;
       if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`;
       return new Date(dateString).toLocaleDateString();
+    }
+    
+    // ============ SCRAPING & AI FUNCTIONS ============
+    
+    async function scrapeReddit() {
+      const statusEl = document.getElementById("scrapeStatus");
+      statusEl.style.display = "block";
+      statusEl.innerHTML = "🔍 Scraping Reddit for job posts... (this may take a moment)";
+      
+      try {
+        const res = await fetch(`${API}/admin/scrape/reddit`, { method: "POST" });
+        const data = await res.json();
+        statusEl.innerHTML = `✅ Found ${data.scraped || 0} new job posts from Reddit!`;
+        fetchAllData();
+        setTimeout(() => { statusEl.style.display = "none"; }, 5000);
+      } catch (e) {
+        statusEl.innerHTML = "❌ Scraping failed. Check server logs.";
+        setTimeout(() => { statusEl.style.display = "none"; }, 5000);
+      }
+    }
+    
+    async function analyzeJobs() {
+      const statusEl = document.getElementById("scrapeStatus");
+      statusEl.style.display = "block";
+      statusEl.innerHTML = "🤖 Analyzing jobs with AI...";
+      
+      try {
+        const res = await fetch(`${API}/admin/scrape/analyze`, { method: "POST" });
+        const data = await res.json();
+        statusEl.innerHTML = `✅ Analyzed ${data.analyzed || 0} jobs!`;
+        fetchAllData();
+        setTimeout(() => { statusEl.style.display = "none"; }, 5000);
+      } catch (e) {
+        statusEl.innerHTML = "❌ Analysis failed.";
+        setTimeout(() => { statusEl.style.display = "none"; }, 5000);
+      }
+    }
+    
+    async function getRecruitmentSuggestions() {
+      const suggestEl = document.getElementById("recruitmentSuggestions");
+      suggestEl.style.display = "block";
+      suggestEl.innerHTML = "🤖 Analyzing talent gaps and generating suggestions...";
+      
+      try {
+        const res = await fetch(`${API}/admin/recruitment/suggestions`);
+        const suggestions = await res.json();
+        
+        if (!suggestions || suggestions.length === 0) {
+          suggestEl.innerHTML = `<div style="color:#a78bfa"><strong>No talent gaps detected!</strong><br><span style="color:#888">Everyone's needs are being met. Keep growing!</span></div>`;
+          return;
+        }
+        
+        let html = `<div style="margin-bottom:12px;color:#a78bfa;font-weight:600">🎯 AI Recruitment Suggestions (Based on Talent Gaps)</div>`;
+        
+        suggestions.forEach(s => {
+          html += `
+            <div style="background:rgba(0,0,0,0.2);padding:12px;border-radius:8px;margin-bottom:12px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <div>
+                  <strong style="color:#fff;font-size:15px;">${s.skill_needed}</strong>
+                  <span style="color:#888;margin-left:8px;">Demand: ${s.demand} | Supply: ${s.supply}</span>
+                </div>
+                <span class="badge yellow">High Priority</span>
+              </div>
+              <div style="margin-top:10px;font-size:12px;">
+                <div style="color:#888;margin-bottom:6px;">Search queries:</div>
+                <div style="display:flex;flex-wrap:wrap;gap:6px;">
+                  <span style="background:rgba(236,72,153,0.2);color:#ec4899;padding:4px 8px;border-radius:4px;font-size:11px;">IG: ${s.search_queries?.instagram || ''}</span>
+                  <span style="background:rgba(59,130,246,0.2);color:#3b82f6;padding:4px 8px;border-radius:4px;font-size:11px;">LinkedIn: ${s.search_queries?.linkedin || ''}</span>
+                  <span style="background:rgba(0,0,0,0.3);color:#888;padding:4px 8px;border-radius:4px;font-size:11px;">X: ${s.search_queries?.twitter || ''}</span>
+                </div>
+              </div>
+              <div style="margin-top:10px;">
+                <div style="color:#888;font-size:12px;margin-bottom:4px;">Outreach template:</div>
+                <div style="background:rgba(255,255,255,0.05);padding:8px;border-radius:6px;font-size:12px;color:#ccc;cursor:pointer;" onclick="navigator.clipboard.writeText(this.innerText);alert('Copied!');">${s.outreach_template || ''}</div>
+              </div>
+            </div>
+          `;
+        });
+        
+        html += `<button class="action-btn secondary" onclick="document.getElementById('recruitmentSuggestions').style.display='none'" style="margin-top:8px;">Close</button>`;
+        suggestEl.innerHTML = html;
+        
+      } catch (e) {
+        suggestEl.innerHTML = "❌ Failed to get suggestions.";
+      }
+    }
+    
+    async function matchExternalOpp(oppId) {
+      try {
+        const res = await fetch(`${API}/admin/opportunities/external/${oppId}/match`, { method: "POST" });
+        const data = await res.json();
+        if (data.matches && data.matches.length > 0) {
+          const names = data.matches.map(m => m.user?.name || 'Unknown').join(', ');
+          alert(`Found ${data.matches.length} matches: ${names}`);
+        } else {
+          alert("No matches found for this opportunity.");
+        }
+        fetchAllData();
+      } catch (e) {
+        alert("Matching failed.");
+      }
+    }
+    
+    async function updateExternalStatus(oppId, status) {
+      await fetch(`${API}/admin/opportunities/external/${oppId}?status=${status}`, { method: "PATCH" });
+      fetchAllData();
     }
     
     document.getElementById("userModal").addEventListener("click", function(e) { if (e.target === this) closeModal(); });
