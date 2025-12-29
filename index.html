@@ -725,7 +725,17 @@
       <div class="modal-section"><h3>Tags</h3><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">${(user.tags || []).map(t => `<span class="tag">${t}</span>`).join("") || '<span style="color:#666">No tags</span>'}</div><div style="display:flex;gap:8px;margin-top:8px"><input type="text" id="newTag" placeholder="Add tag" style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff"><button class="action-btn secondary" onclick="addTag('${user.id}')">Add</button></div></div>
       <div class="modal-section"><h3>Bio</h3><p>${user.bio || 'No bio'}</p></div>
       <div class="modal-section"><h3>Skills (${user.skills?.length || 0})</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${(user.skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('') || 'No skills'}</div></div>
-      ${user.enriched_profile ? `<div class="modal-section" style="background:rgba(139,92,246,0.1);padding:16px;border-radius:10px"><h3 style="color:#a78bfa">Smart Profile (AI Enriched)</h3>${user.enriched_profile.summary ? `<p>${user.enriched_profile.summary}</p>` : ''}${user.enriched_profile.credibility_score ? `<p><strong>Credibility:</strong> ${user.enriched_profile.credibility_score}/100</p>` : ''}</div>` : ''}
+      ${user.enriched_profile && Object.keys(user.enriched_profile).length > 0 ? `<div class="modal-section" style="background:rgba(139,92,246,0.1);padding:16px;border-radius:10px"><h3 style="color:#a78bfa">Smart Profile (AI Enriched)</h3>
+      ${user.enriched_profile.summary ? `<p style="margin-bottom:12px">${user.enriched_profile.summary}</p>` : ''}
+      ${user.enriched_profile.credibility_score ? `<p><strong>Credibility:</strong> ${user.enriched_profile.credibility_score}/100</p>` : ''}
+      ${user.enriched_profile.budget_range ? `<p><strong>💰 Budget Range:</strong> ${user.enriched_profile.budget_range}</p>` : ''}
+      ${user.enriched_profile.availability ? `<p><strong>📅 Availability:</strong> ${user.enriched_profile.availability}</p>` : ''}
+      ${user.enriched_profile.industries?.length ? `<p><strong>🏢 Industries:</strong> ${user.enriched_profile.industries.join(', ')}</p>` : ''}
+      ${user.enriched_profile.work_types?.length ? `<p><strong>🎬 Work Types:</strong> ${user.enriched_profile.work_types.join(', ')}</p>` : ''}
+      ${user.enriched_profile.specialties?.length ? `<p><strong>⭐ Specialties:</strong> ${user.enriched_profile.specialties.join(', ')}</p>` : ''}
+      ${user.enriched_profile.extracted_skills?.length ? `<p><strong>🛠 Extracted Skills:</strong> ${user.enriched_profile.extracted_skills.join(', ')}</p>` : ''}
+      <p style="font-size:11px;color:#666;margin-top:8px">Last updated: ${user.enriched_profile.enriched_at ? timeAgo(user.enriched_profile.enriched_at) : 'Unknown'}</p>
+      </div>` : ''}
       <div class="modal-section"><h3>Notes</h3><div id="userNotes">${(user.notes || []).map(n => `<div class="note-item"><div class="note-text">${n.note}</div><div class="note-time">${timeAgo(n.created_at)}</div></div>`).join("") || '<p style="color:#666">No notes</p>'}</div><div style="display:flex;gap:8px;margin-top:8px"><input type="text" id="newNote" placeholder="Add note" style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff"><button class="action-btn secondary" onclick="addNote('${user.id}')">Add</button></div></div>
       <div class="modal-section"><h3>Send Telegram Message</h3>${user.telegram_connected ? `<div style="display:flex;gap:8px"><input type="text" id="telegramMsg" placeholder="Type message..." style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff"><button class="action-btn primary" onclick="sendTelegramMessage('${user.id}')">Send</button></div>` : '<p style="color:#666">User not connected to Telegram</p>'}</div>
       <div class="modal-section"><h3>Actions</h3><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="action-btn secondary" onclick="setVerification('${user.id}', 'profile')">Set Profile Verified</button><button class="action-btn secondary" onclick="setVerification('${user.id}', 'trusted')">Set Trusted</button><button class="action-btn secondary" onclick="setVerification('${user.id}', 'vip')" style="background:rgba(245,158,11,0.2);color:#f59e0b">Set VIP</button></div></div>`;
@@ -797,4 +807,3 @@
   </script>
 </body>
 </html>
-
