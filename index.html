@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TITLI Admin</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: #0a0a0f;
+      color: #fff;
+      min-height: 100vh;
+    }
+    
+    /* Login */
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+    }
+    .login-box {
+      background: rgba(255,255,255,0.05);
+      padding: 40px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.1);
+      width: 100%;
+      max-width: 360px;
+    }
+    .login-box h1 {
+      font-size: 28px;
+      font-weight: 800;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .login-box p {
+      color: #888;
+      font-size: 14px;
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .login-box input {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.15);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 15px;
+      outline: none;
+    }
+    .login-box button {
+      width: 100%;
+      padding: 14px;
+      margin-top: 16px;
+      background: #e63946;
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .login-box button:hover { background: #c92a36; }
+    
+    /* Dashboard */
+    .dashboard { display: none; }
+    .dashboard.active { display: block; }
+    
+    header {
+      padding: 16px 24px;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      background: #0a0a0f;
+      z-index: 100;
+    }
+    .logo {
+      font-size: 22px;
+      font-weight: 800;
+      color: #e63946;
+    }
+    .logo span { color: #666; font-size: 14px; font-weight: 400; margin-left: 8px; }
+    .header-actions { display: flex; gap: 12px; }
+    .header-actions button {
+      padding: 8px 16px;
+      background: rgba(255,255,255,0.1);
+      border: none;
+      border-radius: 8px;
+      color: #fff;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .header-actions button:hover { background: rgba(255,255,255,0.15); }
+    .header-actions .logout { background: transparent; color: #888; }
+    
+    .container { max-width: 1200px; margin: 0 auto; padding: 24px; }
+    
+    /* Stats */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+    @media (max-width: 768px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    .stat-card {
+      padding: 20px;
+      border-radius: 12px;
+    }
+    .stat-card.blue { background: linear-gradient(135deg, rgba(59,130,246,0.15), rgba(59,130,246,0.05)); border: 1px solid rgba(59,130,246,0.3); }
+    .stat-card.purple { background: linear-gradient(135deg, rgba(139,92,246,0.15), rgba(139,92,246,0.05)); border: 1px solid rgba(139,92,246,0.3); }
+    .stat-card.yellow { background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.05)); border: 1px solid rgba(245,158,11,0.3); }
+    .stat-card.green { background: linear-gradient(135deg, rgba(16,185,129,0.15), rgba(16,185,129,0.05)); border: 1px solid rgba(16,185,129,0.3); }
+    .stat-value { font-size: 28px; font-weight: 700; }
+    .stat-label { font-size: 13px; color: #888; margin-top: 4px; }
+    
+    /* Tabs */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .tab {
+      padding: 10px 20px;
+      background: rgba(255,255,255,0.05);
+      border: none;
+      border-radius: 8px;
+      color: #888;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    .tab:hover { background: rgba(255,255,255,0.1); color: #fff; }
+    .tab.active { background: #e63946; color: #fff; }
+    .tab .badge {
+      margin-left: 8px;
+      padding: 2px 8px;
+      background: #f59e0b;
+      border-radius: 10px;
+      font-size: 12px;
+      color: #000;
+    }
+    
+    /* Search */
+    .search {
+      width: 100%;
+      padding: 14px 16px;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      color: #fff;
+      font-size: 14px;
+      margin-bottom: 24px;
+      outline: none;
+    }
+    
+    /* Cards */
+    .card {
+      background: rgba(255,255,255,0.03);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: 24px;
+    }
+    .card.highlight { border-color: rgba(245,158,11,0.3); }
+    .card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      font-weight: 600;
+      font-size: 15px;
+    }
+    .card.highlight .card-header { color: #f59e0b; }
+    
+    /* Rows */
+    .row {
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .row:last-child { border-bottom: none; }
+    .avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #e63946, #f97316);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+    .row-content { flex: 1; min-width: 0; }
+    .row-title { font-weight: 500; font-size: 14px; }
+    .row-subtitle { font-size: 12px; color: #666; margin-top: 2px; }
+    .badge {
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+    }
+    .badge.green { background: rgba(16,185,129,0.15); color: #10b981; }
+    .badge.yellow { background: rgba(245,158,11,0.15); color: #f59e0b; }
+    .badge.purple { background: rgba(139,92,246,0.15); color: #8b5cf6; }
+    .badge.gray { background: rgba(128,128,128,0.15); color: #888; }
+    
+    /* Empty */
+    .empty {
+      padding: 40px 20px;
+      text-align: center;
+      color: #666;
+      font-size: 14px;
+    }
+    
+    /* Grid */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 768px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+    
+    /* Unfilled Actions */
+    .unfilled-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+    .unfilled-actions a {
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #fff;
+      text-decoration: none;
+    }
+    .unfilled-actions .ig { background: linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045); }
+    .unfilled-actions .li { background: #0a66c2; }
+    
+    /* Tab content */
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+    
+    /* Loading */
+    .loading { text-align: center; padding: 40px; color: #888; }
+  </style>
+</head>
+<body>
+  <!-- Login Screen -->
+  <div class="login-screen" id="loginScreen">
+    <form class="login-box" onsubmit="handleLogin(event)">
+      <h1>TITLI</h1>
+      <p>Admin Dashboard</p>
+      <input type="password" id="password" placeholder="Enter password" required>
+      <button type="submit">Enter</button>
+    </form>
+  </div>
+  
+  <!-- Dashboard -->
+  <div class="dashboard" id="dashboard">
+    <header>
+      <div class="logo">TITLI<span>Admin</span></div>
+      <div class="header-actions">
+        <button onclick="fetchData()">Refresh</button>
+        <button class="logout" onclick="logout()">Logout</button>
+      </div>
+    </header>
+    
+    <div class="container">
+      <!-- Stats -->
+      <div class="stats">
+        <div class="stat-card blue">
+          <div class="stat-value" id="statUsers">0</div>
+          <div class="stat-label">Total Users</div>
+        </div>
+        <div class="stat-card purple">
+          <div class="stat-value" id="statRequests">0</div>
+          <div class="stat-label">Total Requests</div>
+        </div>
+        <div class="stat-card yellow">
+          <div class="stat-value" id="statUnfilled">0</div>
+          <div class="stat-label">Unfilled</div>
+        </div>
+        <div class="stat-card green">
+          <div class="stat-value" id="statConnected">0</div>
+          <div class="stat-label">Telegram Connected</div>
+        </div>
+      </div>
+      
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab('overview')">Overview</button>
+        <button class="tab" onclick="switchTab('users')">Users</button>
+        <button class="tab" onclick="switchTab('requests')">Requests</button>
+        <button class="tab" onclick="switchTab('unfilled')">Unfilled <span class="badge" id="unfilledBadge">0</span></button>
+      </div>
+      
+      <!-- Search -->
+      <input type="text" class="search" placeholder="Search users, requests, skills..." oninput="handleSearch(this.value)">
+      
+      <!-- Tab Contents -->
+      <div class="tab-content active" id="tab-overview">
+        <div class="grid-2">
+          <div class="card">
+            <div class="card-header">Recent Users</div>
+            <div id="recentUsers"><div class="loading">Loading...</div></div>
+          </div>
+          <div class="card highlight">
+            <div class="card-header">Unfilled Requests</div>
+            <div id="recentUnfilled"><div class="loading">Loading...</div></div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="tab-users">
+        <div class="card">
+          <div class="card-header">All Users (<span id="userCount">0</span>)</div>
+          <div id="allUsers"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="tab-requests">
+        <div class="card">
+          <div class="card-header">All Requests (<span id="requestCount">0</span>)</div>
+          <div id="allRequests"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
+      
+      <div class="tab-content" id="tab-unfilled">
+        <div class="card highlight">
+          <div class="card-header">Recruitment Opportunities</div>
+          <div id="allUnfilled"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const API = "https://titly-backend-production.up.railway.app/api";
+    const PASSWORD = "titli2024";
+    
+    let users = [];
+    let requests = [];
+    let unfilled = [];
+    let searchTerm = "";
+    
+    // Check if already logged in
+    if (localStorage.getItem("titli_admin") === "true") {
+      showDashboard();
+      fetchData();
+    }
+    
+    function handleLogin(e) {
+      e.preventDefault();
+      const pwd = document.getElementById("password").value;
+      if (pwd === PASSWORD) {
+        localStorage.setItem("titli_admin", "true");
+        showDashboard();
+        fetchData();
+      } else {
+        alert("Wrong password");
+      }
+    }
+    
+    function logout() {
+      localStorage.removeItem("titli_admin");
+      document.getElementById("loginScreen").style.display = "flex";
+      document.getElementById("dashboard").classList.remove("active");
+    }
+    
+    function showDashboard() {
+      document.getElementById("loginScreen").style.display = "none";
+      document.getElementById("dashboard").classList.add("active");
+    }
+    
+    async function fetchData() {
+      try {
+        const [usersRes, requestsRes, unfilledRes] = await Promise.all([
+          fetch(`${API}/admin/users`).then(r => r.json()).catch(() => []),
+          fetch(`${API}/admin/requests`).then(r => r.json()).catch(() => []),
+          fetch(`${API}/admin/unfilled-requests`).then(r => r.json()).catch(() => [])
+        ]);
+        
+        users = usersRes || [];
+        requests = requestsRes || [];
+        unfilled = unfilledRes || [];
+        
+        updateStats();
+        render();
+      } catch (e) {
+        console.error("Fetch error:", e);
+      }
+    }
+    
+    function updateStats() {
+      document.getElementById("statUsers").textContent = users.length;
+      document.getElementById("statRequests").textContent = requests.length;
+      document.getElementById("statUnfilled").textContent = unfilled.length;
+      document.getElementById("statConnected").textContent = users.filter(u => u.telegram_connected).length;
+      document.getElementById("unfilledBadge").textContent = unfilled.length;
+    }
+    
+    function switchTab(tab) {
+      document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
+      document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+      event.target.classList.add("active");
+      document.getElementById(`tab-${tab}`).classList.add("active");
+    }
+    
+    function handleSearch(term) {
+      searchTerm = term.toLowerCase();
+      render();
+    }
+    
+    function render() {
+      const filteredUsers = users.filter(u => 
+        u.name?.toLowerCase().includes(searchTerm) ||
+        u.skills?.some(s => s.toLowerCase().includes(searchTerm))
+      );
+      
+      const filteredRequests = requests.filter(r =>
+        r.title?.toLowerCase().includes(searchTerm)
+      );
+      
+      // Recent Users (overview)
+      document.getElementById("recentUsers").innerHTML = users.length === 0 
+        ? '<div class="empty">No users yet</div>'
+        : users.slice(0, 5).map(userRow).join("");
+      
+      // Recent Unfilled (overview)
+      document.getElementById("recentUnfilled").innerHTML = unfilled.length === 0
+        ? '<div class="empty">All requests have matches!</div>'
+        : unfilled.slice(0, 5).map(requestRow).join("");
+      
+      // All Users
+      document.getElementById("userCount").textContent = filteredUsers.length;
+      document.getElementById("allUsers").innerHTML = filteredUsers.length === 0
+        ? '<div class="empty">No users found</div>'
+        : filteredUsers.map(u => userRow(u, true)).join("");
+      
+      // All Requests
+      document.getElementById("requestCount").textContent = filteredRequests.length;
+      document.getElementById("allRequests").innerHTML = filteredRequests.length === 0
+        ? '<div class="empty">No requests found</div>'
+        : filteredRequests.map(r => requestRow(r, true)).join("");
+      
+      // Unfilled
+      document.getElementById("allUnfilled").innerHTML = unfilled.length === 0
+        ? '<div class="empty">All requests have matches! 🎉</div>'
+        : unfilled.map(unfilledRow).join("");
+    }
+    
+    function userRow(u, showDetails = false) {
+      return `
+        <div class="row">
+          <div class="avatar">${u.name?.charAt(0) || "?"}</div>
+          <div class="row-content">
+            <div class="row-title">${u.name || "Unknown"}</div>
+            <div class="row-subtitle">${u.skills?.slice(0, 3).join(", ") || "No skills"}</div>
+          </div>
+          ${u.telegram_connected ? '<span class="badge green">Telegram</span>' : ''}
+          ${showDetails && u.location ? `<span style="font-size:12px;color:#666">${u.location}</span>` : ''}
+        </div>
+      `;
+    }
+    
+    function requestRow(r, showDetails = false) {
+      const statusClass = {
+        in_progress: "yellow",
+        completed: "green",
+        awaiting_approval: "purple"
+      }[r.status] || "gray";
+      
+      return `
+        <div class="row" style="display:block">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="row-title">${r.title || "Untitled"}</div>
+            <span class="badge ${statusClass}">${(r.status || "unknown").replace("_", " ")}</span>
+          </div>
+          ${showDetails ? `<div class="row-subtitle" style="margin-top:6px">${new Date(r.created_at).toLocaleDateString()}</div>` : ''}
+        </div>
+      `;
+    }
+    
+    function unfilledRow(r) {
+      const searchTerm = encodeURIComponent(r.title || "");
+      const lastWord = encodeURIComponent((r.title || "").split(" ").pop());
+      
+      return `
+        <div class="row" style="display:block;padding:16px 20px">
+          <div class="row-title" style="color:#fbbf24">${r.title || "Untitled"}</div>
+          <div class="row-subtitle" style="margin-top:4px">
+            By ${r.requester || "Unknown"} · ${r.location || "No location"} · ${new Date(r.created_at).toLocaleDateString()}
+          </div>
+          <div class="unfilled-actions">
+            <a href="https://www.instagram.com/explore/tags/${lastWord}" target="_blank" class="ig">Find on Instagram</a>
+            <a href="https://www.linkedin.com/search/results/people/?keywords=${searchTerm}" target="_blank" class="li">Find on LinkedIn</a>
+          </div>
+        </div>
+      `;
+    }
+  </script>
+</body>
+</html>
