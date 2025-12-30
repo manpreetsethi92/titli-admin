@@ -423,6 +423,7 @@
         <input type="text" class="search" placeholder="Search users, requests, skills..." oninput="handleSearch(this.value)">
         <button class="filter-btn" onclick="toggleFilter('telegram')" id="filterTelegram">Telegram Only</button>
         <button class="filter-btn" onclick="toggleFilter('verified')" id="filterVerified">Verified Only</button>
+        <button class="filter-btn" onclick="toggleFilter('blacklisted')" id="filterBlacklisted" style="border-color:rgba(239,68,68,0.3);">⛔ Blacklisted</button>
       </div>
       
       <div class="tab-content active" id="tab-overview">
@@ -562,7 +563,7 @@
     let recruitmentTargets = [], externalOpps = [];
     let funnel = {}, skillGaps = {}, growth = {};
     let searchTerm = "";
-    let filters = { telegram: false, verified: false };
+    let filters = { telegram: false, verified: false, blacklisted: false };
     
     if (localStorage.getItem("titli_admin") === "true") { showDashboard(); fetchAllData(); }
     
@@ -618,11 +619,12 @@
     
     function updateStats() {
       const telegramUsers = users.filter(u => u.telegram_connected).length;
+      const blacklistedUsers = users.filter(u => u.blacklisted).length;
       const todayActivity = activity.filter(a => new Date(a.timestamp).toDateString() === new Date().toDateString()).length;
       const pendingRecruitment = recruitmentTargets.filter(t => t.status === 'found' || t.status === 'contacted').length;
       
       document.getElementById("statUsers").textContent = users.length;
-      document.getElementById("statUsersDetail").textContent = `${telegramUsers} on Telegram`;
+      document.getElementById("statUsersDetail").textContent = `${telegramUsers} on Telegram${blacklistedUsers > 0 ? ` • ${blacklistedUsers} blocked` : ''}`;
       document.getElementById("statConnections").textContent = connections.length;
       document.getElementById("statRequests").textContent = requests.length;
       document.getElementById("statRequestsDetail").textContent = `${requests.filter(r => r.status === 'completed').length} completed`;
@@ -642,7 +644,8 @@
         const matchesSearch = !searchTerm || u.name?.toLowerCase().includes(searchTerm) || u.phone?.includes(searchTerm) || u.skills?.some(s => s.toLowerCase().includes(searchTerm));
         const matchesTelegram = !filters.telegram || u.telegram_connected;
         const matchesVerified = !filters.verified || (u.verification_level && u.verification_level !== 'phone');
-        return matchesSearch && matchesTelegram && matchesVerified;
+        const matchesBlacklisted = !filters.blacklisted || u.blacklisted === true;
+        return matchesSearch && matchesTelegram && matchesVerified && matchesBlacklisted;
       });
     }
     
@@ -700,7 +703,8 @@
     
     function userCard(u, detailed = false) {
       const icons = { phone: '📱', profile: '✓', work: '💼', trusted: '⭐', vip: '👑' };
-      return `<div class="item-card" onclick="showUserDetail('${u.id}')"><div class="item-header"><div class="avatar">${u.name?.charAt(0) || "?"}</div><div class="item-info"><div class="item-name">${u.name || "Unknown"} ${u.verification_level ? `<span class="verification ${u.verification_level}">${icons[u.verification_level] || ''} ${u.verification_level}</span>` : ''}</div><div class="item-sub">${u.phone || ""} ${u.location ? `• ${u.location}` : ''}</div></div>${u.telegram_connected ? '<span class="badge green">Telegram</span>' : ''}</div>${u.tags?.length ? `<div class="item-meta">${u.tags.map(t => `<span class="tag ${t.toLowerCase() === 'vip' ? 'vip' : ''}">${t}</span>`).join("")}</div>` : ''}<div class="item-meta">${(u.skills || []).slice(0, detailed ? 6 : 3).map(s => `<span class="skill-tag">${s}</span>`).join("")}</div></div>`;
+      const blacklistBadge = u.blacklisted ? '<span class="badge" style="background:rgba(239,68,68,0.2);color:#ef4444;">⛔ Blacklisted</span>' : '';
+      return `<div class="item-card" onclick="showUserDetail('${u.id}')" ${u.blacklisted ? 'style="opacity:0.6;border-color:rgba(239,68,68,0.3);"' : ''}><div class="item-header"><div class="avatar">${u.name?.charAt(0) || "?"}</div><div class="item-info"><div class="item-name">${u.name || "Unknown"} ${u.verification_level ? `<span class="verification ${u.verification_level}">${icons[u.verification_level] || ''} ${u.verification_level}</span>` : ''}</div><div class="item-sub">${u.phone || ""} ${u.location ? `• ${u.location}` : ''}</div></div>${blacklistBadge}${u.telegram_connected && !u.blacklisted ? '<span class="badge green">Telegram</span>' : ''}</div>${u.tags?.length ? `<div class="item-meta">${u.tags.map(t => `<span class="tag ${t.toLowerCase() === 'vip' ? 'vip' : ''}">${t}</span>`).join("")}</div>` : ''}<div class="item-meta">${(u.skills || []).slice(0, detailed ? 6 : 3).map(s => `<span class="skill-tag">${s}</span>`).join("")}</div></div>`;
     }
     
     function requestCard(r) {
