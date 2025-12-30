@@ -421,8 +421,14 @@
       
       <div class="toolbar">
         <input type="text" class="search" placeholder="Search users, requests, skills..." oninput="handleSearch(this.value)">
-        <button class="filter-btn" onclick="toggleFilter('telegram')" id="filterTelegram">Telegram Only</button>
-        <button class="filter-btn" onclick="toggleFilter('verified')" id="filterVerified">Verified Only</button>
+        <select id="statusFilter" onchange="handleStatusFilter(this.value)" style="padding:8px 12px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff;font-size:12px;">
+          <option value="all">All Users</option>
+          <option value="telegram">📱 On Telegram</option>
+          <option value="complete">✓ Complete+</option>
+          <option value="verified">💼 Verified+</option>
+          <option value="proven">⭐ Proven+</option>
+          <option value="vip">👑 VIP Only</option>
+        </select>
       </div>
       
       <div class="tab-content active" id="tab-overview">
@@ -569,10 +575,10 @@
     let recruitmentTargets = [], externalOpps = [];
     let funnel = {}, skillGaps = {}, growth = {};
     let searchTerm = "";
-    let filters = { telegram: false, verified: false };
-    let userStatusFilter = 'active'; // 'active', 'all', 'blacklisted'
+    let statusFilter = 'all'; // all, telegram, complete, verified, proven, vip
+    let userStatusFilter = 'active'; // 'active', 'all', 'blacklisted' - for Users tab only
     
-    if (localStorage.getItem("titli_admin") === "true") { showDashboard(); fetchAllData(); }
+    if (localStorage.getItem("titli_admin") === "true") { showDashboard(); fetchAllData(); setInterval(fetchAllData, 30000); }
     
     document.querySelectorAll('.tab').forEach(tab => {
       tab.addEventListener('click', () => {
@@ -594,7 +600,7 @@
       e.preventDefault();
       if (document.getElementById("password").value === PASSWORD) {
         localStorage.setItem("titli_admin", "true");
-        showDashboard(); fetchAllData();
+        showDashboard(); fetchAllData(); setInterval(fetchAllData, 30000);
       } else { alert("Wrong password"); }
     }
     
@@ -643,19 +649,30 @@
     }
     
     function handleSearch(term) { searchTerm = term.toLowerCase(); render(); }
-    function toggleFilter(filter) { filters[filter] = !filters[filter]; document.getElementById(`filter${filter.charAt(0).toUpperCase() + filter.slice(1)}`).classList.toggle('active'); render(); }
+    function handleStatusFilter(value) { statusFilter = value; render(); }
+    
+    const verificationOrder = ['unverified', 'phone', 'profile', 'work', 'trusted', 'vip'];
+    function getVerificationLevel(level) { return verificationOrder.indexOf(level || 'phone'); }
     
     function getFilteredUsers() {
       return users.filter(u => {
         const matchesSearch = !searchTerm || u.name?.toLowerCase().includes(searchTerm) || u.phone?.includes(searchTerm) || u.skills?.some(s => s.toLowerCase().includes(searchTerm));
-        const matchesTelegram = !filters.telegram || u.telegram_connected;
-        const matchesVerified = !filters.verified || (u.verification_level && u.verification_level !== 'phone');
-        // User status filter
-        let matchesStatus = true;
-        if (userStatusFilter === 'active') matchesStatus = u.blacklisted !== true;
-        else if (userStatusFilter === 'blacklisted') matchesStatus = u.blacklisted === true;
-        // 'all' shows everyone
-        return matchesSearch && matchesTelegram && matchesVerified && matchesStatus;
+        
+        // Status filter from toolbar dropdown
+        let matchesStatusFilter = true;
+        const level = getVerificationLevel(u.verification_level);
+        if (statusFilter === 'telegram') matchesStatusFilter = u.telegram_connected;
+        else if (statusFilter === 'complete') matchesStatusFilter = level >= 2; // profile+
+        else if (statusFilter === 'verified') matchesStatusFilter = level >= 3; // work+
+        else if (statusFilter === 'proven') matchesStatusFilter = level >= 4; // trusted+
+        else if (statusFilter === 'vip') matchesStatusFilter = level >= 5; // vip only
+        
+        // User tab blacklist filter
+        let matchesBlacklist = true;
+        if (userStatusFilter === 'active') matchesBlacklist = u.blacklisted !== true;
+        else if (userStatusFilter === 'blacklisted') matchesBlacklist = u.blacklisted === true;
+        
+        return matchesSearch && matchesStatusFilter && matchesBlacklist;
       });
     }
     
@@ -795,7 +812,10 @@
       </div>
       
       ${user.enriched_profile && Object.keys(user.enriched_profile).length > 0 ? `<div class="modal-section" style="background:linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(236,72,153,0.1) 100%);padding:16px;border-radius:10px;border:1px solid rgba(139,92,246,0.3)">
-        <h3 style="color:#a78bfa;margin-bottom:12px;">🤖 Taj's Notes</h3>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <h3 style="color:#a78bfa;margin:0;">🤖 Taj's Notes</h3>
+          <button class="action-btn secondary" onclick="reanalyzeProfile('${user.id}')" style="padding:4px 8px;font-size:10px;">🔄 Refresh</button>
+        </div>
         ${user.enriched_profile.summary ? `<p style="margin-bottom:12px;font-style:italic;color:#e0e0e0;">"${user.enriched_profile.summary}"</p>` : ''}
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
           ${user.enriched_profile.credibility_score ? `<div style="background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;"><span style="font-size:11px;color:#888;">Credibility</span><br><strong style="font-size:18px;color:#10b981;">${user.enriched_profile.credibility_score}/100</strong></div>` : ''}
@@ -807,7 +827,10 @@
         ${user.enriched_profile.specialties?.length ? `<p><span style="color:#888;">⭐ Specialties:</span> ${user.enriched_profile.specialties.join(', ')}</p>` : ''}
         ${user.enriched_profile.extracted_skills?.length ? `<p><span style="color:#888;">🛠 Skills Found:</span> ${user.enriched_profile.extracted_skills.join(', ')}</p>` : ''}
         <p style="font-size:10px;color:#666;margin-top:8px;text-align:right;">Updated ${user.enriched_profile.enriched_at ? timeAgo(user.enriched_profile.enriched_at) : 'Unknown'}</p>
-      </div>` : '<div class="modal-section" style="background:rgba(255,255,255,0.03);padding:16px;border-radius:10px;border:1px dashed rgba(255,255,255,0.1);"><p style="color:#666;text-align:center;">🤖 Taj hasn\'t analyzed this profile yet.<br><span style="font-size:11px;">Add social links to get AI insights.</span></p></div>'}
+      </div>` : `<div class="modal-section" style="background:rgba(255,255,255,0.03);padding:16px;border-radius:10px;border:1px dashed rgba(255,255,255,0.1);">
+        <p style="color:#666;text-align:center;margin-bottom:12px;">🤖 Taj hasn't analyzed this profile yet.</p>
+        ${social.instagram || social.linkedin ? `<button class="action-btn primary" onclick="reanalyzeProfile('${user.id}')" style="display:block;margin:0 auto;">🔍 Analyze Now</button>` : '<p style="color:#888;text-align:center;font-size:11px;">Add social links to get AI insights.</p>'}
+      </div>`}
       
       ${user.blacklisted ? `<div class="modal-section" style="background:rgba(239,68,68,0.2);padding:12px;border-radius:8px;border:1px solid rgba(239,68,68,0.5)"><span style="color:#ef4444;font-weight:600">⛔ BLACKLISTED</span>${user.blacklist_reason ? `<p style="color:#fca5a5;margin-top:4px;font-size:13px">Reason: ${user.blacklist_reason}</p>` : ''}</div>` : ''}
       
@@ -833,7 +856,6 @@
             <option value="trusted" ${user.verification_level === 'trusted' ? 'disabled' : ''}>⭐ Proven</option>
             <option value="vip" ${user.verification_level === 'vip' ? 'disabled' : ''}>👑 VIP</option>
           </select>
-          <button class="action-btn secondary" onclick="recheckVerification('${user.id}')" style="padding:6px 10px;font-size:11px;">🔄 Auto-check</button>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">
           ${user.blacklisted ? `<button class="action-btn secondary" onclick="unblacklistUser('${user.id}')" style="background:rgba(34,197,94,0.2);color:#22c55e">Remove Blacklist</button>` : `<button class="action-btn secondary" onclick="blacklistUser('${user.id}')" style="background:rgba(239,68,68,0.2);color:#ef4444">Blacklist</button>`}
@@ -854,16 +876,28 @@
       fetchAllData(); 
       closeModal(); 
     }
-    async function recheckVerification(userId) {
-      const res = await fetch(`${API}/admin/users/${userId}/verification-check`);
-      const data = await res.json();
-      if (data.upgraded) {
-        alert(`✅ Upgraded to ${data.to}!\n\nReason: ${data.reason}`);
-      } else {
-        alert(`No upgrade needed.\n\nCurrent: ${data.current}\nNext step: ${data.next_step}`);
+    async function reanalyzeProfile(userId) {
+      const btn = event.target;
+      const originalText = btn.textContent;
+      btn.textContent = '⏳ Analyzing...';
+      btn.disabled = true;
+      
+      try {
+        const res = await fetch(`${API}/admin/users/${userId}/enrich`, { method: 'POST' });
+        const data = await res.json();
+        if (data.enriched) {
+          alert('✅ Profile analyzed by Taj!');
+        } else {
+          alert('⚠️ Could not analyze. Make sure user has social links.');
+        }
+      } catch (e) {
+        alert('Error analyzing profile');
       }
+      
+      btn.textContent = originalText;
+      btn.disabled = false;
       fetchAllData();
-      showUserDetail(userId);
+      setTimeout(() => showUserDetail(userId), 500);
     }
     async function blacklistUser(userId) { 
       const reason = prompt("Reason for blacklisting (optional):"); 
