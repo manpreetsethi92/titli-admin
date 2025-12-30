@@ -750,6 +750,7 @@
             <div style="text-align:right;">
               <span class="badge purple">${s.count}x</span>
               <div style="font-size:10px;color:#666;margin-top:4px;">${timeAgo(s.updated_at)}</div>
+              <button class="action-btn green" style="margin-top:6px;padding:4px 8px;font-size:10px;" onclick="approveCategory('${s.skill}', '${s.suggested_category}')">✓ Add</button>
             </div>
           </div>
         `).join("")}</div>`;
@@ -783,7 +784,8 @@
     function requestCard(r) {
       const colors = { 'in_progress': 'yellow', 'awaiting_approval': 'purple', 'matching': 'blue', 'completed': 'green', 'cancelled': 'gray' };
       const user = users.find(u => u.id === r.user_id);
-      return `<div class="item-card"><div style="display:flex;justify-content:space-between;align-items:start"><div><div class="item-name">${r.title || "Untitled"}</div><div class="item-sub">By ${user?.name || 'Unknown'} • ${timeAgo(r.created_at)}</div></div><span class="badge ${colors[r.status] || 'gray'}">${r.status?.replace('_', ' ')}</span></div></div>`;
+      const categoryBadge = r.category_detected ? `<span class="badge blue" style="margin-left:8px">${r.category_detected}</span>` : '';
+      return `<div class="item-card"><div style="display:flex;justify-content:space-between;align-items:start"><div><div class="item-name">${r.title || "Untitled"}${categoryBadge}</div><div class="item-sub">By ${user?.name || 'Unknown'} • ${timeAgo(r.created_at)}</div></div><span class="badge ${colors[r.status] || 'gray'}">${r.status?.replace('_', ' ')}</span></div></div>`;
     }
     
     function unfilledCard(r, compact = false) {
@@ -986,6 +988,12 @@
     }
     
     async function updateRecruitment(id, status) { await fetch(`${API}/admin/recruitment/targets/${id}?status=${status}`, { method: "PATCH" }); fetchAllData(); }
+    
+    async function approveCategory(skill, category) {
+      if (!confirm(`Add "${skill}" to category "${category}"?`)) return;
+      await fetch(`${API}/admin/category-suggestions/add?category=${encodeURIComponent(category)}&skills=${encodeURIComponent(skill)}`, { method: "POST" });
+      fetchAllData();
+    }
     
     async function saveExternalOpp() {
       const source = document.getElementById("extSource").value;
