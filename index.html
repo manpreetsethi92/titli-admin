@@ -497,6 +497,10 @@
           <div class="card highlight"><div class="card-header">Skills Gap Analysis</div><div id="skillGapsAll"><div class="loading">Loading...</div></div></div>
           <div class="card"><div class="card-header">Available Skills</div><div id="availableSkills"><div class="loading">Loading...</div></div></div>
         </div>
+        <div class="card" style="margin-top:20px;">
+          <div class="card-header">🤖 AI Category Suggestions <span style="font-size:11px;color:#888;font-weight:normal;">Skills that need new categories</span></div>
+          <div id="categorySuggestions"><div class="loading">Loading...</div></div>
+        </div>
       </div>
       
       <div class="tab-content" id="tab-recruitment">
@@ -571,7 +575,7 @@
     const API = "https://titly-backend-production.up.railway.app/api";
     const PASSWORD = "titli2024";
     
-    let users = [], requests = [], unfilled = [], matches = [], connections = [], activity = [];
+    let users = [], requests = [], unfilled = [], matches = [], connections = [], activity = [], categorySuggestions = [];
     let recruitmentTargets = [], externalOpps = [];
     let funnel = {}, skillGaps = {}, growth = {};
     let searchTerm = "";
@@ -624,7 +628,7 @@
     
     async function fetchAllData() {
       try {
-        const [u, r, uf, m, c, a, rt, eo, f, sg, g] = await Promise.all([
+        const [u, r, uf, m, c, a, rt, eo, f, sg, g, cs] = await Promise.all([
           fetch(`${API}/admin/users`).then(res => res.json()).catch(() => []),
           fetch(`${API}/admin/requests`).then(res => res.json()).catch(() => []),
           fetch(`${API}/admin/unfilled-requests`).then(res => res.json()).catch(() => []),
@@ -635,10 +639,11 @@
           fetch(`${API}/admin/opportunities/external`).then(res => res.json()).catch(() => []),
           fetch(`${API}/admin/analytics/funnel`).then(res => res.json()).catch(() => ({})),
           fetch(`${API}/admin/analytics/skill-gaps`).then(res => res.json()).catch(() => ({})),
-          fetch(`${API}/admin/analytics/growth`).then(res => res.json()).catch(() => ({}))
+          fetch(`${API}/admin/analytics/growth`).then(res => res.json()).catch(() => ({})),
+          fetch(`${API}/admin/category-suggestions`).then(res => res.json()).catch(() => [])
         ]);
         users = u || []; requests = r || []; unfilled = uf || []; matches = m || []; connections = c || [];
-        activity = a || []; recruitmentTargets = rt || []; externalOpps = eo || [];
+        activity = a || []; recruitmentTargets = rt || []; externalOpps = eo || []; categorySuggestions = cs || [];
         funnel = f || {}; skillGaps = sg || {}; growth = g || {};
         updateStats(); render();
         document.getElementById("lastUpdated").textContent = `Updated: ${new Date().toLocaleTimeString()}`;
@@ -732,6 +737,22 @@
       
       if (skillGaps.skill_gaps) { document.getElementById("skillGapsAll").innerHTML = skillGaps.skill_gaps.map(g => `<div class="gap-item"><div class="gap-skill">${g.skill}</div><div class="gap-bars"><div class="gap-bar demand" style="width:${Math.min(g.demand * 30, 100)}px">${g.demand} need</div><div class="gap-bar supply" style="width:${Math.min(g.supply * 30, 100)}px">${g.supply} have</div></div><div class="gap-status">${g.gap > 0 ? `<span class="badge red">-${g.gap}</span>` : `<span class="badge green">+${Math.abs(g.gap)}</span>`}</div></div>`).join(""); }
       if (skillGaps.available_skills) { document.getElementById("availableSkills").innerHTML = `<div style="padding:16px">${Object.entries(skillGaps.available_skills).map(([skill, count]) => `<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)"><span>${skill}</span><span class="badge purple">${count} users</span></div>`).join("")}</div>`; }
+      
+      // Category suggestions
+      document.getElementById("categorySuggestions").innerHTML = categorySuggestions.length === 0 
+        ? '<div class="empty" style="padding:20px;text-align:center;color:#666;">No new category suggestions yet. When users request skills outside current categories, they\'ll appear here.</div>'
+        : `<div style="padding:16px;">${categorySuggestions.map(s => `
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:12px;margin-bottom:8px;background:rgba(139,92,246,0.1);border-radius:8px;border:1px solid rgba(139,92,246,0.2);">
+            <div>
+              <div style="font-weight:600;color:#a78bfa;">"${s.skill}"</div>
+              <div style="font-size:12px;color:#888;margin-top:4px;">Suggested: <span style="color:#10b981;">${s.suggested_category}</span></div>
+            </div>
+            <div style="text-align:right;">
+              <span class="badge purple">${s.count}x</span>
+              <div style="font-size:10px;color:#666;margin-top:4px;">${timeAgo(s.updated_at)}</div>
+            </div>
+          </div>
+        `).join("")}</div>`;
       
       document.getElementById("allRecruitment").innerHTML = recruitmentTargets.length === 0 ? '<div class="empty">No recruitment targets yet</div>' : recruitmentTargets.map(t => recruitmentCard(t)).join("");
       document.getElementById("allExternal").innerHTML = externalOpps.length === 0 ? '<div class="empty">No external opportunities yet</div>' : externalOpps.map(o => externalCard(o)).join("");
