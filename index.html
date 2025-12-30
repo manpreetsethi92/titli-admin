@@ -815,6 +815,10 @@
       const currentTier = verificationTiers[user.verification_level || 'phone'] || verificationTiers.phone;
       const social = user.social_links || {};
       
+      const ep = user.enriched_profile || {};
+      const hasConvoData = ep.budget_range || ep.availability || ep.industries?.length || ep.work_types?.length;
+      const hasSocialData = ep.summary || ep.credibility_score;
+      
       let html = `<div class="modal-section"><h3>Contact & Status</h3><p>📱 ${user.phone || 'No phone'}</p><p>📍 ${user.location || 'No location'}</p>${user.telegram_connected ? '<p style="color:#10b981">✓ Telegram Connected</p>' : '<p style="color:#888">✗ Not on Telegram</p>'}<p>Status: <span style="color:${currentTier.color};font-weight:600">${currentTier.icon} ${currentTier.name}</span></p></div>
       
       <div class="modal-section"><h3>Social Links</h3>
@@ -826,26 +830,33 @@
         ${!social.instagram && !social.linkedin && !social.imdb && !social.twitter && !social.soundcloud ? '<p style="color:#666">No social links</p>' : ''}
       </div>
       
-      ${user.enriched_profile && Object.keys(user.enriched_profile).length > 0 ? `<div class="modal-section" style="background:linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(236,72,153,0.1) 100%);padding:16px;border-radius:10px;border:1px solid rgba(139,92,246,0.3)">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-          <h3 style="color:#a78bfa;margin:0;">🤖 Taj's Notes</h3>
-          <button class="action-btn secondary" onclick="reanalyzeProfile('${user.id}')" style="padding:4px 8px;font-size:10px;">🔄 Refresh</button>
+      <!-- CONVERSATION INTELLIGENCE - from Taj chats -->
+      ${hasConvoData ? `<div class="modal-section" style="background:linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(59,130,246,0.1) 100%);padding:16px;border-radius:10px;border:1px solid rgba(16,185,129,0.3)">
+        <h3 style="color:#10b981;margin-bottom:12px;">💬 From Conversations</h3>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+          ${ep.budget_range ? `<div style="background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;"><span style="font-size:11px;color:#888;">💰 Budget</span><br><strong style="color:#fff;">${ep.budget_range}</strong></div>` : ''}
+          ${ep.availability ? `<div style="background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;"><span style="font-size:11px;color:#888;">📅 Availability</span><br><strong style="color:#fff;">${ep.availability}</strong></div>` : ''}
         </div>
-        ${user.enriched_profile.summary ? `<p style="margin-bottom:12px;font-style:italic;color:#e0e0e0;">"${user.enriched_profile.summary}"</p>` : ''}
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
-          ${user.enriched_profile.credibility_score ? `<div style="background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;"><span style="font-size:11px;color:#888;">Credibility</span><br><strong style="font-size:18px;color:#10b981;">${user.enriched_profile.credibility_score}/100</strong></div>` : ''}
-          ${user.enriched_profile.budget_range ? `<div style="background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;"><span style="font-size:11px;color:#888;">Budget</span><br><strong style="color:#fff;">${user.enriched_profile.budget_range}</strong></div>` : ''}
-        </div>
-        ${user.enriched_profile.availability ? `<p style="margin-top:8px;"><span style="color:#888;">📅 Availability:</span> ${user.enriched_profile.availability}</p>` : ''}
-        ${user.enriched_profile.industries?.length ? `<p><span style="color:#888;">🏢 Industries:</span> ${user.enriched_profile.industries.join(', ')}</p>` : ''}
-        ${user.enriched_profile.work_types?.length ? `<p><span style="color:#888;">🎬 Work Types:</span> ${user.enriched_profile.work_types.join(', ')}</p>` : ''}
-        ${user.enriched_profile.specialties?.length ? `<p><span style="color:#888;">⭐ Specialties:</span> ${user.enriched_profile.specialties.join(', ')}</p>` : ''}
-        ${user.enriched_profile.extracted_skills?.length ? `<p><span style="color:#888;">🛠 Skills Found:</span> ${user.enriched_profile.extracted_skills.join(', ')}</p>` : ''}
-        <p style="font-size:10px;color:#666;margin-top:8px;text-align:right;">Updated ${user.enriched_profile.enriched_at ? timeAgo(user.enriched_profile.enriched_at) : 'Unknown'}</p>
-      </div>` : `<div class="modal-section" style="background:rgba(255,255,255,0.03);padding:16px;border-radius:10px;border:1px dashed rgba(255,255,255,0.1);">
-        <p style="color:#666;text-align:center;margin-bottom:12px;">🤖 Taj hasn't analyzed this profile yet.</p>
-        ${social.instagram || social.linkedin ? `<button class="action-btn primary" onclick="reanalyzeProfile('${user.id}')" style="display:block;margin:0 auto;">🔍 Analyze Now</button>` : '<p style="color:#888;text-align:center;font-size:11px;">Add social links to get AI insights.</p>'}
-      </div>`}
+        ${ep.industries?.length ? `<p style="margin-top:8px;"><span style="color:#888;">🏢 Industries:</span> ${ep.industries.join(', ')}</p>` : ''}
+        ${ep.work_types?.length ? `<p><span style="color:#888;">🎬 Work Types:</span> ${ep.work_types.join(', ')}</p>` : ''}
+        ${ep.looking_for ? `<p><span style="color:#888;">🔍 Looking for:</span> ${ep.looking_for}</p>` : ''}
+        ${ep.offering ? `<p><span style="color:#888;">✨ Offering:</span> ${ep.offering}</p>` : ''}
+        <p style="font-size:10px;color:#666;margin-top:8px;">Extracted from Telegram chats with Taj</p>
+      </div>` : ''}
+      
+      <!-- SOCIAL PROFILE - from scraping (optional) -->
+      ${hasSocialData ? `<div class="modal-section" style="background:linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(236,72,153,0.1) 100%);padding:16px;border-radius:10px;border:1px solid rgba(139,92,246,0.3)">
+        <h3 style="color:#a78bfa;margin-bottom:12px;">🔍 Social Profile</h3>
+        ${ep.summary ? `<p style="margin-bottom:12px;font-style:italic;color:#e0e0e0;">"${ep.summary}"</p>` : ''}
+        ${ep.credibility_score ? `<div style="background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;display:inline-block;"><span style="font-size:11px;color:#888;">Credibility</span><br><strong style="font-size:18px;color:#10b981;">${ep.credibility_score}/100</strong></div>` : ''}
+        ${ep.specialties?.length ? `<p style="margin-top:8px;"><span style="color:#888;">⭐ Specialties:</span> ${ep.specialties.join(', ')}</p>` : ''}
+        ${ep.extracted_skills?.length ? `<p><span style="color:#888;">🛠 Skills Found:</span> ${ep.extracted_skills.join(', ')}</p>` : ''}
+        <p style="font-size:10px;color:#666;margin-top:8px;text-align:right;">Updated ${ep.enriched_at ? timeAgo(ep.enriched_at) : 'Unknown'}</p>
+      </div>` : ''}
+      
+      ${!hasConvoData && !hasSocialData ? `<div class="modal-section" style="background:rgba(255,255,255,0.03);padding:16px;border-radius:10px;border:1px dashed rgba(255,255,255,0.1);">
+        <p style="color:#666;text-align:center;">🤖 No intel yet. Chat with Taj on Telegram to build profile.</p>
+      </div>` : ''}
       
       ${user.blacklisted ? `<div class="modal-section" style="background:rgba(239,68,68,0.2);padding:12px;border-radius:8px;border:1px solid rgba(239,68,68,0.5)"><span style="color:#ef4444;font-weight:600">⛔ BLACKLISTED</span>${user.blacklist_reason ? `<p style="color:#fca5a5;margin-top:4px;font-size:13px">Reason: ${user.blacklist_reason}</p>` : ''}</div>` : ''}
       
