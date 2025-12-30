@@ -578,7 +578,14 @@
     let statusFilter = 'all'; // all, telegram, complete, verified, proven, vip
     let userStatusFilter = 'active'; // 'active', 'all', 'blacklisted' - for Users tab only
     
-    if (localStorage.getItem("titli_admin") === "true") { showDashboard(); fetchAllData(); setInterval(fetchAllData, 30000); }
+    if (localStorage.getItem("titli_admin") === "true") { 
+      showDashboard(); 
+      fetchAllData(); 
+      setInterval(fetchAllData, 30000);
+      // Restore tab from URL hash
+      const hash = window.location.hash.replace('#', '');
+      if (hash) switchTab(hash);
+    }
     
     document.querySelectorAll('.tab').forEach(tab => {
       tab.addEventListener('click', () => {
@@ -586,14 +593,20 @@
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
         document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+        // Save to URL hash
+        window.location.hash = tab.dataset.tab;
       });
     });
     
     function switchTab(tabId) {
       document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      document.querySelector(`[data-tab="${tabId}"]`).classList.add('active');
-      document.getElementById(`tab-${tabId}`).classList.add('active');
+      const tabEl = document.querySelector(`[data-tab="${tabId}"]`);
+      if (tabEl) {
+        tabEl.classList.add('active');
+        document.getElementById(`tab-${tabId}`).classList.add('active');
+        window.location.hash = tabId;
+      }
     }
     
     function handleLogin(e) {
@@ -601,6 +614,8 @@
       if (document.getElementById("password").value === PASSWORD) {
         localStorage.setItem("titli_admin", "true");
         showDashboard(); fetchAllData(); setInterval(fetchAllData, 30000);
+        const hash = window.location.hash.replace('#', '');
+        if (hash) switchTab(hash);
       } else { alert("Wrong password"); }
     }
     
