@@ -752,6 +752,7 @@
       
       let html = `<div class="modal-section"><h3>Contact & Status</h3><p>📱 ${user.phone || 'No phone'}</p><p>📍 ${user.location || 'No location'}</p>${user.telegram_connected ? '<p style="color:#10b981">✓ Telegram Connected</p>' : '<p style="color:#888">✗ Not on Telegram</p>'}<p>Verification: <span class="verification ${user.verification_level || 'phone'}">${user.verification_level || 'phone'}</span></p></div>
       <div class="modal-section"><h3>Tags</h3><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">${(user.tags || []).map(t => `<span class="tag">${t}</span>`).join("") || '<span style="color:#666">No tags</span>'}</div><div style="display:flex;gap:8px;margin-top:8px"><input type="text" id="newTag" placeholder="Add tag" style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff"><button class="action-btn secondary" onclick="addTag('${user.id}')">Add</button></div></div>
+      ${user.blacklisted ? `<div class="modal-section" style="background:rgba(239,68,68,0.2);padding:12px;border-radius:8px;border:1px solid rgba(239,68,68,0.5)"><span style="color:#ef4444;font-weight:600">⛔ BLACKLISTED</span>${user.blacklist_reason ? `<p style="color:#fca5a5;margin-top:4px;font-size:13px">Reason: ${user.blacklist_reason}</p>` : ''}</div>` : ''}
       <div class="modal-section"><h3>Bio</h3><p>${user.bio || 'No bio'}</p></div>
       <div class="modal-section"><h3>Skills (${user.skills?.length || 0})</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${(user.skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('') || 'No skills'}</div></div>
       ${user.enriched_profile && Object.keys(user.enriched_profile).length > 0 ? `<div class="modal-section" style="background:rgba(139,92,246,0.1);padding:16px;border-radius:10px"><h3 style="color:#a78bfa">Smart Profile (AI Enriched)</h3>
@@ -767,7 +768,7 @@
       </div>` : ''}
       <div class="modal-section"><h3>Notes</h3><div id="userNotes">${(user.notes || []).map(n => `<div class="note-item"><div class="note-text">${n.note}</div><div class="note-time">${timeAgo(n.created_at)}</div></div>`).join("") || '<p style="color:#666">No notes</p>'}</div><div style="display:flex;gap:8px;margin-top:8px"><input type="text" id="newNote" placeholder="Add note" style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff"><button class="action-btn secondary" onclick="addNote('${user.id}')">Add</button></div></div>
       <div class="modal-section"><h3>Send Telegram Message</h3>${user.telegram_connected ? `<div style="display:flex;gap:8px"><input type="text" id="telegramMsg" placeholder="Type message..." style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff"><button class="action-btn primary" onclick="sendTelegramMessage('${user.id}')">Send</button></div>` : '<p style="color:#666">User not connected to Telegram</p>'}</div>
-      <div class="modal-section"><h3>Actions</h3><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="action-btn secondary" onclick="setVerification('${user.id}', 'profile')">Set Profile Verified</button><button class="action-btn secondary" onclick="setVerification('${user.id}', 'trusted')">Set Trusted</button><button class="action-btn secondary" onclick="setVerification('${user.id}', 'vip')" style="background:rgba(245,158,11,0.2);color:#f59e0b">Set VIP</button></div></div>`;
+      <div class="modal-section"><h3>Actions</h3><div style="display:flex;gap:8px;flex-wrap:wrap"><button class="action-btn secondary" onclick="setVerification('${user.id}', 'profile')">Set Profile Verified</button><button class="action-btn secondary" onclick="setVerification('${user.id}', 'trusted')">Set Trusted</button><button class="action-btn secondary" onclick="setVerification('${user.id}', 'vip')" style="background:rgba(245,158,11,0.2);color:#f59e0b">Set VIP</button>${user.blacklisted ? `<button class="action-btn secondary" onclick="unblacklistUser('${user.id}')" style="background:rgba(34,197,94,0.2);color:#22c55e">Remove Blacklist</button>` : `<button class="action-btn secondary" onclick="blacklistUser('${user.id}')" style="background:rgba(239,68,68,0.2);color:#ef4444">Blacklist</button>`}</div></div>`;
       
       document.getElementById("modalUserBody").innerHTML = html;
       document.getElementById("userModal").classList.add("active");
@@ -778,6 +779,21 @@
     async function addTag(userId) { const tag = document.getElementById("newTag").value.trim(); if (!tag) return; await fetch(`${API}/admin/users/${userId}/tags?tag=${encodeURIComponent(tag)}`, { method: "POST" }); fetchAllData(); closeModal(); }
     async function addNote(userId) { const note = document.getElementById("newNote").value.trim(); if (!note) return; await fetch(`${API}/admin/users/${userId}/notes?note=${encodeURIComponent(note)}`, { method: "POST" }); fetchAllData(); showUserDetail(userId); }
     async function setVerification(userId, level) { await fetch(`${API}/admin/users/${userId}/verification?level=${level}`, { method: "PATCH" }); fetchAllData(); closeModal(); }
+    async function blacklistUser(userId) { 
+      const reason = prompt("Reason for blacklisting (optional):"); 
+      if (reason === null) return; // Cancelled
+      const params = reason ? `?reason=${encodeURIComponent(reason)}` : '';
+      await fetch(`${API}/admin/users/${userId}/blacklist${params}`, { method: "PATCH" }); 
+      fetchAllData(); 
+      closeModal(); 
+      alert("User blacklisted. They won't appear in any matches.");
+    }
+    async function unblacklistUser(userId) { 
+      if (!confirm("Remove this user from blacklist?")) return;
+      await fetch(`${API}/admin/users/${userId}/unblacklist`, { method: "PATCH" }); 
+      fetchAllData(); 
+      closeModal(); 
+    }
     async function sendTelegramMessage(userId) { const msg = document.getElementById("telegramMsg").value.trim(); if (!msg) return; try { await fetch(`${API}/admin/users/${userId}/message?message=${encodeURIComponent(msg)}`, { method: "POST" }); alert("Message sent!"); } catch (e) { alert("Failed to send"); } }
     
     function showRecruitmentForm() { const f = document.getElementById("recruitmentForm"); f.style.display = f.style.display === 'none' ? 'block' : 'none'; }
