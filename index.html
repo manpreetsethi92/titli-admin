@@ -773,43 +773,64 @@
       if (!user) return;
       document.getElementById("modalUserName").textContent = user.name || "User Details";
       const verificationTiers = {
-        unverified: { icon: '⚪', name: 'Unverified', color: '#666' },
-        phone: { icon: '📱', name: 'Phone Verified', color: '#3b82f6' },
-        profile: { icon: '✓', name: 'Profile Complete', color: '#10b981' },
-        work: { icon: '💼', name: 'Work Verified', color: '#8b5cf6' },
-        trusted: { icon: '⭐', name: 'Trusted', color: '#f59e0b' },
+        unverified: { icon: '⚪', name: 'New', color: '#666' },
+        phone: { icon: '📱', name: 'Signed Up', color: '#3b82f6' },
+        profile: { icon: '✓', name: 'Complete', color: '#10b981' },
+        work: { icon: '💼', name: 'Verified', color: '#8b5cf6' },
+        trusted: { icon: '⭐', name: 'Proven', color: '#f59e0b' },
         vip: { icon: '👑', name: 'VIP', color: '#ec4899' }
       };
       const currentTier = verificationTiers[user.verification_level || 'phone'] || verificationTiers.phone;
+      const social = user.social_links || {};
       
-      let html = `<div class="modal-section"><h3>Contact & Status</h3><p>📱 ${user.phone || 'No phone'}</p><p>📍 ${user.location || 'No location'}</p>${user.telegram_connected ? '<p style="color:#10b981">✓ Telegram Connected</p>' : '<p style="color:#888">✗ Not on Telegram</p>'}<p>Verification: <span style="color:${currentTier.color};font-weight:600">${currentTier.icon} ${currentTier.name}</span></p>${user.verification_reason ? `<p style="font-size:11px;color:#888">Reason: ${user.verification_reason}</p>` : ''}</div>
-      <div class="modal-section"><h3>Tags</h3><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">${(user.tags || []).map(t => `<span class="tag">${t}</span>`).join("") || '<span style="color:#666">No tags</span>'}</div><div style="display:flex;gap:8px;margin-top:8px"><input type="text" id="newTag" placeholder="Add tag" style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff"><button class="action-btn secondary" onclick="addTag('${user.id}')">Add</button></div></div>
+      let html = `<div class="modal-section"><h3>Contact & Status</h3><p>📱 ${user.phone || 'No phone'}</p><p>📍 ${user.location || 'No location'}</p>${user.telegram_connected ? '<p style="color:#10b981">✓ Telegram Connected</p>' : '<p style="color:#888">✗ Not on Telegram</p>'}<p>Status: <span style="color:${currentTier.color};font-weight:600">${currentTier.icon} ${currentTier.name}</span></p></div>
+      
+      <div class="modal-section"><h3>Social Links</h3>
+        ${social.instagram ? `<p><a href="${social.instagram.startsWith('http') ? social.instagram : 'https://' + social.instagram}" target="_blank" style="color:#ec4899;">📸 Instagram →</a></p>` : ''}
+        ${social.linkedin ? `<p><a href="${social.linkedin.startsWith('http') ? social.linkedin : 'https://' + social.linkedin}" target="_blank" style="color:#3b82f6;">💼 LinkedIn →</a></p>` : ''}
+        ${social.imdb ? `<p><a href="${social.imdb.startsWith('http') ? social.imdb : 'https://' + social.imdb}" target="_blank" style="color:#f59e0b;">🎬 IMDb →</a></p>` : ''}
+        ${social.twitter ? `<p><a href="${social.twitter.startsWith('http') ? social.twitter : 'https://' + social.twitter}" target="_blank" style="color:#1da1f2;">🐦 Twitter →</a></p>` : ''}
+        ${social.soundcloud ? `<p><a href="${social.soundcloud.startsWith('http') ? social.soundcloud : 'https://' + social.soundcloud}" target="_blank" style="color:#ff5500;">🎵 SoundCloud →</a></p>` : ''}
+        ${!social.instagram && !social.linkedin && !social.imdb && !social.twitter && !social.soundcloud ? '<p style="color:#666">No social links</p>' : ''}
+      </div>
+      
+      ${user.enriched_profile && Object.keys(user.enriched_profile).length > 0 ? `<div class="modal-section" style="background:linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(236,72,153,0.1) 100%);padding:16px;border-radius:10px;border:1px solid rgba(139,92,246,0.3)">
+        <h3 style="color:#a78bfa;margin-bottom:12px;">🤖 Taj's Notes</h3>
+        ${user.enriched_profile.summary ? `<p style="margin-bottom:12px;font-style:italic;color:#e0e0e0;">"${user.enriched_profile.summary}"</p>` : ''}
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
+          ${user.enriched_profile.credibility_score ? `<div style="background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;"><span style="font-size:11px;color:#888;">Credibility</span><br><strong style="font-size:18px;color:#10b981;">${user.enriched_profile.credibility_score}/100</strong></div>` : ''}
+          ${user.enriched_profile.budget_range ? `<div style="background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;"><span style="font-size:11px;color:#888;">Budget</span><br><strong style="color:#fff;">${user.enriched_profile.budget_range}</strong></div>` : ''}
+        </div>
+        ${user.enriched_profile.availability ? `<p style="margin-top:8px;"><span style="color:#888;">📅 Availability:</span> ${user.enriched_profile.availability}</p>` : ''}
+        ${user.enriched_profile.industries?.length ? `<p><span style="color:#888;">🏢 Industries:</span> ${user.enriched_profile.industries.join(', ')}</p>` : ''}
+        ${user.enriched_profile.work_types?.length ? `<p><span style="color:#888;">🎬 Work Types:</span> ${user.enriched_profile.work_types.join(', ')}</p>` : ''}
+        ${user.enriched_profile.specialties?.length ? `<p><span style="color:#888;">⭐ Specialties:</span> ${user.enriched_profile.specialties.join(', ')}</p>` : ''}
+        ${user.enriched_profile.extracted_skills?.length ? `<p><span style="color:#888;">🛠 Skills Found:</span> ${user.enriched_profile.extracted_skills.join(', ')}</p>` : ''}
+        <p style="font-size:10px;color:#666;margin-top:8px;text-align:right;">Updated ${user.enriched_profile.enriched_at ? timeAgo(user.enriched_profile.enriched_at) : 'Unknown'}</p>
+      </div>` : '<div class="modal-section" style="background:rgba(255,255,255,0.03);padding:16px;border-radius:10px;border:1px dashed rgba(255,255,255,0.1);"><p style="color:#666;text-align:center;">🤖 Taj hasn\'t analyzed this profile yet.<br><span style="font-size:11px;">Add social links to get AI insights.</span></p></div>'}
+      
       ${user.blacklisted ? `<div class="modal-section" style="background:rgba(239,68,68,0.2);padding:12px;border-radius:8px;border:1px solid rgba(239,68,68,0.5)"><span style="color:#ef4444;font-weight:600">⛔ BLACKLISTED</span>${user.blacklist_reason ? `<p style="color:#fca5a5;margin-top:4px;font-size:13px">Reason: ${user.blacklist_reason}</p>` : ''}</div>` : ''}
-      <div class="modal-section"><h3>Bio</h3><p>${user.bio || 'No bio'}</p></div>
-      <div class="modal-section"><h3>Skills (${user.skills?.length || 0})</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${(user.skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('') || 'No skills'}</div></div>
-      ${user.enriched_profile && Object.keys(user.enriched_profile).length > 0 ? `<div class="modal-section" style="background:rgba(139,92,246,0.1);padding:16px;border-radius:10px"><h3 style="color:#a78bfa">Smart Profile (AI Enriched)</h3>
-      ${user.enriched_profile.summary ? `<p style="margin-bottom:12px">${user.enriched_profile.summary}</p>` : ''}
-      ${user.enriched_profile.credibility_score ? `<p><strong>Credibility:</strong> ${user.enriched_profile.credibility_score}/100</p>` : ''}
-      ${user.enriched_profile.budget_range ? `<p><strong>💰 Budget Range:</strong> ${user.enriched_profile.budget_range}</p>` : ''}
-      ${user.enriched_profile.availability ? `<p><strong>📅 Availability:</strong> ${user.enriched_profile.availability}</p>` : ''}
-      ${user.enriched_profile.industries?.length ? `<p><strong>🏢 Industries:</strong> ${user.enriched_profile.industries.join(', ')}</p>` : ''}
-      ${user.enriched_profile.work_types?.length ? `<p><strong>🎬 Work Types:</strong> ${user.enriched_profile.work_types.join(', ')}</p>` : ''}
-      ${user.enriched_profile.specialties?.length ? `<p><strong>⭐ Specialties:</strong> ${user.enriched_profile.specialties.join(', ')}</p>` : ''}
-      ${user.enriched_profile.extracted_skills?.length ? `<p><strong>🛠 Extracted Skills:</strong> ${user.enriched_profile.extracted_skills.join(', ')}</p>` : ''}
-      <p style="font-size:11px;color:#666;margin-top:8px">Last updated: ${user.enriched_profile.enriched_at ? timeAgo(user.enriched_profile.enriched_at) : 'Unknown'}</p>
-      </div>` : ''}
+      
+      <div class="modal-section"><h3>Bio</h3><p>${user.bio || '<span style="color:#666">No bio</span>'}</p></div>
+      
+      <div class="modal-section"><h3>Skills (${user.skills?.length || 0})</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${(user.skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('') || '<span style="color:#666">No skills</span>'}</div></div>
+      
+      <div class="modal-section"><h3>Tags</h3><div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">${(user.tags || []).map(t => `<span class="tag">${t}</span>`).join("") || '<span style="color:#666">No tags</span>'}</div><div style="display:flex;gap:8px;margin-top:8px"><input type="text" id="newTag" placeholder="Add tag" style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff"><button class="action-btn secondary" onclick="addTag('${user.id}')">Add</button></div></div>
+      
       <div class="modal-section"><h3>Notes</h3><div id="userNotes">${(user.notes || []).map(n => `<div class="note-item"><div class="note-text">${n.note}</div><div class="note-time">${timeAgo(n.created_at)}</div></div>`).join("") || '<p style="color:#666">No notes</p>'}</div><div style="display:flex;gap:8px;margin-top:8px"><input type="text" id="newNote" placeholder="Add note" style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff"><button class="action-btn secondary" onclick="addNote('${user.id}')">Add</button></div></div>
+      
       <div class="modal-section"><h3>Send Telegram Message</h3>${user.telegram_connected ? `<div style="display:flex;gap:8px"><input type="text" id="telegramMsg" placeholder="Type message..." style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff"><button class="action-btn primary" onclick="sendTelegramMessage('${user.id}')">Send</button></div>` : '<p style="color:#666">User not connected to Telegram</p>'}</div>
+      
       <div class="modal-section"><h3>Actions</h3>
         <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-          <label style="font-size:12px;color:#888;">Set Verification:</label>
+          <label style="font-size:12px;color:#888;">Set Status:</label>
           <select id="verificationSelect" onchange="setVerificationManual('${user.id}', this.value)" style="padding:6px 10px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff;font-size:12px;">
-            <option value="" disabled selected>Change level...</option>
-            <option value="unverified" ${user.verification_level === 'unverified' ? 'disabled' : ''}>⚪ Unverified</option>
-            <option value="phone" ${user.verification_level === 'phone' ? 'disabled' : ''}>📱 Phone Verified</option>
-            <option value="profile" ${user.verification_level === 'profile' ? 'disabled' : ''}>✓ Profile Complete</option>
-            <option value="work" ${user.verification_level === 'work' ? 'disabled' : ''}>💼 Work Verified</option>
-            <option value="trusted" ${user.verification_level === 'trusted' ? 'disabled' : ''}>⭐ Trusted</option>
+            <option value="" disabled selected>Change...</option>
+            <option value="unverified" ${user.verification_level === 'unverified' ? 'disabled' : ''}>⚪ New</option>
+            <option value="phone" ${user.verification_level === 'phone' ? 'disabled' : ''}>📱 Signed Up</option>
+            <option value="profile" ${user.verification_level === 'profile' ? 'disabled' : ''}>✓ Complete</option>
+            <option value="work" ${user.verification_level === 'work' ? 'disabled' : ''}>💼 Verified</option>
+            <option value="trusted" ${user.verification_level === 'trusted' ? 'disabled' : ''}>⭐ Proven</option>
             <option value="vip" ${user.verification_level === 'vip' ? 'disabled' : ''}>👑 VIP</option>
           </select>
           <button class="action-btn secondary" onclick="recheckVerification('${user.id}')" style="padding:6px 10px;font-size:11px;">🔄 Auto-check</button>
