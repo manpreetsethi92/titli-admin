@@ -888,10 +888,12 @@
         if (data.enriched) {
           alert('✅ Profile analyzed by Taj!');
         } else {
-          alert('⚠️ Could not analyze. Make sure user has social links.');
+          alert(`⚠️ ${data.reason || 'Could not analyze profile'}`);
+          console.log('Enrich failed:', data);
         }
       } catch (e) {
-        alert('Error analyzing profile');
+        alert('Error analyzing profile: ' + e.message);
+        console.error(e);
       }
       
       btn.textContent = originalText;
