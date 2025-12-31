@@ -329,618 +329,619 @@
       <button type="submit">Enter</button>
     </form>
   </div>
-  <div class="dashboard" id="dashboard">
-    <header>
-      <div><span class="logo">TITLI<span>Command Center</span></span></div>
-      <div class="header-actions">
-        <span class="last-updated" id="lastUpdated"></span>
-        <button onclick="fetchAllData()">Refresh</button>
-        <button class="logout" onclick="logout()">Logout</button>
-      </div>
-    </header>
-    
-    <div class="container">
-      <!-- Stats Grid -->
-      <div class="stats-grid">
-        <div class="stat-card blue" onclick="switchTab('users')">
-          <div class="stat-value" id="statUsers">0</div>
-          <div class="stat-label">Total Users</div>
-          <div class="stat-detail" id="statUsersDetail">-</div>
-        </div>
-        <div class="stat-card green" onclick="switchTab('connections')">
-          <div class="stat-value" id="statConnections">0</div>
-          <div class="stat-label">Connections</div>
-          <div class="stat-detail">Successful matches</div>
-        </div>
-        <div class="stat-card purple" onclick="switchTab('requests')">
-          <div class="stat-value" id="statRequests">0</div>
-          <div class="stat-label">Requests</div>
-          <div class="stat-detail" id="statRequestsDetail">-</div>
-        </div>
-        <div class="stat-card orange" onclick="switchTab('external-jobs')">
-          <div class="stat-value" id="statExternalJobs">0</div>
-          <div class="stat-label">External Jobs</div>
-          <div class="stat-detail" id="statExternalJobsDetail">-</div>
-        </div>
-        <div class="stat-card cyan" onclick="switchTab('talent-targets')">
-          <div class="stat-value" id="statTalentTargets">0</div>
-          <div class="stat-label">Talent Targets</div>
-          <div class="stat-detail" id="statTalentDetail">-</div>
-        </div>
-        <div class="stat-card red" onclick="switchTab('activity')">
-          <div class="stat-value" id="statActivity">0</div>
-          <div class="stat-label">Actions Today</div>
-          <div class="stat-detail">Taj activity</div>
-        </div>
-      </div>
-      
-      <!-- Tabs -->
-      <div class="tabs">
-        <button class="tab active" data-tab="overview">Overview</button>
-        <button class="tab" data-tab="users">Users</button>
-        <button class="tab" data-tab="requests">Requests</button>
-        <button class="tab" data-tab="connections">Connections</button>
-        <button class="tab" data-tab="external-jobs">🔍 External Jobs <span class="badge" id="jobsBadge">0</span></button>
-        <button class="tab" data-tab="talent-targets">🎯 Talent Targets <span class="badge" id="talentBadge">0</span></button>
-        <button class="tab" data-tab="recruitment">📊 Recruitment</button>
-        <button class="tab" data-tab="skill-gaps">Skill Gaps</button>
-        <button class="tab" data-tab="activity">Activity</button>
-      </div>
-      
-      <!-- Overview Tab -->
-      <div class="tab-content active" id="tab-overview">
-        <div class="grid-3">
-          <div class="card">
-            <div class="card-header">Recent Activity</div>
-            <div id="recentActivity"><div class="loading">Loading...</div></div>
-          </div>
-          <div class="card highlight">
-            <div class="card-header">New External Jobs <span class="count" id="newJobsCount">0</span></div>
-            <div id="newJobs"><div class="loading">Loading...</div></div>
-          </div>
-          <div class="card">
-            <div class="card-header">Talent Pipeline</div>
-            <div id="talentPipeline"><div class="loading">Loading...</div></div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Users Tab -->
-      <div class="tab-content" id="tab-users">
-        <div class="card">
-          <div class="card-header">All Users <span class="count" id="userCount">0</span></div>
-          <div id="allUsers"><div class="loading">Loading...</div></div>
-        </div>
-      </div>
-      
-      <!-- Requests Tab -->
-      <div class="tab-content" id="tab-requests">
-        <div class="card">
-          <div class="card-header">All Requests <span class="count" id="requestCount">0</span></div>
-          <div id="allRequests"><div class="loading">Loading...</div></div>
-        </div>
-      </div>
-      
-      <!-- Connections Tab -->
-      <div class="tab-content" id="tab-connections">
-        <div class="card success">
-          <div class="card-header">Successful Connections <span class="count" id="connectionCount">0</span></div>
-          <div id="allConnections"><div class="loading">Loading...</div></div>
-        </div>
-      </div>
-      
-      <!-- External Jobs Tab (Pipeline 1) -->
-      <div class="tab-content" id="tab-external-jobs">
-        <div class="card">
-          <div class="card-header">
-            <span>External Job Opportunities</span>
-            <div class="actions">
-              <button class="action-btn orange small" onclick="scrapeAllJobs()">🔍 Scrape All Sources</button>
-              <button class="action-btn secondary small" onclick="scrapeReddit()">Reddit</button>
-              <button class="action-btn secondary small" onclick="scrapeCraigslist()">Craigslist</button>
-              <button class="action-btn purple small" onclick="analyzeAllJobs()">🤖 AI Analyze All</button>
-              <button class="action-btn green small" onclick="showAddJobForm()">+ Add Manual</button>
-            </div>
-          </div>
-          
-          <div class="stats-mini" id="jobsStatsMini">
-            <div class="stat-mini"><div class="stat-mini-value" id="jobsTotal">0</div><div class="stat-mini-label">Total</div></div>
-            <div class="stat-mini"><div class="stat-mini-value" id="jobsAnalyzed">0</div><div class="stat-mini-label">Analyzed</div></div>
-            <div class="stat-mini"><div class="stat-mini-value" id="jobsMatched">0</div><div class="stat-mini-label">With Matches</div></div>
-            <div class="stat-mini"><div class="stat-mini-value" id="jobsNotified">0</div><div class="stat-mini-label">Notified</div></div>
-          </div>
-          
-          <div class="filters-bar">
-            <select id="jobSourceFilter" onchange="filterJobs()">
-              <option value="">All Sources</option>
-              <option value="reddit">Reddit</option>
-              <option value="craigslist">Craigslist</option>
-              <option value="productionhub">ProductionHub</option>
-              <option value="mandy">Mandy</option>
-            </select>
-            <select id="jobCategoryFilter" onchange="filterJobs()">
-              <option value="">All Categories</option>
-              <option value="film">Film</option>
-              <option value="photography">Photography</option>
-              <option value="music">Music</option>
-              <option value="design">Design</option>
-              <option value="tech">Tech</option>
-              <option value="writing">Writing</option>
-              <option value="marketing">Marketing</option>
-            </select>
-            <select id="jobStatusFilter" onchange="filterJobs()">
-              <option value="">All Status</option>
-              <option value="new">New</option>
-              <option value="analyzed">Analyzed</option>
-              <option value="notified">Notified</option>
-            </select>
-          </div>
-          
-          <div id="jobsStatus" style="display:none;padding:12px 20px;background:rgba(59,130,246,0.1);color:#60a5fa;"></div>
-          
-          <div id="addJobForm" style="display:none;padding:20px;border-bottom:1px solid rgba(255,255,255,0.1);">
-            <div class="form-inline">
-              <div class="form-row"><label>Source</label><input type="text" id="jobSource" placeholder="Reddit, Instagram, etc."></div>
-              <div class="form-row"><label>Title</label><input type="text" id="jobTitle" placeholder="Looking for photographer..."></div>
-            </div>
-            <div class="form-row"><label>Description</label><textarea id="jobDescription" placeholder="Full job description..."></textarea></div>
-            <div class="form-inline">
-              <div class="form-row"><label>Location</label><input type="text" id="jobLocation" placeholder="City, State"></div>
-              <div class="form-row"><label>Budget</label><input type="text" id="jobBudget" placeholder="$500/day"></div>
-              <div class="form-row"><label>URL</label><input type="text" id="jobUrl" placeholder="https://..."></div>
-            </div>
-            <div class="form-inline">
-              <div class="form-row"><label>Poster Username</label><input type="text" id="jobPosterUsername" placeholder="@username"></div>
-              <div class="form-row"><label>Poster Profile URL</label><input type="text" id="jobPosterUrl" placeholder="https://..."></div>
-            </div>
-            <button class="action-btn primary" onclick="saveJob()" style="width:100%;margin-top:8px;">Save Job</button>
-          </div>
-          
-          <div id="allExternalJobs"><div class="loading">Loading...</div></div>
-        </div>
-      </div>
-      
-      <!-- Talent Targets Tab (Pipeline 2) -->
-      <div class="tab-content" id="tab-talent-targets">
-        <div class="card">
-          <div class="card-header">
-            <span>Talent Recruitment Pipeline</span>
-            <div class="actions">
-              <button class="action-btn cyan small" onclick="scrapeShareGrid()">🔍 Scrape ShareGrid</button>
-              <button class="action-btn purple small" onclick="analyzeAllTalents()">🤖 AI Analyze All</button>
-              <button class="action-btn green small" onclick="showAddTalentForm()">+ Add Manual</button>
-            </div>
-          </div>
-          
-          <div class="stats-mini" id="talentStatsMini">
-            <div class="stat-mini"><div class="stat-mini-value" id="talentTotal">0</div><div class="stat-mini-label">Total</div></div>
-            <div class="stat-mini"><div class="stat-mini-value" id="talentContacted">0</div><div class="stat-mini-label">Contacted</div></div>
-            <div class="stat-mini"><div class="stat-mini-value" id="talentResponded">0</div><div class="stat-mini-label">Responded</div></div>
-            <div class="stat-mini"><div class="stat-mini-value" id="talentJoined">0</div><div class="stat-mini-label">Joined</div></div>
-          </div>
-          
-          <div class="filters-bar">
-            <select id="talentSourceFilter" onchange="filterTalents()">
-              <option value="">All Sources</option>
-              <option value="sharegrid">ShareGrid</option>
-              <option value="instagram">Instagram</option>
-              <option value="linkedin">LinkedIn</option>
-              <option value="reddit">Reddit (Job Posters)</option>
-              <option value="manual">Manual</option>
-            </select>
-            <select id="talentCategoryFilter" onchange="filterTalents()">
-              <option value="">All Categories</option>
-              <option value="film">Film</option>
-              <option value="photography">Photography</option>
-              <option value="music">Music</option>
-              <option value="design">Design</option>
-            </select>
-            <select id="talentStatusFilter" onchange="filterTalents()">
-              <option value="">All Status</option>
-              <option value="found">Found</option>
-              <option value="contacted">Contacted</option>
-              <option value="responded">Responded</option>
-              <option value="joined">Joined</option>
-              <option value="declined">Declined</option>
-            </select>
-          </div>
-          
-          <div id="talentStatus" style="display:none;padding:12px 20px;background:rgba(6,182,212,0.1);color:#06b6d4;"></div>
-          
-          <div id="addTalentForm" style="display:none;padding:20px;border-bottom:1px solid rgba(255,255,255,0.1);">
-            <div class="form-inline">
-              <div class="form-row"><label>Name</label><input type="text" id="talentName" placeholder="Full name"></div>
-              <div class="form-row"><label>Platform</label>
-                <select id="talentPlatform">
-                  <option value="instagram">Instagram</option>
-                  <option value="linkedin">LinkedIn</option>
-                  <option value="sharegrid">ShareGrid</option>
-                  <option value="behance">Behance</option>
-                  <option value="other">Other</option>
-                </select>
-              </div>
-            </div>
-            <div class="form-row"><label>Profile URL</label><input type="text" id="talentUrl" placeholder="https://instagram.com/..."></div>
-            <div class="form-inline">
-              <div class="form-row"><label>Skills (comma separated)</label><input type="text" id="talentSkills" placeholder="Cinematography, Editing"></div>
-              <div class="form-row"><label>Location</label><input type="text" id="talentLocation" placeholder="Los Angeles, CA"></div>
-            </div>
-            <div class="form-row"><label>Notes</label><input type="text" id="talentNotes" placeholder="Where you found them, why they're good..."></div>
-            <button class="action-btn primary" onclick="saveTalent()" style="width:100%;margin-top:8px;">Save Talent Target</button>
-          </div>
-          
-          <div id="allTalentTargets"><div class="loading">Loading...</div></div>
-        </div>
-      </div>
-      
-      <!-- Recruitment Tab -->
-      <div class="tab-content" id="tab-recruitment">
-        <div class="grid-2">
-          <div class="card highlight">
-            <div class="card-header">🤖 AI Recruitment Suggestions</div>
-            <div id="recruitmentSuggestions"><div class="loading">Loading...</div></div>
-          </div>
-          <div class="card">
-            <div class="card-header">Outreach Templates</div>
-            <div id="outreachTemplates" style="padding:16px;">
-              <div style="margin-bottom:16px;">
-                <h4 style="font-size:13px;color:#888;margin-bottom:8px;">For Job Posters (Recruit them as clients)</h4>
-                <div class="outreach-box" onclick="copyText(this.innerText)">Hey! Saw you're looking for a {skill}. We have verified {skill}s in our network ready to work. Want me to send some your way? It's free to post on Titli 🦋</div>
-              </div>
-              <div>
-                <h4 style="font-size:13px;color:#888;margin-bottom:8px;">For Talent (Recruit them as users)</h4>
-                <div class="outreach-box" onclick="copyText(this.innerText)">Hey! Love your work 🔥 We're building Titli - a community connecting creative professionals with paid opportunities. Got people actively looking for {skill}s right now. Interested? It's free 🦋</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Skill Gaps Tab -->
-      <div class="tab-content" id="tab-skill-gaps">
-        <div class="grid-2">
-          <div class="card highlight">
-            <div class="card-header">Skills Gap Analysis</div>
-            <div id="skillGapsAll"><div class="loading">Loading...</div></div>
-          </div>
-          <div class="card">
-            <div class="card-header">Available Skills</div>
-            <div id="availableSkills"><div class="loading">Loading...</div></div>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Activity Tab -->
-      <div class="tab-content" id="tab-activity">
-        <div class="card">
-          <div class="card-header">All Activity <span class="count" id="activityCount">0</span></div>
-          <div id="allActivity"><div class="loading">Loading...</div></div>
-        </div>
-      </div>
+<div class="dashboard" id="dashboard">
+  <header>
+    <div><span class="logo">TITLI<span>Command Center</span></span></div>
+    <div class="header-actions">
+      <span class="last-updated" id="lastUpdated"></span>
+      <button onclick="fetchAllData()">Refresh</button>
+      <button class="logout" onclick="logout()">Logout</button>
     </div>
-  </div>
+  </header>
   
-  <!-- Modals -->
-  <div class="modal-overlay" id="jobModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 id="modalJobTitle">Job Details</h2>
-        <button class="modal-close" onclick="closeModal('jobModal')">&times;</button>
+  <div class="container">
+    <!-- Stats Grid -->
+    <div class="stats-grid">
+      <div class="stat-card blue" onclick="switchTab('users')">
+        <div class="stat-value" id="statUsers">0</div>
+        <div class="stat-label">Total Users</div>
+        <div class="stat-detail" id="statUsersDetail">-</div>
       </div>
-      <div class="modal-body" id="modalJobBody"></div>
+      <div class="stat-card green" onclick="switchTab('connections')">
+        <div class="stat-value" id="statConnections">0</div>
+        <div class="stat-label">Connections</div>
+        <div class="stat-detail">Successful matches</div>
+      </div>
+      <div class="stat-card purple" onclick="switchTab('requests')">
+        <div class="stat-value" id="statRequests">0</div>
+        <div class="stat-label">Requests</div>
+        <div class="stat-detail" id="statRequestsDetail">-</div>
+      </div>
+      <div class="stat-card orange" onclick="switchTab('external-jobs')">
+        <div class="stat-value" id="statExternalJobs">0</div>
+        <div class="stat-label">External Jobs</div>
+        <div class="stat-detail" id="statExternalJobsDetail">-</div>
+      </div>
+      <div class="stat-card cyan" onclick="switchTab('talent-targets')">
+        <div class="stat-value" id="statTalentTargets">0</div>
+        <div class="stat-label">Talent Targets</div>
+        <div class="stat-detail" id="statTalentDetail">-</div>
+      </div>
+      <div class="stat-card red" onclick="switchTab('activity')">
+        <div class="stat-value" id="statActivity">0</div>
+        <div class="stat-label">Actions Today</div>
+        <div class="stat-detail">Taj activity</div>
+      </div>
+    </div>
+    
+    <!-- Tabs -->
+    <div class="tabs">
+      <button class="tab active" data-tab="overview">Overview</button>
+      <button class="tab" data-tab="users">Users</button>
+      <button class="tab" data-tab="requests">Requests</button>
+      <button class="tab" data-tab="connections">Connections</button>
+      <button class="tab" data-tab="external-jobs">🔍 External Jobs <span class="badge" id="jobsBadge">0</span></button>
+      <button class="tab" data-tab="talent-targets">🎯 Talent Targets <span class="badge" id="talentBadge">0</span></button>
+      <button class="tab" data-tab="recruitment">📊 Recruitment</button>
+      <button class="tab" data-tab="skill-gaps">Skill Gaps</button>
+      <button class="tab" data-tab="activity">Activity</button>
+    </div>
+    
+    <!-- Overview Tab -->
+    <div class="tab-content active" id="tab-overview">
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-header">Recent Activity</div>
+          <div id="recentActivity"><div class="loading">Loading...</div></div>
+        </div>
+        <div class="card highlight">
+          <div class="card-header">New External Jobs <span class="count" id="newJobsCount">0</span></div>
+          <div id="newJobs"><div class="loading">Loading...</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">Talent Pipeline</div>
+          <div id="talentPipeline"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Users Tab -->
+    <div class="tab-content" id="tab-users">
+      <div class="card">
+        <div class="card-header">All Users <span class="count" id="userCount">0</span></div>
+        <div id="allUsers"><div class="loading">Loading...</div></div>
+      </div>
+    </div>
+    
+    <!-- Requests Tab -->
+    <div class="tab-content" id="tab-requests">
+      <div class="card">
+        <div class="card-header">All Requests <span class="count" id="requestCount">0</span></div>
+        <div id="allRequests"><div class="loading">Loading...</div></div>
+      </div>
+    </div>
+    
+    <!-- Connections Tab -->
+    <div class="tab-content" id="tab-connections">
+      <div class="card success">
+        <div class="card-header">Successful Connections <span class="count" id="connectionCount">0</span></div>
+        <div id="allConnections"><div class="loading">Loading...</div></div>
+      </div>
+    </div>
+    
+    <!-- External Jobs Tab (Pipeline 1) -->
+    <div class="tab-content" id="tab-external-jobs">
+      <div class="card">
+        <div class="card-header">
+          <span>External Job Opportunities</span>
+          <div class="actions">
+            <button class="action-btn orange small" onclick="scrapeAllJobs()">🔍 Scrape All Sources</button>
+            <button class="action-btn secondary small" onclick="scrapeReddit()">Reddit</button>
+            <button class="action-btn secondary small" onclick="scrapeCraigslist()">Craigslist</button>
+            <button class="action-btn purple small" onclick="analyzeAllJobs()">🤖 AI Analyze All</button>
+            <button class="action-btn green small" onclick="showAddJobForm()">+ Add Manual</button>
+          </div>
+        </div>
+        
+        <div class="stats-mini" id="jobsStatsMini">
+          <div class="stat-mini"><div class="stat-mini-value" id="jobsTotal">0</div><div class="stat-mini-label">Total</div></div>
+          <div class="stat-mini"><div class="stat-mini-value" id="jobsAnalyzed">0</div><div class="stat-mini-label">Analyzed</div></div>
+          <div class="stat-mini"><div class="stat-mini-value" id="jobsMatched">0</div><div class="stat-mini-label">With Matches</div></div>
+          <div class="stat-mini"><div class="stat-mini-value" id="jobsNotified">0</div><div class="stat-mini-label">Notified</div></div>
+        </div>
+        
+        <div class="filters-bar">
+          <select id="jobSourceFilter" onchange="filterJobs()">
+            <option value="">All Sources</option>
+            <option value="reddit">Reddit</option>
+            <option value="craigslist">Craigslist</option>
+            <option value="productionhub">ProductionHub</option>
+            <option value="mandy">Mandy</option>
+          </select>
+          <select id="jobCategoryFilter" onchange="filterJobs()">
+            <option value="">All Categories</option>
+            <option value="film">Film</option>
+            <option value="photography">Photography</option>
+            <option value="music">Music</option>
+            <option value="design">Design</option>
+            <option value="tech">Tech</option>
+            <option value="writing">Writing</option>
+            <option value="marketing">Marketing</option>
+          </select>
+          <select id="jobStatusFilter" onchange="filterJobs()">
+            <option value="">All Status</option>
+            <option value="new">New</option>
+            <option value="analyzed">Analyzed</option>
+            <option value="notified">Notified</option>
+          </select>
+        </div>
+        
+        <div id="jobsStatus" style="display:none;padding:12px 20px;background:rgba(59,130,246,0.1);color:#60a5fa;"></div>
+        
+        <div id="addJobForm" style="display:none;padding:20px;border-bottom:1px solid rgba(255,255,255,0.1);">
+          <div class="form-inline">
+            <div class="form-row"><label>Source</label><input type="text" id="jobSource" placeholder="Reddit, Instagram, etc."></div>
+            <div class="form-row"><label>Title</label><input type="text" id="jobTitle" placeholder="Looking for photographer..."></div>
+          </div>
+          <div class="form-row"><label>Description</label><textarea id="jobDescription" placeholder="Full job description..."></textarea></div>
+          <div class="form-inline">
+            <div class="form-row"><label>Location</label><input type="text" id="jobLocation" placeholder="City, State"></div>
+            <div class="form-row"><label>Budget</label><input type="text" id="jobBudget" placeholder="$500/day"></div>
+            <div class="form-row"><label>URL</label><input type="text" id="jobUrl" placeholder="https://..."></div>
+          </div>
+          <div class="form-inline">
+            <div class="form-row"><label>Poster Username</label><input type="text" id="jobPosterUsername" placeholder="@username"></div>
+            <div class="form-row"><label>Poster Profile URL</label><input type="text" id="jobPosterUrl" placeholder="https://..."></div>
+          </div>
+          <button class="action-btn primary" onclick="saveJob()" style="width:100%;margin-top:8px;">Save Job</button>
+        </div>
+        
+        <div id="allExternalJobs"><div class="loading">Loading...</div></div>
+      </div>
+    </div>
+    
+    <!-- Talent Targets Tab (Pipeline 2) -->
+    <div class="tab-content" id="tab-talent-targets">
+      <div class="card">
+        <div class="card-header">
+          <span>Talent Recruitment Pipeline</span>
+          <div class="actions">
+            <button class="action-btn cyan small" onclick="scrapeShareGrid()">🔍 Scrape ShareGrid</button>
+            <button class="action-btn purple small" onclick="analyzeAllTalents()">🤖 AI Analyze All</button>
+            <button class="action-btn green small" onclick="showAddTalentForm()">+ Add Manual</button>
+          </div>
+        </div>
+        
+        <div class="stats-mini" id="talentStatsMini">
+          <div class="stat-mini"><div class="stat-mini-value" id="talentTotal">0</div><div class="stat-mini-label">Total</div></div>
+          <div class="stat-mini"><div class="stat-mini-value" id="talentContacted">0</div><div class="stat-mini-label">Contacted</div></div>
+          <div class="stat-mini"><div class="stat-mini-value" id="talentResponded">0</div><div class="stat-mini-label">Responded</div></div>
+          <div class="stat-mini"><div class="stat-mini-value" id="talentJoined">0</div><div class="stat-mini-label">Joined</div></div>
+        </div>
+        
+        <div class="filters-bar">
+          <select id="talentSourceFilter" onchange="filterTalents()">
+            <option value="">All Sources</option>
+            <option value="sharegrid">ShareGrid</option>
+            <option value="instagram">Instagram</option>
+            <option value="linkedin">LinkedIn</option>
+            <option value="reddit">Reddit (Job Posters)</option>
+            <option value="manual">Manual</option>
+          </select>
+          <select id="talentCategoryFilter" onchange="filterTalents()">
+            <option value="">All Categories</option>
+            <option value="film">Film</option>
+            <option value="photography">Photography</option>
+            <option value="music">Music</option>
+            <option value="design">Design</option>
+          </select>
+          <select id="talentStatusFilter" onchange="filterTalents()">
+            <option value="">All Status</option>
+            <option value="found">Found</option>
+            <option value="contacted">Contacted</option>
+            <option value="responded">Responded</option>
+            <option value="joined">Joined</option>
+            <option value="declined">Declined</option>
+          </select>
+        </div>
+        
+        <div id="talentStatus" style="display:none;padding:12px 20px;background:rgba(6,182,212,0.1);color:#06b6d4;"></div>
+        
+        <div id="addTalentForm" style="display:none;padding:20px;border-bottom:1px solid rgba(255,255,255,0.1);">
+          <div class="form-inline">
+            <div class="form-row"><label>Name</label><input type="text" id="talentName" placeholder="Full name"></div>
+            <div class="form-row"><label>Platform</label>
+              <select id="talentPlatform">
+                <option value="instagram">Instagram</option>
+                <option value="linkedin">LinkedIn</option>
+                <option value="sharegrid">ShareGrid</option>
+                <option value="behance">Behance</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="form-row"><label>Profile URL</label><input type="text" id="talentUrl" placeholder="https://instagram.com/..."></div>
+          <div class="form-inline">
+            <div class="form-row"><label>Skills (comma separated)</label><input type="text" id="talentSkills" placeholder="Cinematography, Editing"></div>
+            <div class="form-row"><label>Location</label><input type="text" id="talentLocation" placeholder="Los Angeles, CA"></div>
+          </div>
+          <div class="form-row"><label>Notes</label><input type="text" id="talentNotes" placeholder="Where you found them, why they're good..."></div>
+          <button class="action-btn primary" onclick="saveTalent()" style="width:100%;margin-top:8px;">Save Talent Target</button>
+        </div>
+        
+        <div id="allTalentTargets"><div class="loading">Loading...</div></div>
+      </div>
+    </div>
+    
+    <!-- Recruitment Tab -->
+    <div class="tab-content" id="tab-recruitment">
+      <div class="grid-2">
+        <div class="card highlight">
+          <div class="card-header">🤖 AI Recruitment Suggestions</div>
+          <div id="recruitmentSuggestions"><div class="loading">Loading...</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">Outreach Templates</div>
+          <div id="outreachTemplates" style="padding:16px;">
+            <div style="margin-bottom:16px;">
+              <h4 style="font-size:13px;color:#888;margin-bottom:8px;">For Job Posters (Recruit them as clients)</h4>
+              <div class="outreach-box" onclick="copyText(this.innerText)">Hey! Saw you're looking for a {skill}. We have verified {skill}s in our network ready to work. Want me to send some your way? It's free to post on Titli 🦋</div>
+            </div>
+            <div>
+              <h4 style="font-size:13px;color:#888;margin-bottom:8px;">For Talent (Recruit them as users)</h4>
+              <div class="outreach-box" onclick="copyText(this.innerText)">Hey! Love your work 🔥 We're building Titli - a community connecting creative professionals with paid opportunities. Got people actively looking for {skill}s right now. Interested? It's free 🦋</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Skill Gaps Tab -->
+    <div class="tab-content" id="tab-skill-gaps">
+      <div class="grid-2">
+        <div class="card highlight">
+          <div class="card-header">Skills Gap Analysis</div>
+          <div id="skillGapsAll"><div class="loading">Loading...</div></div>
+        </div>
+        <div class="card">
+          <div class="card-header">Available Skills</div>
+          <div id="availableSkills"><div class="loading">Loading...</div></div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Activity Tab -->
+    <div class="tab-content" id="tab-activity">
+      <div class="card">
+        <div class="card-header">All Activity <span class="count" id="activityCount">0</span></div>
+        <div id="allActivity"><div class="loading">Loading...</div></div>
+      </div>
     </div>
   </div>
+</div>
+
+<!-- Modals -->
+<div class="modal-overlay" id="jobModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalJobTitle">Job Details</h2>
+      <button class="modal-close" onclick="closeModal('jobModal')">&times;</button>
+    </div>
+    <div class="modal-body" id="modalJobBody"></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="talentModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modalTalentTitle">Talent Details</h2>
+      <button class="modal-close" onclick="closeModal('talentModal')">&times;</button>
+    </div>
+    <div class="modal-body" id="modalTalentBody"></div>
+  </div>
+</div>
+<script>
+  const API = "https://titly-backend-production.up.railway.app/api";
+  const PASSWORD = "titli2024";
   
-  <div class="modal-overlay" id="talentModal">
-    <div class="modal">
-      <div class="modal-header">
-        <h2 id="modalTalentTitle">Talent Details</h2>
-        <button class="modal-close" onclick="closeModal('talentModal')">&times;</button>
-      </div>
-      <div class="modal-body" id="modalTalentBody"></div>
-    </div>
-  </div>
-  <script>
-    const API = "https://titly-backend-production.up.railway.app/api";
-    const PASSWORD = "titli2024";
-    
-    // Data stores
-    let users = [], requests = [], connections = [], activity = [];
-    let externalJobs = [], talentTargets = [], recruitmentSuggestions = [];
-    let skillGaps = {}, externalOpsStats = {};
-    
-    // Init
-    if (localStorage.getItem("titli_admin") === "true") { 
+  // Data stores
+  let users = [], requests = [], connections = [], activity = [];
+  let externalJobs = [], talentTargets = [], recruitmentSuggestions = [];
+  let skillGaps = {}, externalOpsStats = {};
+  
+  // Init
+  if (localStorage.getItem("titli_admin") === "true") { 
+    showDashboard(); 
+    fetchAllData(); 
+    setInterval(fetchAllData, 30000);
+    const hash = window.location.hash.replace('#', '');
+    if (hash) switchTab(hash);
+  }
+  
+  // Tab switching
+  document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
+      window.location.hash = tab.dataset.tab;
+    });
+  });
+  
+  function switchTab(tabId) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    const tabEl = document.querySelector(`[data-tab="${tabId}"]`);
+    if (tabEl) {
+      tabEl.classList.add('active');
+      document.getElementById(`tab-${tabId}`).classList.add('active');
+      window.location.hash = tabId;
+    }
+  }
+  
+  function handleLogin(e) {
+    e.preventDefault();
+    if (document.getElementById("password").value === PASSWORD) {
+      localStorage.setItem("titli_admin", "true");
       showDashboard(); 
       fetchAllData(); 
       setInterval(fetchAllData, 30000);
-      const hash = window.location.hash.replace('#', '');
-      if (hash) switchTab(hash);
+    } else { 
+      alert("Wrong password"); 
     }
-    
-    // Tab switching
-    document.querySelectorAll('.tab').forEach(tab => {
-      tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        tab.classList.add('active');
-        document.getElementById(`tab-${tab.dataset.tab}`).classList.add('active');
-        window.location.hash = tab.dataset.tab;
-      });
-    });
-    
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-      const tabEl = document.querySelector(`[data-tab="${tabId}"]`);
-      if (tabEl) {
-        tabEl.classList.add('active');
-        document.getElementById(`tab-${tabId}`).classList.add('active');
-        window.location.hash = tabId;
-      }
+  }
+  
+  function logout() { localStorage.removeItem("titli_admin"); location.reload(); }
+  function showDashboard() { document.getElementById("loginScreen").style.display = "none"; document.getElementById("dashboard").classList.add("active"); }
+  
+  // Fetch all data
+  async function fetchAllData() {
+    try {
+      const [u, r, c, a, ej, tt, sg, eos] = await Promise.all([
+        fetch(`${API}/admin/users`).then(res => res.json()).catch(() => []),
+        fetch(`${API}/admin/requests`).then(res => res.json()).catch(() => []),
+        fetch(`${API}/admin/connections`).then(res => res.json()).catch(() => []),
+        fetch(`${API}/admin/activity?limit=100`).then(res => res.json()).catch(() => []),
+        fetch(`${API}/admin/external-jobs?limit=100`).then(res => res.json()).catch(() => []),
+        fetch(`${API}/admin/talent-targets?limit=100`).then(res => res.json()).catch(() => []),
+        fetch(`${API}/admin/analytics/skill-gaps`).then(res => res.json()).catch(() => ({})),
+        fetch(`${API}/admin/external-ops/stats`).then(res => res.json()).catch(() => ({}))
+      ]);
+      
+      users = u || [];
+      requests = r || [];
+      connections = c || [];
+      activity = a || [];
+      externalJobs = ej || [];
+      talentTargets = tt || [];
+      skillGaps = sg || {};
+      externalOpsStats = eos || {};
+      
+      updateStats();
+      render();
+      document.getElementById("lastUpdated").textContent = `Updated: ${new Date().toLocaleTimeString()}`;
+    } catch (e) { 
+      console.error("Fetch error:", e); 
     }
+  }
+  
+  function updateStats() {
+    const telegramUsers = users.filter(u => u.telegram_connected).length;
+    const todayActivity = activity.filter(a => new Date(a.timestamp).toDateString() === new Date().toDateString()).length;
     
-    function handleLogin(e) {
-      e.preventDefault();
-      if (document.getElementById("password").value === PASSWORD) {
-        localStorage.setItem("titli_admin", "true");
-        showDashboard(); 
-        fetchAllData(); 
-        setInterval(fetchAllData, 30000);
-      } else { 
-        alert("Wrong password"); 
-      }
+    document.getElementById("statUsers").textContent = users.length;
+    document.getElementById("statUsersDetail").textContent = `${telegramUsers} on Telegram`;
+    document.getElementById("statConnections").textContent = connections.length;
+    document.getElementById("statRequests").textContent = requests.length;
+    document.getElementById("statRequestsDetail").textContent = `${requests.filter(r => r.status === 'completed').length} completed`;
+    document.getElementById("statExternalJobs").textContent = externalJobs.length;
+    document.getElementById("statExternalJobsDetail").textContent = `${externalJobs.filter(j => j.analyzed).length} analyzed`;
+    document.getElementById("statTalentTargets").textContent = talentTargets.length;
+    document.getElementById("statTalentDetail").textContent = `${talentTargets.filter(t => t.status === 'joined').length} joined`;
+    document.getElementById("statActivity").textContent = todayActivity;
+    
+    // Badges
+    document.getElementById("jobsBadge").textContent = externalJobs.filter(j => j.status === 'new').length;
+    document.getElementById("talentBadge").textContent = talentTargets.filter(t => t.status === 'found').length;
+    
+    // External Ops Stats
+    if (externalOpsStats.jobs) {
+      document.getElementById("jobsTotal").textContent = externalOpsStats.jobs.total || 0;
+      document.getElementById("jobsAnalyzed").textContent = externalOpsStats.jobs.analyzed || 0;
+      document.getElementById("jobsMatched").textContent = externalOpsStats.jobs.with_matches || 0;
+      document.getElementById("jobsNotified").textContent = externalOpsStats.jobs.notified || 0;
     }
-    
-    function logout() { localStorage.removeItem("titli_admin"); location.reload(); }
-    function showDashboard() { document.getElementById("loginScreen").style.display = "none"; document.getElementById("dashboard").classList.add("active"); }
-    
-    // Fetch all data
-    async function fetchAllData() {
-      try {
-        const [u, r, c, a, ej, tt, sg, eos] = await Promise.all([
-          fetch(`${API}/admin/users`).then(res => res.json()).catch(() => []),
-          fetch(`${API}/admin/requests`).then(res => res.json()).catch(() => []),
-          fetch(`${API}/admin/connections`).then(res => res.json()).catch(() => []),
-          fetch(`${API}/admin/activity?limit=100`).then(res => res.json()).catch(() => []),
-          fetch(`${API}/admin/external-jobs?limit=100`).then(res => res.json()).catch(() => []),
-          fetch(`${API}/admin/talent-targets?limit=100`).then(res => res.json()).catch(() => []),
-          fetch(`${API}/admin/analytics/skill-gaps`).then(res => res.json()).catch(() => ({})),
-          fetch(`${API}/admin/external-ops/stats`).then(res => res.json()).catch(() => ({}))
-        ]);
-        
-        users = u || [];
-        requests = r || [];
-        connections = c || [];
-        activity = a || [];
-        externalJobs = ej || [];
-        talentTargets = tt || [];
-        skillGaps = sg || {};
-        externalOpsStats = eos || {};
-        
-        updateStats();
-        render();
-        document.getElementById("lastUpdated").textContent = `Updated: ${new Date().toLocaleTimeString()}`;
-      } catch (e) { 
-        console.error("Fetch error:", e); 
-      }
+    if (externalOpsStats.talents) {
+      document.getElementById("talentTotal").textContent = externalOpsStats.talents.total || 0;
+      document.getElementById("talentContacted").textContent = externalOpsStats.talents.contacted || 0;
+      document.getElementById("talentResponded").textContent = externalOpsStats.talents.responded || 0;
+      document.getElementById("talentJoined").textContent = externalOpsStats.talents.joined || 0;
     }
+  }
+  
+  function render() {
+    // Overview - Recent Activity
+    document.getElementById("recentActivity").innerHTML = activity.length === 0 
+      ? '<div class="empty">No activity yet</div>' 
+      : activity.slice(0, 8).map(a => activityItem(a)).join("");
     
-    function updateStats() {
-      const telegramUsers = users.filter(u => u.telegram_connected).length;
-      const todayActivity = activity.filter(a => new Date(a.timestamp).toDateString() === new Date().toDateString()).length;
-      
-      document.getElementById("statUsers").textContent = users.length;
-      document.getElementById("statUsersDetail").textContent = `${telegramUsers} on Telegram`;
-      document.getElementById("statConnections").textContent = connections.length;
-      document.getElementById("statRequests").textContent = requests.length;
-      document.getElementById("statRequestsDetail").textContent = `${requests.filter(r => r.status === 'completed').length} completed`;
-      document.getElementById("statExternalJobs").textContent = externalJobs.length;
-      document.getElementById("statExternalJobsDetail").textContent = `${externalJobs.filter(j => j.analyzed).length} analyzed`;
-      document.getElementById("statTalentTargets").textContent = talentTargets.length;
-      document.getElementById("statTalentDetail").textContent = `${talentTargets.filter(t => t.status === 'joined').length} joined`;
-      document.getElementById("statActivity").textContent = todayActivity;
-      
-      // Badges
-      document.getElementById("jobsBadge").textContent = externalJobs.filter(j => j.status === 'new').length;
-      document.getElementById("talentBadge").textContent = talentTargets.filter(t => t.status === 'found').length;
-      
-      // External Ops Stats
-      if (externalOpsStats.jobs) {
-        document.getElementById("jobsTotal").textContent = externalOpsStats.jobs.total || 0;
-        document.getElementById("jobsAnalyzed").textContent = externalOpsStats.jobs.analyzed || 0;
-        document.getElementById("jobsMatched").textContent = externalOpsStats.jobs.with_matches || 0;
-        document.getElementById("jobsNotified").textContent = externalOpsStats.jobs.notified || 0;
-      }
-      if (externalOpsStats.talents) {
-        document.getElementById("talentTotal").textContent = externalOpsStats.talents.total || 0;
-        document.getElementById("talentContacted").textContent = externalOpsStats.talents.contacted || 0;
-        document.getElementById("talentResponded").textContent = externalOpsStats.talents.responded || 0;
-        document.getElementById("talentJoined").textContent = externalOpsStats.talents.joined || 0;
-      }
-    }
+    // Overview - New Jobs
+    const newJobs = externalJobs.filter(j => j.status === 'new').slice(0, 5);
+    document.getElementById("newJobsCount").textContent = newJobs.length;
+    document.getElementById("newJobs").innerHTML = newJobs.length === 0
+      ? '<div class="empty">No new jobs</div>'
+      : newJobs.map(j => jobCardMini(j)).join("");
     
-    function render() {
-      // Overview - Recent Activity
-      document.getElementById("recentActivity").innerHTML = activity.length === 0 
-        ? '<div class="empty">No activity yet</div>' 
-        : activity.slice(0, 8).map(a => activityItem(a)).join("");
-      
-      // Overview - New Jobs
-      const newJobs = externalJobs.filter(j => j.status === 'new').slice(0, 5);
-      document.getElementById("newJobsCount").textContent = newJobs.length;
-      document.getElementById("newJobs").innerHTML = newJobs.length === 0
-        ? '<div class="empty">No new jobs</div>'
-        : newJobs.map(j => jobCardMini(j)).join("");
-      
-      // Overview - Talent Pipeline
-      const pipeline = [
-        { label: 'Found', count: talentTargets.filter(t => t.status === 'found').length, color: '#3b82f6' },
-        { label: 'Contacted', count: talentTargets.filter(t => t.outreach_status === 'contacted').length, color: '#f59e0b' },
-        { label: 'Responded', count: talentTargets.filter(t => t.outreach_status === 'responded').length, color: '#8b5cf6' },
-        { label: 'Joined', count: talentTargets.filter(t => t.status === 'joined').length, color: '#10b981' }
-      ];
-      document.getElementById("talentPipeline").innerHTML = `<div style="padding:16px;">${pipeline.map(p => `
-        <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-          <div style="width:80px;font-size:13px;color:#888;">${p.label}</div>
-          <div style="flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:4px;overflow:hidden;">
-            <div style="width:${Math.min(p.count * 10, 100)}%;height:100%;background:${p.color};"></div>
+    // Overview - Talent Pipeline
+    const pipeline = [
+      { label: 'Found', count: talentTargets.filter(t => t.status === 'found').length, color: '#3b82f6' },
+      { label: 'Contacted', count: talentTargets.filter(t => t.outreach_status === 'contacted').length, color: '#f59e0b' },
+      { label: 'Responded', count: talentTargets.filter(t => t.outreach_status === 'responded').length, color: '#8b5cf6' },
+      { label: 'Joined', count: talentTargets.filter(t => t.status === 'joined').length, color: '#10b981' }
+    ];
+    document.getElementById("talentPipeline").innerHTML = `<div style="padding:16px;">${pipeline.map(p => `
+      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+        <div style="width:80px;font-size:13px;color:#888;">${p.label}</div>
+        <div style="flex:1;height:24px;background:rgba(255,255,255,0.05);border-radius:4px;overflow:hidden;">
+          <div style="width:${Math.min(p.count * 10, 100)}%;height:100%;background:${p.color};"></div>
+        </div>
+        <div style="width:40px;text-align:right;font-weight:600;">${p.count}</div>
+      </div>
+    `).join("")}</div>`;
+    
+    // Users
+    document.getElementById("userCount").textContent = users.length;
+    document.getElementById("allUsers").innerHTML = users.length === 0 
+      ? '<div class="empty">No users yet</div>' 
+      : users.slice(0, 50).map(u => userCard(u)).join("");
+    
+    // Requests
+    document.getElementById("requestCount").textContent = requests.length;
+    document.getElementById("allRequests").innerHTML = requests.length === 0 
+      ? '<div class="empty">No requests yet</div>' 
+      : requests.map(r => requestCard(r)).join("");
+    
+    // Connections
+    document.getElementById("connectionCount").textContent = connections.length;
+    document.getElementById("allConnections").innerHTML = connections.length === 0 
+      ? '<div class="empty">No connections yet</div>' 
+      : connections.map(c => connectionCard(c)).join("");
+    
+    // External Jobs
+    renderExternalJobs();
+    
+    // Talent Targets
+    renderTalentTargets();
+    
+    // Recruitment Suggestions
+    renderRecruitmentSuggestions();
+    
+    // Skill Gaps
+    if (skillGaps.skill_gaps && skillGaps.skill_gaps.length > 0) {
+      document.getElementById("skillGapsAll").innerHTML = skillGaps.skill_gaps.map(g => `
+        <div style="display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.05);">
+          <div style="width:120px;font-weight:500;">${g.skill}</div>
+          <div style="flex:1;display:flex;gap:8px;">
+            <div style="background:rgba(239,68,68,0.3);color:#ef4444;padding:4px 8px;border-radius:4px;font-size:11px;">${g.demand} need</div>
+            <div style="background:rgba(16,185,129,0.3);color:#10b981;padding:4px 8px;border-radius:4px;font-size:11px;">${g.supply} have</div>
           </div>
-          <div style="width:40px;text-align:right;font-weight:600;">${p.count}</div>
+          <span class="badge ${g.gap > 0 ? 'red' : 'green'}">${g.gap > 0 ? '-' : '+'}${Math.abs(g.gap)}</span>
+        </div>
+      `).join("");
+    } else {
+      document.getElementById("skillGapsAll").innerHTML = '<div class="empty">No skill gaps data</div>';
+    }
+    
+    if (skillGaps.available_skills && Object.keys(skillGaps.available_skills).length > 0) {
+      document.getElementById("availableSkills").innerHTML = `<div style="padding:16px;">
+        ${Object.entries(skillGaps.available_skills).slice(0, 20).map(([skill, count]) => `
+          <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
+            <span>${skill}</span>
+            <span class="badge purple">${count}</span>
+          </div>
+        `).join("")}
+      </div>`;
+    } else {
+      document.getElementById("availableSkills").innerHTML = '<div class="empty">No skills data</div>';
+    }
+    
+    // Activity
+    document.getElementById("activityCount").textContent = activity.length;
+    document.getElementById("allActivity").innerHTML = activity.length === 0 
+      ? '<div class="empty">No activity yet</div>' 
+      : activity.map(a => activityItem(a)).join("");
+  }
+  
+  // ============ RENDER FUNCTIONS ============
+  
+  function renderExternalJobs() {
+    const sourceFilter = document.getElementById("jobSourceFilter")?.value || '';
+    const categoryFilter = document.getElementById("jobCategoryFilter")?.value || '';
+    const statusFilter = document.getElementById("jobStatusFilter")?.value || '';
+    
+    let filtered = externalJobs;
+    if (sourceFilter) filtered = filtered.filter(j => j.source === sourceFilter);
+    if (categoryFilter) filtered = filtered.filter(j => j.category === categoryFilter);
+    if (statusFilter) {
+      if (statusFilter === 'analyzed') filtered = filtered.filter(j => j.analyzed);
+      else filtered = filtered.filter(j => j.status === statusFilter);
+    }
+    
+    document.getElementById("allExternalJobs").innerHTML = filtered.length === 0
+      ? '<div class="empty">No jobs found</div>'
+      : filtered.slice(0, 50).map(j => jobCard(j)).join("");
+  }
+  
+  function renderTalentTargets() {
+    const sourceFilter = document.getElementById("talentSourceFilter")?.value || '';
+    const categoryFilter = document.getElementById("talentCategoryFilter")?.value || '';
+    const statusFilter = document.getElementById("talentStatusFilter")?.value || '';
+    
+    let filtered = talentTargets;
+    if (sourceFilter) filtered = filtered.filter(t => t.source === sourceFilter);
+    if (categoryFilter) filtered = filtered.filter(t => t.category === categoryFilter);
+    if (statusFilter) filtered = filtered.filter(t => t.status === statusFilter || t.outreach_status === statusFilter);
+    
+    document.getElementById("allTalentTargets").innerHTML = filtered.length === 0
+      ? '<div class="empty">No talents found</div>'
+      : filtered.slice(0, 50).map(t => talentCard(t)).join("");
+  }
+  
+  async function renderRecruitmentSuggestions() {
+    try {
+      const suggestions = await fetch(`${API}/admin/recruitment/suggestions`).then(r => r.json()).catch(() => []);
+      
+      if (!suggestions || suggestions.length === 0) {
+        document.getElementById("recruitmentSuggestions").innerHTML = '<div class="empty" style="padding:20px;">No talent gaps detected! 🎉</div>';
+        return;
+      }
+      
+      document.getElementById("recruitmentSuggestions").innerHTML = `<div style="padding:16px;">${suggestions.map(s => `
+        <div style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);border-radius:8px;padding:16px;margin-bottom:12px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+            <strong style="font-size:16px;">${s.skill_needed}</strong>
+            <span class="badge ${s.priority === 'high' ? 'red' : 'yellow'}">${s.priority} priority</span>
+          </div>
+          <div style="font-size:12px;color:#888;margin-bottom:12px;">
+            Demand: ${s.demand} | Supply: ${s.supply} | Gap: ${s.gap}
+          </div>
+          <div style="margin-bottom:12px;">
+            <div style="font-size:11px;color:#888;margin-bottom:4px;">Search queries:</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              ${Object.entries(s.search_queries || {}).map(([platform, query]) => `
+                <a href="${getSearchUrl(platform, query)}" target="_blank" 
+                   class="badge" style="background:rgba(255,255,255,0.1);color:#fff;text-decoration:none;">
+                  ${platform}
+                </a>
+              `).join("")}
+            </div>
+          </div>
+          <div class="outreach-box" onclick="copyText(this.innerText)" style="font-size:12px;">
+            ${s.outreach_template || ''}
+          </div>
         </div>
       `).join("")}</div>`;
-      
-      // Users
-      document.getElementById("userCount").textContent = users.length;
-      document.getElementById("allUsers").innerHTML = users.length === 0 
-        ? '<div class="empty">No users yet</div>' 
-        : users.slice(0, 50).map(u => userCard(u)).join("");
-      
-      // Requests
-      document.getElementById("requestCount").textContent = requests.length;
-      document.getElementById("allRequests").innerHTML = requests.length === 0 
-        ? '<div class="empty">No requests yet</div>' 
-        : requests.map(r => requestCard(r)).join("");
-      
-      // Connections
-      document.getElementById("connectionCount").textContent = connections.length;
-      document.getElementById("allConnections").innerHTML = connections.length === 0 
-        ? '<div class="empty">No connections yet</div>' 
-        : connections.map(c => connectionCard(c)).join("");
-      
-      // External Jobs
-      renderExternalJobs();
-      
-      // Talent Targets
-      renderTalentTargets();
-      
-      // Recruitment Suggestions
-      renderRecruitmentSuggestions();
-      
-      // Skill Gaps
-      if (skillGaps.skill_gaps && skillGaps.skill_gaps.length > 0) {
-        document.getElementById("skillGapsAll").innerHTML = skillGaps.skill_gaps.map(g => `
-          <div style="display:flex;align-items:center;padding:12px 16px;border-bottom:1px solid rgba(255,255,255,0.05);">
-            <div style="width:120px;font-weight:500;">${g.skill}</div>
-            <div style="flex:1;display:flex;gap:8px;">
-              <div style="background:rgba(239,68,68,0.3);color:#ef4444;padding:4px 8px;border-radius:4px;font-size:11px;">${g.demand} need</div>
-              <div style="background:rgba(16,185,129,0.3);color:#10b981;padding:4px 8px;border-radius:4px;font-size:11px;">${g.supply} have</div>
-            </div>
-            <span class="badge ${g.gap > 0 ? 'red' : 'green'}">${g.gap > 0 ? '-' : '+'}${Math.abs(g.gap)}</span>
-          </div>
-        `).join("");
-      } else {
-        document.getElementById("skillGapsAll").innerHTML = '<div class="empty">No skill gaps data</div>';
-      }
-      
-      if (skillGaps.available_skills && Object.keys(skillGaps.available_skills).length > 0) {
-        document.getElementById("availableSkills").innerHTML = `<div style="padding:16px;">
-          ${Object.entries(skillGaps.available_skills).slice(0, 20).map(([skill, count]) => `
-            <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);">
-              <span>${skill}</span>
-              <span class="badge purple">${count}</span>
-            </div>
-          `).join("")}
-        </div>`;
-      } else {
-        document.getElementById("availableSkills").innerHTML = '<div class="empty">No skills data</div>';
-      }
-      
-      // Activity
-      document.getElementById("activityCount").textContent = activity.length;
-      document.getElementById("allActivity").innerHTML = activity.length === 0 
-        ? '<div class="empty">No activity yet</div>' 
-        : activity.map(a => activityItem(a)).join("");
+    } catch (e) {
+      document.getElementById("recruitmentSuggestions").innerHTML = '<div class="empty">Error loading suggestions</div>';
     }
-    
-    // ============ RENDER FUNCTIONS ============
-    
-    function renderExternalJobs() {
-      const sourceFilter = document.getElementById("jobSourceFilter")?.value || '';
-      const categoryFilter = document.getElementById("jobCategoryFilter")?.value || '';
-      const statusFilter = document.getElementById("jobStatusFilter")?.value || '';
-      
-      let filtered = externalJobs;
-      if (sourceFilter) filtered = filtered.filter(j => j.source === sourceFilter);
-      if (categoryFilter) filtered = filtered.filter(j => j.category === categoryFilter);
-      if (statusFilter) {
-        if (statusFilter === 'analyzed') filtered = filtered.filter(j => j.analyzed);
-        else filtered = filtered.filter(j => j.status === statusFilter);
-      }
-      
-      document.getElementById("allExternalJobs").innerHTML = filtered.length === 0
-        ? '<div class="empty">No jobs found</div>'
-        : filtered.slice(0, 50).map(j => jobCard(j)).join("");
+  }
+  
+  function getSearchUrl(platform, query) {
+    const q = encodeURIComponent(query);
+    switch(platform) {
+      case 'instagram': return `https://www.instagram.com/explore/tags/${query.replace(/[#\s]/g, '')}`;
+      case 'linkedin': return `https://www.linkedin.com/search/results/people/?keywords=${q}`;
+      case 'twitter': return `https://twitter.com/search?q=${q}`;
+      case 'sharegrid': return `https://www.sharegrid.com/crew?q=${q}`;
+      default: return `https://www.google.com/search?q=${q}`;
     }
-    
-    function renderTalentTargets() {
-      const sourceFilter = document.getElementById("talentSourceFilter")?.value || '';
-      const categoryFilter = document.getElementById("talentCategoryFilter")?.value || '';
-      const statusFilter = document.getElementById("talentStatusFilter")?.value || '';
-      
-      let filtered = talentTargets;
-      if (sourceFilter) filtered = filtered.filter(t => t.source === sourceFilter);
-      if (categoryFilter) filtered = filtered.filter(t => t.category === categoryFilter);
-      if (statusFilter) filtered = filtered.filter(t => t.status === statusFilter || t.outreach_status === statusFilter);
-      
-      document.getElementById("allTalentTargets").innerHTML = filtered.length === 0
-        ? '<div class="empty">No talents found</div>'
-        : filtered.slice(0, 50).map(t => talentCard(t)).join("");
-    }
-    
-    async function renderRecruitmentSuggestions() {
-      try {
-        const suggestions = await fetch(`${API}/admin/recruitment/suggestions`).then(r => r.json()).catch(() => []);
-        
-        if (!suggestions || suggestions.length === 0) {
-          document.getElementById("recruitmentSuggestions").innerHTML = '<div class="empty" style="padding:20px;">No talent gaps detected! 🎉</div>';
-          return;
-        }
-        
-        document.getElementById("recruitmentSuggestions").innerHTML = `<div style="padding:16px;">${suggestions.map(s => `
-          <div style="background:rgba(139,92,246,0.1);border:1px solid rgba(139,92,246,0.2);border-radius:8px;padding:16px;margin-bottom:12px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
-              <strong style="font-size:16px;">${s.skill_needed}</strong>
-              <span class="badge ${s.priority === 'high' ? 'red' : 'yellow'}">${s.priority} priority</span>
-            </div>
-            <div style="font-size:12px;color:#888;margin-bottom:12px;">
-              Demand: ${s.demand} | Supply: ${s.supply} | Gap: ${s.gap}
-            </div>
-            <div style="margin-bottom:12px;">
-              <div style="font-size:11px;color:#888;margin-bottom:4px;">Search queries:</div>
-              <div style="display:flex;flex-wrap:wrap;gap:6px;">
-                ${Object.entries(s.search_queries || {}).map(([platform, query]) => `
-                  <a href="${getSearchUrl(platform, query)}" target="_blank" 
-                     class="badge" style="background:rgba(255,255,255,0.1);color:#fff;text-decoration:none;">
-                    ${platform}
-                  </a>
-                `).join("")}
-              </div>
-            </div>
-            <div class="outreach-box" onclick="copyText(this.innerText)" style="font-size:12px;">
-              ${s.outreach_template || ''}
-            </div>
-          </div>
-        `).join("")}</div>`;
-      } catch (e) {
-        document.getElementById("recruitmentSuggestions").innerHTML = '<div class="empty">Error loading suggestions</div>';
-      }
-    }
-    
-    function getSearchUrl(platform, query) {
-      const q = encodeURIComponent(query);
-      switch(platform) {
-        case 'instagram': return `https://www.instagram.com/explore/tags/${query.replace(/[#\s]/g, '')}`;
-        case 'linkedin': return `https://www.linkedin.com/search/results/people/?keywords=${q}`;
-        case 'twitter': return `https://twitter.com/search?q=${q}`;
-        case 'sharegrid': return `https://www.sharegrid.com/crew?q=${q}`;
-        default: return `https://www.google.com/search?q=${q}`;
-      }
-    }
-    
-    function filterJobs() { renderExternalJobs(); }
-    function filterTalents() { renderTalentTargets(); }
-    // ============ CARD RENDERERS ============
+  }
+  
+  function filterJobs() { renderExternalJobs(); }
+  function filterTalents() { renderTalentTargets(); }
+
+// ============ CARD RENDERERS ============
     
     function userCard(u) {
       const initials = (u.name || 'U').substring(0, 2).toUpperCase();
