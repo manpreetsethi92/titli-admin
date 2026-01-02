@@ -639,7 +639,7 @@
           fetch(`${API}/admin/connections`).then(res => res.json()).catch(() => []),
           fetch(`${API}/admin/activity?limit=100`).then(res => res.json()).catch(() => []),
           fetch(`${API}/admin/recruitment/targets`).then(res => res.json()).catch(() => []),
-          fetch(`${API}/admin/external-jobs`).then(res => res.json()).catch(() => ({jobs: []})),
+          fetch(`https://titly-backend-production.up.railway.app/admin/external-jobs`).then(res => res.json()).catch(() => ({jobs: []})),
           fetch(`${API}/admin/analytics/funnel`).then(res => res.json()).catch(() => ({})),
           fetch(`${API}/admin/analytics/skill-gaps`).then(res => res.json()).catch(() => ({})),
           fetch(`${API}/admin/analytics/growth`).then(res => res.json()).catch(() => ({})),
@@ -822,7 +822,7 @@
     
     async function updateJobStatus(jobId, status) {
       try {
-        await fetch(`${API}/admin/external-jobs/${jobId}?status=${status}`, { method: 'PATCH' });
+        await fetch(`https://titly-backend-production.up.railway.app/admin/external-jobs/${jobId}?status=${status}`, { method: 'PATCH' });
         fetchAllData();
       } catch (e) {
         console.error('Failed to update job status:', e);
