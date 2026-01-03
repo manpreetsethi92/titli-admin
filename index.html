@@ -822,13 +822,15 @@
       const statusColors = { 'new': 'orange', 'reviewed': 'blue', 'contacted': 'yellow', 'converted': 'green', 'expired': 'gray' };
       const hasSkills = j.skills_needed && j.skills_needed.length > 0;
       const matchCount = j.matched_user_ids?.length || 0;
+      // Check multiple possible URL field names
+      const redditUrl = j.reddit_url || j.source_url || j.url || j.post_url || j.link;
       
       return `<div class="job-card" onclick="showJobDetail('${j.id}')" style="cursor:pointer;">
         <div style="display:flex;justify-content:space-between;align-items:start;">
           <div style="flex:1;">
             <div class="job-title">${j.title || 'Untitled'}</div>
             <div class="job-meta">
-              r/${j.subreddit || 'unknown'} • <a href="https://reddit.com/u/${j.reddit_author}" target="_blank" style="color:#3b82f6;" onclick="event.stopPropagation();">u/${j.reddit_author || 'unknown'}</a> • ${timeAgo(j.created_at)}
+              r/${j.subreddit || 'unknown'} • <a href="https://reddit.com/u/${j.reddit_author || j.author || 'unknown'}" target="_blank" style="color:#3b82f6;" onclick="event.stopPropagation();">u/${j.reddit_author || j.author || 'unknown'}</a> • ${timeAgo(j.created_at)}
               ${j.location ? `• 📍 ${j.location}` : ''}
               ${j.budget_range ? `• 💰 ${j.budget_range}` : ''}
             </div>
@@ -838,7 +840,7 @@
         ${detailed && j.original_text ? `<div class="job-text">${j.original_text.substring(0, 200)}${j.original_text.length > 200 ? '...' : ''}</div>` : ''}
         ${hasSkills ? `<div class="item-meta">${j.skills_needed.map(s => `<span class="skill-tag">${s}</span>`).join('')}</div>` : '<div style="font-size:11px;color:#666;margin-top:4px;">⚠️ No skills extracted yet</div>'}
         <div class="job-actions" onclick="event.stopPropagation();">
-          ${j.reddit_url ? `<a href="${j.reddit_url}" target="_blank" class="action-btn secondary" style="padding:6px 10px;font-size:11px;">View on Reddit →</a>` : ''}
+          ${redditUrl ? `<a href="${redditUrl}" target="_blank" class="action-btn secondary" style="padding:6px 10px;font-size:11px;">View on Reddit →</a>` : '<span style="font-size:11px;color:#666;">No link available</span>'}
           ${matchCount > 0 ? `<span class="badge green">${matchCount} matches</span>` : ''}
           ${j.status === 'new' ? `<button class="action-btn secondary" onclick="updateJobStatus('${j.id}', 'reviewed')" style="padding:6px 10px;font-size:11px;">Mark Reviewed</button>` : ''}
         </div>
@@ -1083,6 +1085,9 @@
       
       document.getElementById("modalJobTitle").textContent = job.title || "Job Details";
       const matchingUsers = findMatchingUsers(job.skills_needed);
+      // Check multiple possible URL field names
+      const redditUrl = job.reddit_url || job.source_url || job.url || job.post_url || job.link;
+      const authorName = job.reddit_author || job.author || 'unknown';
       
       const outreachTemplate = `Hey! I saw your post on r/${job.subreddit || 'reddit'} about "${job.title || 'your project'}".
 
@@ -1095,8 +1100,9 @@ Check us out: titli.app`;
       let html = `
         <div class="modal-section">
           <h3>Source</h3>
-          <p>r/${job.subreddit || 'unknown'} • <a href="https://reddit.com/u/${job.reddit_author}" target="_blank" style="color:#3b82f6;">u/${job.reddit_author || 'unknown'}</a> • ${timeAgo(job.created_at)}</p>
-          ${job.reddit_url ? `<p><a href="${job.reddit_url}" target="_blank" class="action-btn secondary" style="margin-top:8px;display:inline-block;">View on Reddit →</a></p>` : ''}
+          <p>r/${job.subreddit || 'unknown'} • <a href="https://reddit.com/u/${authorName}" target="_blank" style="color:#3b82f6;">u/${authorName}</a> • ${timeAgo(job.created_at)}</p>
+          ${redditUrl ? `<p><a href="${redditUrl}" target="_blank" class="action-btn secondary" style="margin-top:8px;display:inline-block;">View on Reddit →</a></p>` : '<p style="color:#666;font-size:12px;margin-top:8px;">No direct link available</p>'}
+        </div>
         </div>
         <div class="modal-section">
           <h3>Full Post</h3>
