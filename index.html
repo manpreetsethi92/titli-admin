@@ -862,20 +862,118 @@
       const currentTier = verificationTiers[user.verification_level || 'phone'] || verificationTiers.phone;
       const social = user.social_links || {};
       const ep = user.enriched_profile || {};
+      const userRequests = requests.filter(r => r.user_id === user.id);
+      const userActivity = activity.filter(a => a.details?.user_id === user.id || a.details?.name === user.name);
       
-      let html = `<div class="modal-section"><h3>Contact & Status</h3><p>📱 ${user.phone || 'No phone'}</p><p>📍 ${user.location || 'No location'}</p>${user.telegram_connected ? '<p style="color:#10b981">✓ Telegram Connected</p>' : '<p style="color:#888">✗ Not on Telegram</p>'}<p>Status: <span style="color:${currentTier.color};font-weight:600">${currentTier.icon} ${currentTier.name}</span></p></div>
-      <div class="modal-section"><h3>Social Links</h3>
-        ${social.instagram ? `<p><a href="${social.instagram.startsWith('http') ? social.instagram : 'https://' + social.instagram}" target="_blank" style="color:#ec4899;">📸 Instagram →</a></p>` : ''}
-        ${social.linkedin ? `<p><a href="${social.linkedin.startsWith('http') ? social.linkedin : 'https://' + social.linkedin}" target="_blank" style="color:#3b82f6;">💼 LinkedIn →</a></p>` : ''}
-        ${!social.instagram && !social.linkedin ? '<p style="color:#666">No social links</p>' : ''}
-      </div>
-      ${user.blacklisted ? `<div class="modal-section" style="background:rgba(239,68,68,0.2);padding:12px;border-radius:8px;"><span style="color:#ef4444;font-weight:600">⛔ BLACKLISTED</span></div>` : ''}
-      <div class="modal-section"><h3>Bio</h3><p>${user.bio || '<span style="color:#666">No bio</span>'}</p></div>
-      <div class="modal-section"><h3>Skills</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${(user.skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('') || '<span style="color:#666">No skills</span>'}</div></div>
-      <div class="modal-section"><h3>Send Telegram Message</h3>${user.telegram_connected ? `<div style="display:flex;gap:8px"><input type="text" id="telegramMsg" placeholder="Type message..." style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff"><button class="action-btn primary" onclick="sendTelegramMessage('${user.id}')">Send</button></div>` : '<p style="color:#666">User not connected to Telegram</p>'}</div>`;
+      // Profile header with image
+      let html = `
+      <div style="display:flex;gap:20px;align-items:flex-start;margin-bottom:20px;">
+        <div class="avatar" style="width:80px;height:80px;font-size:32px;flex-shrink:0;${user.profile_image ? `background-image:url('${user.profile_image}');background-size:cover;background-position:center;` : ''}">${user.profile_image ? '' : (user.name?.charAt(0) || '?')}</div>
+        <div style="flex:1;">
+          <div style="font-size:20px;font-weight:700;margin-bottom:4px;">${user.name || 'Unknown'} <span style="color:${currentTier.color};font-size:14px;">${currentTier.icon} ${currentTier.name}</span></div>
+          <div style="color:#888;font-size:13px;">${user.phone || ''} ${user.location ? `• 📍 ${user.location}` : ''}</div>
+          <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;">
+            ${user.telegram_connected ? '<span class="badge green">📱 Telegram</span>' : '<span class="badge gray">No Telegram</span>'}
+            ${social.instagram ? `<a href="${social.instagram.startsWith('http') ? social.instagram : 'https://instagram.com/' + social.instagram}" target="_blank" class="badge" style="background:linear-gradient(135deg,rgba(131,58,180,0.3),rgba(253,29,29,0.3));color:#ec4899;text-decoration:none;">📸 Instagram</a>` : ''}
+            ${social.linkedin ? `<a href="${social.linkedin.startsWith('http') ? social.linkedin : 'https://linkedin.com/in/' + social.linkedin}" target="_blank" class="badge" style="background:rgba(10,102,194,0.3);color:#3b82f6;text-decoration:none;">💼 LinkedIn</a>` : ''}
+          </div>
+        </div>
+      </div>`;
+      
+      // Taj's Notes (AI enriched profile)
+      if (ep && Object.keys(ep).length > 0) {
+        html += `
+        <div class="modal-section" style="background:linear-gradient(135deg, rgba(139,92,246,0.15) 0%, rgba(236,72,153,0.1) 100%);padding:16px;border-radius:10px;border:1px solid rgba(139,92,246,0.3)">
+          <h3 style="color:#a78bfa;margin-bottom:12px;">🤖 Taj's Notes</h3>
+          ${ep.summary ? `<p style="margin-bottom:12px;font-style:italic;color:#e0e0e0;">"${ep.summary}"</p>` : ''}
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
+            ${ep.credibility_score ? `<div style="background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;"><span style="font-size:11px;color:#888;">Credibility</span><br><strong style="font-size:18px;color:#10b981;">${ep.credibility_score}/100</strong></div>` : ''}
+            ${ep.budget_range ? `<div style="background:rgba(0,0,0,0.2);padding:8px;border-radius:6px;"><span style="font-size:11px;color:#888;">Budget</span><br><strong style="color:#fff;">${ep.budget_range}</strong></div>` : ''}
+          </div>
+          ${ep.availability ? `<p style="margin-top:8px;"><span style="color:#888;">📅 Availability:</span> ${ep.availability}</p>` : ''}
+          ${ep.industries?.length ? `<p><span style="color:#888;">🏢 Industries:</span> ${ep.industries.join(', ')}</p>` : ''}
+          ${ep.work_types?.length ? `<p><span style="color:#888;">🎬 Work Types:</span> ${ep.work_types.join(', ')}</p>` : ''}
+          ${ep.specialties?.length ? `<p><span style="color:#888;">⭐ Specialties:</span> ${ep.specialties.join(', ')}</p>` : ''}
+          ${ep.extracted_skills?.length ? `<p><span style="color:#888;">🛠 Skills Found:</span> ${ep.extracted_skills.join(', ')}</p>` : ''}
+          <p style="font-size:10px;color:#666;margin-top:8px;text-align:right;">Updated ${ep.enriched_at ? timeAgo(ep.enriched_at) : 'Unknown'}</p>
+        </div>`;
+      } else {
+        html += `<div class="modal-section" style="background:rgba(255,255,255,0.03);padding:16px;border-radius:10px;border:1px dashed rgba(255,255,255,0.1);"><p style="color:#666;text-align:center;">🤖 Taj hasn't analyzed this profile yet.<br><span style="font-size:11px;">User needs to chat more with Taj to get AI insights.</span></p></div>`;
+      }
+      
+      // Blacklist warning
+      if (user.blacklisted) {
+        html += `<div class="modal-section" style="background:rgba(239,68,68,0.2);padding:12px;border-radius:8px;border:1px solid rgba(239,68,68,0.5)"><span style="color:#ef4444;font-weight:600">⛔ BLACKLISTED</span>${user.blacklist_reason ? `<p style="color:#fca5a5;font-size:12px;margin-top:4px;">Reason: ${user.blacklist_reason}</p>` : ''}</div>`;
+      }
+      
+      // Bio
+      html += `<div class="modal-section"><h3>Bio</h3><p>${user.bio || '<span style="color:#666">No bio yet</span>'}</p></div>`;
+      
+      // Skills
+      html += `<div class="modal-section"><h3>Skills</h3><div style="display:flex;gap:6px;flex-wrap:wrap">${(user.skills || []).map(s => `<span class="skill-tag">${s}</span>`).join('') || '<span style="color:#666">No skills added</span>'}</div></div>`;
+      
+      // Admin Notes
+      html += `
+      <div class="modal-section">
+        <h3>Admin Notes</h3>
+        <div id="userNotes">${(user.notes || []).map(n => `<div class="note-item"><div class="note-text">${n.note}</div><div class="note-time">${timeAgo(n.created_at)}</div></div>`).join('') || '<p style="color:#666">No notes yet</p>'}</div>
+        <div style="display:flex;gap:8px;margin-top:8px">
+          <input type="text" id="newNote" placeholder="Add a note about this user..." style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff">
+          <button class="action-btn secondary" onclick="addNote('${user.id}')">Add</button>
+        </div>
+      </div>`;
+      
+      // Send Telegram Message
+      html += `
+      <div class="modal-section">
+        <h3>Send Telegram Message</h3>
+        ${user.telegram_connected ? `
+          <div style="display:flex;gap:8px">
+            <input type="text" id="telegramMsg" placeholder="Type message..." style="flex:1;padding:8px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff">
+            <button class="action-btn primary" onclick="sendTelegramMessage('${user.id}')">Send</button>
+          </div>
+        ` : '<p style="color:#666">User not connected to Telegram</p>'}
+      </div>`;
+      
+      // User's Requests
+      html += `
+      <div class="modal-section">
+        <h3>Requests (${userRequests.length})</h3>
+        ${userRequests.length === 0 ? '<p style="color:#666">No requests yet</p>' : 
+          userRequests.slice(0, 5).map(r => `
+            <div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05)">
+              <div style="font-size:13px;font-weight:500;">${r.title || 'Untitled'}</div>
+              <div style="font-size:11px;color:#666">${r.status?.replace('_', ' ')} • ${timeAgo(r.created_at)}</div>
+            </div>
+          `).join('')}
+      </div>`;
+      
+      // Recent Activity
+      html += `
+      <div class="modal-section">
+        <h3>Recent Activity (${userActivity.length})</h3>
+        ${userActivity.length === 0 ? '<p style="color:#666">No activity recorded</p>' : 
+          userActivity.slice(0, 5).map(a => `
+            <div style="padding:6px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:12px;">
+              <span style="color:#888;">${a.action?.replace(/_/g, ' ')}</span>
+              <span style="color:#666;float:right;">${timeAgo(a.timestamp)}</span>
+            </div>
+          `).join('')}
+      </div>`;
       
       document.getElementById("modalUserBody").innerHTML = html;
       document.getElementById("userModal").classList.add("active");
+    }
+    
+    async function addNote(userId) {
+      const note = document.getElementById("newNote").value.trim();
+      if (!note) return;
+      try {
+        await fetch(`${API}/admin/users/${userId}/notes?note=${encodeURIComponent(note)}`, { method: "POST" });
+        document.getElementById("newNote").value = '';
+        fetchAllData();
+        setTimeout(() => showUserDetail(userId), 500);
+      } catch (e) { alert("Failed to add note"); }
     }
     
     function closeModal() { document.getElementById("userModal").classList.remove("active"); }
