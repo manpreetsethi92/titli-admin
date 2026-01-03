@@ -594,6 +594,16 @@
         
         <div style="display:flex;gap:12px;margin-bottom:16px;flex-wrap:wrap;">
           <input type="text" id="jobSearch" class="search" placeholder="Search jobs by title, skills, subreddit..." oninput="filterJobs()" style="flex:1;min-width:200px;">
+          <select id="jobPlatformFilter" onchange="filterByPlatformDropdown(this.value)" style="padding:8px 12px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff;font-size:12px;">
+            <option value="all">All Platforms</option>
+            <option value="reddit">🔴 Reddit</option>
+            <option value="craigslist">📋 Craigslist</option>
+            <option value="instagram">📸 Instagram</option>
+            <option value="tiktok">🎵 TikTok</option>
+            <option value="linkedin">💼 LinkedIn</option>
+            <option value="twitter">🐦 X/Twitter</option>
+            <option value="threads">🧵 Threads</option>
+          </select>
           <select id="jobStatusFilter" onchange="filterJobs()" style="padding:8px 12px;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:6px;color:#fff;font-size:12px;">
             <option value="all">All Jobs</option>
             <option value="new">New Only</option>
@@ -820,6 +830,19 @@
     
     function filterByPlatform(platform) {
       platformFilter = platform;
+      document.querySelectorAll('.platform-pill').forEach(pill => {
+        pill.classList.remove('active');
+        if (pill.dataset.platform === platform) pill.classList.add('active');
+      });
+      // Sync dropdown
+      const dropdown = document.getElementById('jobPlatformFilter');
+      if (dropdown) dropdown.value = platform;
+      filterJobs();
+    }
+    
+    function filterByPlatformDropdown(platform) {
+      platformFilter = platform;
+      // Sync pills
       document.querySelectorAll('.platform-pill').forEach(pill => {
         pill.classList.remove('active');
         if (pill.dataset.platform === platform) pill.classList.add('active');
