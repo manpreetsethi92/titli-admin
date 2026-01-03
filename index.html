@@ -479,13 +479,11 @@
       
       <div class="tabs">
         <button class="tab active" data-tab="overview">Overview</button>
-        <button class="tab" data-tab="activity">Activity Feed</button>
         <button class="tab" data-tab="users">Users</button>
         <button class="tab" data-tab="requests">Requests</button>
         <button class="tab" data-tab="unfilled">Unfilled <span class="badge" id="unfilledBadge">0</span></button>
         <button class="tab" data-tab="connections">Connections</button>
         <button class="tab" data-tab="external-jobs">External Jobs <span class="badge" id="externalJobsBadge" style="background:#f97316;">0</span></button>
-        <button class="tab" data-tab="analytics">Analytics</button>
         <button class="tab" data-tab="skill-gaps">Skill Gaps</button>
         <button class="tab" data-tab="recruitment">Recruitment</button>
       </div>
@@ -528,11 +526,6 @@
             <div id="recentJobs"><div class="loading">Loading...</div></div>
           </div>
         </div>
-      </div>
-      
-      <!-- ACTIVITY TAB -->
-      <div class="tab-content" id="tab-activity">
-        <div class="card"><div class="card-header">All Taj Activity <span class="count" id="activityCount">0</span></div><div id="allActivity"><div class="loading">Loading...</div></div></div>
       </div>
       
       <!-- USERS TAB -->
@@ -633,14 +626,6 @@
             <button class="modal-close" onclick="closeJobModal()">&times;</button>
           </div>
           <div class="modal-body" id="modalJobBody"></div>
-        </div>
-      </div>
-      
-      <!-- ANALYTICS TAB -->
-      <div class="tab-content" id="tab-analytics">
-        <div class="grid-2">
-          <div class="card"><div class="card-header">Conversion Funnel</div><div id="funnelChart"><div class="loading">Loading...</div></div></div>
-          <div class="card"><div class="card-header">Growth (Last 30 Days)</div><div id="growthChart"><div class="loading">Loading...</div></div></div>
         </div>
       </div>
       
