@@ -84,6 +84,32 @@ export const triggerWAJobMatching = async (jobId: string) => {
   return response.data
 }
 
+// ── Pipeline triggers ─────────────────────────────────────
+// Scraping and classification run inline and routinely exceed the client's
+// default 10s timeout, so each trigger sets its own.
+const LONG = { timeout: 180000 }
+
+export const fetchJobAlertStats = async () => {
+  const response = await api.get('/admin/job-alerts/stats')
+  return response.data
+}
+
+export const triggerScrape = async (source: string) => {
+  const response = await api.post(`/admin/scrape/${source}`, null, LONG)
+  return response.data
+}
+
+export const triggerProcessQueue = async () => {
+  const response = await api.post('/admin/process-queue', null, LONG)
+  return response.data
+}
+
+export const triggerJobAlerts = async (timeOfDay = 'morning') => {
+  const response = await api.post(
+    `/admin/send-job-alerts?time_of_day=${timeOfDay}`, null, LONG)
+  return response.data
+}
+
 export const fetchAICosts = async (days = 30) => {
   const response = await api.get(`/admin/dashboard/ai-costs?days=${days}`)
   return response.data
