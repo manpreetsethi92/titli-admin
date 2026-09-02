@@ -94,6 +94,11 @@ export const fetchJobAlertStats = async () => {
   return response.data
 }
 
+export const fetchJobAlertHistory = async (limit = 500) => {
+  const response = await api.get(`/admin/job-alerts/history?limit=${limit}`)
+  return response.data
+}
+
 export const triggerScrape = async (source: string) => {
   const response = await api.post(`/admin/scrape/${source}`, null, LONG)
   return response.data

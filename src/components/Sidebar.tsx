@@ -11,6 +11,7 @@ const navItems = [
   { id: 'overview', label: 'Overview', icon: LayoutDashboard, href: '/' },
   { id: 'wa-jobs', label: 'WA Group Jobs', icon: Zap, href: '/wa-jobs' },
   { id: 'jobs', label: 'Job Pipeline', icon: FileText, href: '/jobs' },
+  { id: 'job-alerts', label: 'Job Alerts', icon: Send, href: '/job-alerts' },
   { id: 'requests', label: 'Requests', icon: Target, href: '/requests' },
   { id: 'matches', label: 'Matches', icon: LinkIcon, href: '/matches' },
   { id: 'connections', label: 'Connections', icon: Handshake, href: '/connections' },
