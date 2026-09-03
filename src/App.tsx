@@ -4,6 +4,7 @@ import Layout from './components/Layout'
 import Dashboard from './pages/Dashboard'
 import WAGroupJobs from './pages/WAGroupJobs'
 import JobPipeline from './pages/JobPipeline'
+import JobAlerts from './pages/JobAlerts'
 import Requests from './pages/Requests'
 import Matches from './pages/Matches'
 import Users from './pages/Users'
@@ -26,7 +27,7 @@ import RateBenchmarks from './pages/RateBenchmarks'
 import DemandForecasting from './pages/DemandForecasting'
 import EnterpriseAPI from './pages/EnterpriseAPI'
 
-const SESSION_KEY = 'titlii_admin_auth'
+const SESSION_KEY = 'gully_admin_auth'
 
 function ProtectedLayout({ onLogout }: { onLogout: () => void }) {
   return (
@@ -63,6 +64,7 @@ function App() {
           <Route path="/" element={<Dashboard />} />
           <Route path="/wa-jobs" element={<WAGroupJobs />} />
           <Route path="/jobs" element={<JobPipeline />} />
+          <Route path="/job-alerts" element={<JobAlerts />} />
           <Route path="/requests" element={<Requests />} />
           <Route path="/matches" element={<Matches />} />
           <Route path="/users" element={<Users />} />

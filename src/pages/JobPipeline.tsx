@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import StatCard from '../components/StatCard'
-import { FileText, CheckCircle, AlertCircle, Zap, XCircle } from 'lucide-react'
-import { fetchJobQueueStats } from '../utils/api'
+import { FileText, CheckCircle, AlertCircle, Zap, XCircle, Send } from 'lucide-react'
+import { fetchJobQueueStats, fetchJobAlertStats } from '../utils/api'
+import PipelineControls from '../components/PipelineControls'
 
 interface PipelineStats {
   raw_jobs: { total: number; queued: number; rejected_heuristic: number; processed: number }
@@ -10,21 +11,25 @@ interface PipelineStats {
 
 export default function JobPipeline() {
   const [stats, setStats] = useState<PipelineStats | null>(null)
+  const [alertsSent, setAlertsSent] = useState<number | null>(null)
   const [loading, setLoading] = useState(true)
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const data = await fetchJobQueueStats()
-        setStats(data)
-      } catch (err) {
-        console.error('Failed to load pipeline stats:', err)
-      } finally {
-        setLoading(false)
-      }
+  const load = async () => {
+    try {
+      const [data, alerts] = await Promise.all([
+        fetchJobQueueStats(),
+        fetchJobAlertStats().catch(() => null),
+      ])
+      setStats(data)
+      setAlertsSent(alerts?.sent_7d ?? null)
+    } catch (err) {
+      console.error('Failed to load pipeline stats:', err)
+    } finally {
+      setLoading(false)
     }
-    load()
-  }, [])
+  }
+
+  useEffect(() => { load() }, [])
 
   if (loading) return <div className="flex items-center justify-center h-full text-gray-400">Loading pipeline...</div>
   if (!stats) return <div className="text-center py-8 text-red-400">Failed to load pipeline data</div>
@@ -47,13 +52,16 @@ export default function JobPipeline() {
       </div>
 
       {/* Top Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
         <StatCard label="Total Scraped" value={stats.raw_jobs.total} icon={<FileText size={20} />} index={0} />
         <StatCard label="Rejected" value={stats.raw_jobs.rejected_heuristic} icon={<XCircle size={20} />} index={4} />
         <StatCard label="Processed" value={stats.raw_jobs.processed} icon={<CheckCircle size={20} />} index={1} />
         <StatCard label="Queue Pending" value={stats.job_queue.pending} icon={<Zap size={20} />} index={2} />
         <StatCard label="Failed" value={stats.job_queue.failed} icon={<AlertCircle size={20} />} index={4} />
+        <StatCard label="Alerts Sent (7d)" value={alertsSent ?? '—'} icon={<Send size={20} />} index={3} />
       </div>
+
+      <PipelineControls onDone={load} />
       {/* Pipeline Funnel */}
       <div className="bg-dark-surface border border-dark-border rounded-lg p-6">
         <h2 className="text-xl font-semibold mb-6">Pipeline Stages</h2>
